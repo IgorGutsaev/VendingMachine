@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.98
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dispensing", "Dispensing", "{092FCF5F-46E0-4C42-96B6-CEA36E988EC8}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.txt = Readme.txt
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions", "Dispensing\Abstractions\Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.csproj", "{CD3FF486-2636-44E9-A357-D593684166F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{47D4898C-D171-4731-A2A2-1DF9F7779454}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Common.Abstractions", "Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj", "{A6A899BE-E2AD-4E33-8AB6-59A088D95089}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests", "Dispensing\Tests\Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.csproj", "{651D122C-61E5-41EC-96C9-2F25530182F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Core", "Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj", "{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD3FF486-2636-44E9-A357-D593684166F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD3FF486-2636-44E9-A357-D593684166F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD3FF486-2636-44E9-A357-D593684166F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD3FF486-2636-44E9-A357-D593684166F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A899BE-E2AD-4E33-8AB6-59A088D95089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A899BE-E2AD-4E33-8AB6-59A088D95089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A899BE-E2AD-4E33-8AB6-59A088D95089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A899BE-E2AD-4E33-8AB6-59A088D95089}.Release|Any CPU.Build.0 = Release|Any CPU
+		{651D122C-61E5-41EC-96C9-2F25530182F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651D122C-61E5-41EC-96C9-2F25530182F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651D122C-61E5-41EC-96C9-2F25530182F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651D122C-61E5-41EC-96C9-2F25530182F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CD3FF486-2636-44E9-A357-D593684166F3} = {092FCF5F-46E0-4C42-96B6-CEA36E988EC8}
+		{A6A899BE-E2AD-4E33-8AB6-59A088D95089} = {47D4898C-D171-4731-A2A2-1DF9F7779454}
+		{651D122C-61E5-41EC-96C9-2F25530182F6} = {092FCF5F-46E0-4C42-96B6-CEA36E988EC8}
+		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C} = {092FCF5F-46E0-4C42-96B6-CEA36E988EC8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A02BEFA1-73D8-435F-8D33-C1AB99ACD5C2}
+	EndGlobalSection
+EndGlobal
