@@ -1,0 +1,9 @@
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS `Planograms` (
+	`Id`	BLOB NOT NULL UNIQUE,
+	`Data`	TEXT NOT NULL,
+	`Timestamp`	DateTime NOT NULL,
+	PRIMARY KEY(`Id`)
+);
+COMMIT;

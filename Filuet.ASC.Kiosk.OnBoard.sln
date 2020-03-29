@@ -12,11 +12,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Di
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{47D4898C-D171-4731-A2A2-1DF9F7779454}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Common.Abstractions", "Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj", "{A6A899BE-E2AD-4E33-8AB6-59A088D95089}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Common.Abstractions", "Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj", "{A6A899BE-E2AD-4E33-8AB6-59A088D95089}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests", "Dispensing\Tests\Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.csproj", "{651D122C-61E5-41EC-96C9-2F25530182F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Core", "Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj", "{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Dispensing.Core", "Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj", "{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{28E87852-E76C-437D-B820-64460B36E042}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions", "Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj", "{B8331EDF-C82C-4397-81FF-39036926CDFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Storage.Core", "Storage\Core\Filuet.ASC.Kiosk.OnBoard.Storage.Core.csproj", "{B8A658FC-70BA-41DA-990B-26AF44C41C91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Storage.Tests", "Storage\Tests\Filuet.ASC.Kiosk.OnBoard.Storage.Tests.csproj", "{A896E887-9367-4C91-9E53-16C353727296}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +48,18 @@ Global
 		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8331EDF-C82C-4397-81FF-39036926CDFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8331EDF-C82C-4397-81FF-39036926CDFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8331EDF-C82C-4397-81FF-39036926CDFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8331EDF-C82C-4397-81FF-39036926CDFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A658FC-70BA-41DA-990B-26AF44C41C91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A658FC-70BA-41DA-990B-26AF44C41C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A658FC-70BA-41DA-990B-26AF44C41C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A658FC-70BA-41DA-990B-26AF44C41C91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A896E887-9367-4C91-9E53-16C353727296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A896E887-9367-4C91-9E53-16C353727296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A896E887-9367-4C91-9E53-16C353727296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A896E887-9367-4C91-9E53-16C353727296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +69,9 @@ Global
 		{A6A899BE-E2AD-4E33-8AB6-59A088D95089} = {47D4898C-D171-4731-A2A2-1DF9F7779454}
 		{651D122C-61E5-41EC-96C9-2F25530182F6} = {092FCF5F-46E0-4C42-96B6-CEA36E988EC8}
 		{7896ABCA-0DC5-49FB-B2BA-32C85656DA5C} = {092FCF5F-46E0-4C42-96B6-CEA36E988EC8}
+		{B8331EDF-C82C-4397-81FF-39036926CDFF} = {28E87852-E76C-437D-B820-64460B36E042}
+		{B8A658FC-70BA-41DA-990B-26AF44C41C91} = {28E87852-E76C-437D-B820-64460B36E042}
+		{A896E887-9367-4C91-9E53-16C353727296} = {28E87852-E76C-437D-B820-64460B36E042}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A02BEFA1-73D8-435F-8D33-C1AB99ACD5C2}
