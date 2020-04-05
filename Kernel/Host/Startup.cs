@@ -1,12 +1,17 @@
+using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core;
+using Filuet.Utils.Abstractions.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Linq;
 
-namespace Filuet.ASC.OnBoard.Dashboard.Host
+namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
     public class Startup
     {
@@ -21,6 +26,16 @@ namespace Filuet.ASC.OnBoard.Dashboard.Host
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging((builder) =>
+            {
+                builder.AddSerilog(new LoggerConfiguration()
+                   .ReadFrom.Configuration(Configuration, "Serilog")
+                   .CreateLogger());
+#if DEBUG
+                builder.AddDebug();
+                builder.AddConsole((c) => c.TimestampFormat = "[HH:mm:ss.fff] ");
+#endif
+            });
 
             services.AddControllersWithViews();
         }

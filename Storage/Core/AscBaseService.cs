@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
 {
-    public abstract class AscBaseService<TUnitOfWork> : IAscBaseService<TUnitOfWork>
+    public class AscBaseService<TUnitOfWork> : IAscBaseService<TUnitOfWork>
         where TUnitOfWork : IAscUnitOfWork
     {
         protected TUnitOfWork _uow;

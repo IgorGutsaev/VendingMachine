@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Dashboar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Dashboard.Shared", "Maintenance\Dashboard\Shared\Filuet.ASC.OnBoard.Dashboard.Shared.csproj", "{2422BC4C-E06E-4F91-9D7C-D4D2982A8E67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Dashboard.Host", "Kernel\Host\Filuet.ASC.OnBoard.Dashboard.Host.csproj", "{4DF93D7B-78E5-4799-BB35-9C2AAEDB1632}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Kernel.HostApp", "Kernel\Host\Filuet.ASC.OnBoard.Kernel.HostApp.csproj", "{4DF93D7B-78E5-4799-BB35-9C2AAEDB1632}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

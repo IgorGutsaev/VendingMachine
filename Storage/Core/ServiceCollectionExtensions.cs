@@ -9,11 +9,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSignalService(this IServiceCollection serviceCollection)
+        public static IServiceCollection AddStorageService(this IServiceCollection serviceCollection)
         {
             return serviceCollection
                 .AddTransient<IAscUnitOfWork, AscBaseUnitOfWork>()
-                .AddTransient<IKioskStorageService, KioskStorageService>();
+                .AddSingleton<IKioskStorageService, KioskStorageService>();
         }
 
         public static IServiceCollection AddCacheContext(this IServiceCollection serviceCollection, Action<LocalStorageSettings> setupAction = null)

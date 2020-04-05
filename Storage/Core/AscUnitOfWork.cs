@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
 {
-    public abstract class AscUnitOfWork<TDbContext> : IAscUnitOfWork
+    public class AscUnitOfWork<TDbContext> : IAscUnitOfWork
         where TDbContext : DbContext
     {
         protected TDbContext _dbContext;

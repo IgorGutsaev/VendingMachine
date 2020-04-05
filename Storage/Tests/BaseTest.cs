@@ -24,7 +24,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Tests
                 GetExecutingAssembly().Location);
 
             _provider = new ServiceCollection()
-                .AddSignalService()
+                .AddStorageService()
                 .AddCacheContext(s => {
                     s.CreateDbScriptPath = rootDir + CREATE_DB_SCRIPT_PATH;
                     s.DbFilepath = rootDir + DB_FILEPATH;

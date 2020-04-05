@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
 {
-    public interface IKioskStorageService : IDisposable
+    public interface IKioskStorageService : IKioskEventProducer, IDisposable
     {
         void Add(Planogram planogram);
 
