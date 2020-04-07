@@ -37,7 +37,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 ISupplyDispenser s1 = host.Services.GetRequiredService<ISupplyDispenser>();
                 var t = s2.Get(x => true);
-                s1.Dispense();
+                s1.Dispense("foo");
             });
 
 

@@ -21,7 +21,10 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
         public static IServiceCollection AddHardware(this IServiceCollection serviceCollection)
         {
             return serviceCollection.AddSupplyDispenser()
-                .AddEventMediation<IKioskEventProducer>()
+                .AddEventMediation((sp, broker) => {
+                    broker.AppendProducer(sp.GetRequiredService<ISupplyDispenser>() as IEventProducer);
+                    broker.AppendProducer(sp.GetRequiredService<IKioskStorageService>());
+                })          
                 .AddSingleton((sp) =>
                     new EventConsumer()
                         .AppendWriter<ISupplyDispenser>(new EventWriter<ISupplyDispenser>(sp.GetRequiredService<ILogger<ISupplyDispenser>>()))
