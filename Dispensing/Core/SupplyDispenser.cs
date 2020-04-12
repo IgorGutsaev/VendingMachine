@@ -10,14 +10,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
 {
     internal class SupplyDispenser : ISupplyDispenser
     {
+        public event EventHandler<DispenseEventArgs> OnDispensing;
+
         public void Dispense(string address)
         {
-           // OnEvent?.Invoke(this, EventItem.Info("Hello world"));
-        }
-
-        public void Subscribe(Action<object, EventItem> onEvent)
-        {
-           // OnEvent += (sender, ev) => onEvent(sender, ev);
+            OnDispensing?.Invoke(this, new DispenseEventArgs { address = "Hello world" });
         }
     }
 }

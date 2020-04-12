@@ -37,14 +37,18 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 ISupplyDispenser s1 = host.Services.GetRequiredService<ISupplyDispenser>();
                 var t = s2.Get(x => true);
+
+                s1.OnDispensing += S1_OnDispensing;
+                s1.OnDispensing -= S1_OnDispensing;
                 s1.Dispense("foo");
             });
-
 
             host.Run();
         }
 
-
+        private static void S1_OnDispensing(object sender, EventArgs e)
+        {
+        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
