@@ -33,7 +33,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             // POC
             Task.Run(() =>
             {
-                IKioskStorageService s2 = host.Services.GetRequiredService<IKioskStorageService>();
+                IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
                 ISupplyDispenser s1 = host.Services.GetRequiredService<ISupplyDispenser>();
                 var t = s2.Get(x => true);
@@ -62,7 +62,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     services.AddHardware();
 
-                    services.AddStorageService()
+                    services.AddStorage()
                         .AddCacheContext(settings =>
                         {
                             string rootDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);

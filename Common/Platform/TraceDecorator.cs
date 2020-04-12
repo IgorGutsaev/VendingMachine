@@ -6,6 +6,10 @@ using System.Text.Json.Serialization;
 using System.Diagnostics;
 using System.Reflection;
 using System.Linq;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq.Expressions;
+using System.Text.Encodings.Web;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 {
@@ -25,8 +29,28 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 
             Func<object[], string> serializeArgs = (a) =>
             {
-                string flt = JsonSerializer.Serialize(a.Where(x => !(x.GetType().Name.Contains("EventHandler")))); // Except events and delegates
-                return (flt != null && flt.Length > 0 ? flt : string.Empty);
+                object[] convertedArgs = new object[args.Length];
+                Array.Copy(args, convertedArgs, args.Length);
+
+                for (int i = 0; i < convertedArgs.Length; i++)
+                {
+                    string argType = convertedArgs[i].GetType().Name;
+
+                    if (argType.Contains("Expression"))
+                        convertedArgs[i] = convertedArgs[i].ToString();                    
+                    else if (argType.Contains("Func"))
+                        convertedArgs[i] = convertedArgs[i].ToString();
+                    else if (argType.Contains("EventHandler"))
+                        convertedArgs[i] = convertedArgs[i].ToString();
+                }
+
+                var settings = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+
+                if (convertedArgs.Length <= 0)
+                    return string.Empty;
+                else if (convertedArgs.Length == 1) 
+                    return JsonSerializer.Serialize(convertedArgs[0], typeof(object), settings);
+                else return JsonSerializer.Serialize(convertedArgs, typeof(object[]), settings);
             };
 
             try

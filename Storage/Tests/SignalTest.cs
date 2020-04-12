@@ -29,7 +29,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Tests
             // Prepare
             Planogram source = Planogram.Create(planogram);
             string id = source.Id;
-            IKioskStorageService service = NewSignalService;
+            IStorageService service = NewSignalService;
 
             // Pre-validate
             Assert.NotNull(service);
