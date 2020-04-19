@@ -1,12 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
+namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
 {
-    public class HostContext
-    {
-        public StorageSettings Storage { get; set; }
-    }
-
     public class StorageSettings
     {
         public string DbScriptFile { get; set; }

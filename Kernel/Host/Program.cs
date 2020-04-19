@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.Utils.Abstractions.Event;
