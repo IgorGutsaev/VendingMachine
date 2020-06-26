@@ -9,6 +9,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddCashPayment(this IServiceCollection serviceCollection)
-        => serviceCollection.AddSingleton<ICashPayment>(new CashPayment()); 
+        => serviceCollection.AddSingleton<ICashPaymentService>(new CashPaymentService()); 
     }
 }
