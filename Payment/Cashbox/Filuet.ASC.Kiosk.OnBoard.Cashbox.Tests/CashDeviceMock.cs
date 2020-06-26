@@ -4,15 +4,13 @@ using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Common.Business;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 {
     public enum TestWork
     {
-        CashAccepted,
-        BadCashAccepted,
+        CashReceived,
+        BadCashReceived,
         GiveChanged,
         BadGiveChanged
     }
@@ -21,7 +19,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
     {
         private TestWork _type;
 
-        public event EventHandler<EventCashReceive> OnAcceptance;
+        public event EventHandler<EventCashReceive> OnReceive;
         public event EventHandler<TestResultCash> OnTest;
         public event EventHandler<EventCashReceive> OnChange;
         public event EventHandler<EventItem> OnStop;
@@ -31,28 +29,28 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             _type = type;
         }
 
-        public void CashAcceptance(Money money)
+        public void CashReceive(Money money)
         {
             EventCashReceive eventCashReceive = new EventCashReceive();
             switch (_type)
             {
-                case TestWork.CashAccepted:
+                case TestWork.CashReceived:
                     eventCashReceive.Money = money;
-                    eventCashReceive.Event = EventItem.Info("CashReceive");
-
+                    eventCashReceive.Event = EventItem.Info("CashReceived");
+                    
                     break;
-                case TestWork.BadCashAccepted:
+                case TestWork.BadCashReceived:
                     eventCashReceive.Money = money;
-                    eventCashReceive.Event = EventItem.Error("CashReceive");
+                    eventCashReceive.Event = EventItem.Error("CashReceived");
 
-                    break;
-                case TestWork.BadGiveChanged:
                     break;
                 default:
+                    eventCashReceive.Money = money;
+                    eventCashReceive.Event = EventItem.Debug("CashReceived");
                     break;
             }
 
-            OnAcceptance?.Invoke(this, eventCashReceive);
+            OnReceive?.Invoke(this, eventCashReceive);
 
 
         }
@@ -63,17 +61,18 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
             switch (_type)
             {
-                case TestWork.CashAccepted:
+                case TestWork.CashReceived:
                     result.Result = TestResultError.None;
                     result.Description = "None error";
                     break;
-                case TestWork.BadCashAccepted:
+                case TestWork.BadCashReceived:
                     result.Result = TestResultError.BillReceiverError;
                     result.Description = "Bill receiver error";
                     break;
-                case TestWork.BadGiveChanged:
-                    break;
                 default:
+                    result.Result = TestResultError.None;
+
+                    result.Description = "Cash Tested";
                     break;
             }
 
@@ -86,11 +85,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
             switch (_type)
             {
-                case TestWork.CashAccepted:
-                    
-                    break;
-                case TestWork.BadCashAccepted:
-                    break;
                 case TestWork.GiveChanged:
                     eventCash.Event = EventItem.Info("Give change");
                     eventCash.Money = money;
@@ -100,6 +94,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
                     eventCash.Money = money;
                     break;
                 default:
+                    eventCash.Money = money;
+                    eventCash.Event = EventItem.Debug("Gived change");
                     break;
             }
 

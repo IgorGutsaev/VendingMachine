@@ -16,7 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Storage\Core\Filuet.ASC.Kiosk.OnBoard.Storage.Core.csproj" />
     <ProjectReference Include="..\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="cache.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="cache.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

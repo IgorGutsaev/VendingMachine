@@ -9,9 +9,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions
     {
         void Test();
 
-        void CashAcceptance(Money money);
+        void CashReceive(Money money);
 
-        event EventHandler<EventCashReceive> OnAcceptance;
+        event EventHandler<EventCashReceive> OnReceive;
 
         event EventHandler<EventCashReceive> OnChange;
 

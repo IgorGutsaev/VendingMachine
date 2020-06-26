@@ -1,8 +1,5 @@
-using System;
-using System.Diagnostics.Tracing;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Events;
-using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Core;
 using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Common.Business;
@@ -10,29 +7,43 @@ using Xunit;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 {
-    public class CashPaymentTest
+    public class CashPaymentTest:BaseTest
     {
 
         private decimal _amount;
-        public CashPaymentTest()
-        {  
-        }
 
         [Theory]
-        [InlineData(100.0,CurrencyCode.RussianRouble)]
-        public void Test_CashAcceptance_Good(decimal amount, CurrencyCode currency)
+        [InlineData(100.0,CurrencyCode.RussianRouble,TestWork.CashReceived)]
+        [InlineData(99.0,CurrencyCode.RussianRouble,TestWork.BadCashReceived)]
+        [InlineData(98.0,CurrencyCode.RussianRouble,TestWork.GiveChanged)]
+        [InlineData(97.0,CurrencyCode.RussianRouble,TestWork.BadGiveChanged)]
+        public void Test_CashReceive(decimal amount, CurrencyCode currency,TestWork type)
         {
             //prepare
             _amount = amount;
 
-            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.CashAccepted));
+            CashPaymentService service = new CashPaymentService(new CashDeviceMock(type), StorageService);
 
-            service.OnAcceptance += Service_OnAcceptedGood;
+            switch (type)
+            {
+                case TestWork.CashReceived:
+                    service.OnReceive += Service_OnReceived_Good;
+
+                    break;
+                case TestWork.BadCashReceived:
+
+                    service.OnReceive += Service_OnReceived_Bad;
+                    break;
+                default:
+                    service.OnReceive += Service_OnReceived_Another;
+                    break;
+            }
+
             
             Money money = Money.Create(amount, currency);
 
             // Perform
-            service.CashAcceptance(money);
+            service.CashReceive(money);
 
             // Pre-validation
             //Assert.Equal(amount, _payment.Amount, 6);
@@ -44,28 +55,23 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             
         }
 
-        [Theory]
-        [InlineData(100.0,CurrencyCode.RussianRouble)]
-        public void Test_CashAcceptance_Bad(decimal amount,CurrencyCode currency)
+        private void Service_OnReceived_Another(object sender, EventCashReceive e)
         {
-            //prepare
-            _amount = amount;
+            Assert.NotNull(e.Event);
 
-            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.BadCashAccepted));
+            Assert.NotNull(e.Money);
 
-            service.OnAcceptance += Service_OnAcceptedBad;
+            Assert.Equal(_amount, e.Money.Value);
 
-            Money money = Money.Create(amount, currency);
-
-            //repform
-            service.CashAcceptance(money);
+            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Debug.ToString());
         }
+
 
         [Fact]
         public void Test_CashTest()
         {
             //prepare
-            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.CashAccepted));
+            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.CashReceived), StorageService);
 
             service.OnTest += Service_OnTest;
 
@@ -77,7 +83,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
         public void Test_DeviceStop()
         {
             //prepare
-            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.CashAccepted));
+            CashPaymentService service = new CashPaymentService(new CashDeviceMock(TestWork.CashReceived), StorageService);
 
             service.OnStop += Service_OnStop;
 
@@ -88,12 +94,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
         [Theory]
         [InlineData(99.9,CurrencyCode.RussianRouble,TestWork.GiveChanged)]
         [InlineData(98.9,CurrencyCode.RussianRouble,TestWork.BadGiveChanged)]
-        [InlineData(95,CurrencyCode.RussianRouble,TestWork.BadCashAccepted)]
-        [InlineData(95,CurrencyCode.RussianRouble,TestWork.CashAccepted)]
+        [InlineData(97,CurrencyCode.RussianRouble,TestWork.BadCashReceived)]
+        [InlineData(95,CurrencyCode.RussianRouble,TestWork.CashReceived)]
         public void Test_GiveChange(decimal amount,CurrencyCode currencyCode,TestWork type)
         {
             //prepare
-            CashPaymentService service = new CashPaymentService(new CashDeviceMock(type));
+            CashPaymentService service = new CashPaymentService(new CashDeviceMock(type), StorageService);
 
             Money money = Money.Create(amount, currencyCode);
 
@@ -121,8 +127,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
         private void Service_OnChange_Another(object sender, EventCashReceive e)
         {
-            Assert.Null( e.Money);
-            Assert.Null(e.Event);
+            Assert.NotNull(e.Event);
+
+            Assert.NotNull(e.Money);
+
+            Assert.Equal(_amount, e.Money.Value);
+
+            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Debug.ToString());
         }
 
         private void Service_OnChange_Bad(object sender, EventCashReceive e)
@@ -139,24 +150,27 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
         private void Service_OnStop(object sender, EventItem e)
         {
-            Assert.Equal(e.Level.ToString(), Utils.Abstractions.Events.EventItem.EventLevel.Info.ToString());
+            Assert.Equal(e.Level.ToString(), EventItem.EventLevel.Info.ToString());
         }
 
-        private void Service_OnTest(object sender, Abstractions.TestResultCash e)
+        private void Service_OnTest(object sender, Abstracti
+            ons.TestResultCash e)
         {
             Assert.Equal(TestResultError.None.ToString(), e.Result.ToString());
         }
 
-        private void Service_OnAcceptedBad(object sender, EventCashReceive e)
+        private void Service_OnReceived_Bad(object sender, EventCashReceive e)
         {
-            Assert.Equal(e.Event.Level.ToString(), Utils.Abstractions.Events.EventItem.EventLevel.Error.ToString());
+            Assert.NotNull(e.Event);
+            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Error.ToString());
 
+            Assert.NotNull(e.Money);
             Assert.Equal(_amount, e.Money.Value);
         }
 
-        private void Service_OnAcceptedGood(object sender, EventCashReceive e)
+        private void Service_OnReceived_Good(object sender, EventCashReceive e)
         {
-            Assert.Equal(e.Event.Level.ToString(), Utils.Abstractions.Events.EventItem.EventLevel.Info.ToString());
+            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Info.ToString());
 
             Assert.Equal(_amount, e.Money.Value);
         }
