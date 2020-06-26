@@ -13,6 +13,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
         private readonly LocalStorageSettings _Settings;
         public DbSet<Planogram> Planograms { get; set; }
 
+        public DbSet<CashPaymentDetail> CashPaymentDetails { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
