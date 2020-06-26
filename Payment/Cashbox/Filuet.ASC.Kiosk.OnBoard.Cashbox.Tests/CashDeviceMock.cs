@@ -11,17 +11,20 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 {
     public enum TestWork
     {
-        CashAccepting,
+        CashAccepted,
         BadCashAccepted,
-        BadCashOut
+        GiveChanged,
+        BadGiveChanged
     }
 
     public class CashDeviceMock : ICashDeviceAdapter
     {
         private TestWork _type;
 
-        public event EventHandler<EventCashReceive> OnCashReceive;
+        public event EventHandler<EventCashReceive> OnAcceptance;
         public event EventHandler<TestResultCash> OnTest;
+        public event EventHandler<EventCashReceive> OnChange;
+        public event EventHandler<EventItem> OnStop;
 
         public CashDeviceMock(TestWork type)
         {
@@ -30,36 +33,84 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
         public void CashAcceptance(Money money)
         {
-            EventCashReceive eventCashReceive = new EventCashReceive()
-            {
-                Money = money,
-                Event = EventItem.Info("CashReceive")
-            };
+            EventCashReceive eventCashReceive = new EventCashReceive();
             switch (_type)
             {
-                case TestWork.CashAccepting:
-                    OnCashReceive?.Invoke(this, eventCashReceive);
-                    break;
-                case TestWork.BadCashAccepted:
+                case TestWork.CashAccepted:
+                    eventCashReceive.Money = money;
+                    eventCashReceive.Event = EventItem.Info("CashReceive");
 
                     break;
-                case TestWork.BadCashOut:
+                case TestWork.BadCashAccepted:
+                    eventCashReceive.Money = money;
+                    eventCashReceive.Event = EventItem.Error("CashReceive");
+
+                    break;
+                case TestWork.BadGiveChanged:
                     break;
                 default:
                     break;
             }
 
+            OnAcceptance?.Invoke(this, eventCashReceive);
+
+
         }
 
         public void Test()
         {
-            TestResultCash result = new TestResultCash()
+            TestResultCash result = new TestResultCash();
+
+            switch (_type)
             {
-                Result = TestResultError.None,
-                Description = $"None Error"
-            };
+                case TestWork.CashAccepted:
+                    result.Result = TestResultError.None;
+                    result.Description = "None error";
+                    break;
+                case TestWork.BadCashAccepted:
+                    result.Result = TestResultError.BillReceiverError;
+                    result.Description = "Bill receiver error";
+                    break;
+                case TestWork.BadGiveChanged:
+                    break;
+                default:
+                    break;
+            }
 
             OnTest?.Invoke(this, result);
+        }
+
+        public void GiveChange(Money money)
+        {
+            EventCashReceive eventCash = new EventCashReceive();
+
+            switch (_type)
+            {
+                case TestWork.CashAccepted:
+                    
+                    break;
+                case TestWork.BadCashAccepted:
+                    break;
+                case TestWork.GiveChanged:
+                    eventCash.Event = EventItem.Info("Give change");
+                    eventCash.Money = money;
+                    break;
+                case TestWork.BadGiveChanged:
+                    eventCash.Event = EventItem.Error("Give change error");
+                    eventCash.Money = money;
+                    break;
+                default:
+                    break;
+            }
+
+            OnChange?.Invoke(this, eventCash);
+        }
+
+        public void Stop()
+        {
+            EventItem eventItem = EventItem.Info("Device stoped");
+
+            OnStop?.Invoke(this, eventItem);
         }
     }
 }
