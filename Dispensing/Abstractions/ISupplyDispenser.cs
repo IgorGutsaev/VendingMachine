@@ -6,8 +6,18 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
 {
-    public interface ISupplyDispenser: IKioskEventProducer
+    public class DispenseEventArgs : EventArgs
     {
-        void Dispense();
+        public string address { get; set; }
+
+        public override string ToString()
+            => $"{GetType().Name}({address})";
+    }
+
+    public interface ISupplyDispenser
+    {
+        event EventHandler<DispenseEventArgs> OnDispensing;
+
+        void Dispense(string address);
     }
 }

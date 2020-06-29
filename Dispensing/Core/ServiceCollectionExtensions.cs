@@ -1,4 +1,5 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders;
@@ -23,6 +24,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
         }
 
         public static IServiceCollection AddSupplyDispenser(this IServiceCollection serviceCollection)
-            => serviceCollection.AddSingleton<ISupplyDispenser>(new SupplyDispenser()); // Also add dispensing provider (jofemar)
+            => serviceCollection.AddSingleton<ISupplyDispenser>(TraceDecorator<ISupplyDispenser>.Create(new SupplyDispenser()))
+            ; // Also add dispensing provider (jofemar)
     }
 }

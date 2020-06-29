@@ -10,7 +10,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
     {
         protected TUnitOfWork _uow;
 
-        public TUnitOfWork UnitOfWork { get { return _uow; } }
+        public TUnitOfWork UnitOfWork { get { return _uow; } internal set { _uow = value; } }
 
         public AscBaseService(TUnitOfWork uow)
         {

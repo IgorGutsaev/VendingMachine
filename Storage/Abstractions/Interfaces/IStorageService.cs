@@ -1,12 +1,10 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
 {
-    public interface IKioskStorageService : IKioskEventProducer, IDisposable
+    public interface IStorageService
     {
         void Add(Planogram planogram);
 
@@ -15,5 +13,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
         void Truncate();
 
         int Count();
+        void AddCashPaymentDetails(CashPaymentDetail detail);
+        IEnumerable<CashPaymentDetail> GetCashPaymentDetails(Expression<Func<CashPaymentDetail, bool>> detail);
     }
 }
