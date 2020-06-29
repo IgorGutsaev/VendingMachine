@@ -14,13 +14,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 
         internal Order()
         {
-            _id = new Guid();
+            _id = Guid.NewGuid();
             _timestamp = DateTime.Now;
         }
 
         public Money Amount { get; internal set; }
 
-        public IEnumerable<OrderItem> Items { get; internal set; }
+        public IEnumerable<OrderPosition> Items { get; internal set; }
 
         public override string ToString() => Amount.ToString();
 

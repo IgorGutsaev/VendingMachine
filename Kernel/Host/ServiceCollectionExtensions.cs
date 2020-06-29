@@ -4,6 +4,7 @@ using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
+using Filuet.ASC.OnBoard.Kernel.Core;
 using Filuet.Utils.Abstractions.Event;
 using Filuet.Utils.Abstractions.Events;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,11 +25,13 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 .AddEventMediation((sp, broker) => {
                     broker.AppendProducer(sp.GetRequiredService<ISupplyDispenser>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<IStorageService>() as IEventProducer);
+                    broker.AppendProducer(sp.GetRequiredService<IAttendant>() as IEventProducer);
                 })          
                 .AddSingleton((sp) =>
                     new EventConsumer()
                         .AppendWriter<ISupplyDispenser>(new EventWriter<ISupplyDispenser>(sp.GetRequiredService<ILogger<ISupplyDispenser>>()))
-                        .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>())));
+                        .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>()))
+                        .AppendWriter<IAttendant>(new EventWriter<IAttendant>(sp.GetRequiredService<ILogger<IAttendant>>())));
         }
     }
 }

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Platform\Filuet.ASC.Kiosk.OnBoard.Common.Platform.csproj" />
     <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.csproj" />
     <ProjectReference Include="..\..\Payment\Abstractions\Filuet.ASC.OnBoard.Payment.Abstractions.csproj" />
     <ProjectReference Include="..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />

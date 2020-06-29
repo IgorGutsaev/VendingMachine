@@ -1,17 +1,26 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using Filuet.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.OnBoard.Kernel.Core
 {
-    public class Attendant
+    public class Attendant : IAttendant
     {
+        /// <summary>
+        /// Vendor state <see cref="AttendantState"/>
+        /// </summary>
         public AttendantState State { get; private set; } = AttendantState.Idle;
-        public Order Order { get; private set; }
 
-        public event EventHandler<Order> OnNewOrder;
+        public Order Order
+        {
+            get => _order;
+            set {
+                _order = value;
+                OnNewOrder?.Invoke(this, new NewOrderEventArgs { Order = _order });
+            }
+        }
+
+        public event EventHandler<NewOrderEventArgs> OnNewOrder;
 
         private static Attendant Vendor { get; set; }
 
@@ -24,7 +33,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         {
             State = AttendantState.Busy;
             Order = setupOrder?.CreateTargetAndInvoke().Build();
-            OnNewOrder?.Invoke(this, Order);
         }
 
         public void Flush()
@@ -32,5 +40,7 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             Order = null;
             State = AttendantState.Idle;
         }
+
+        private Order _order;
     }
 }

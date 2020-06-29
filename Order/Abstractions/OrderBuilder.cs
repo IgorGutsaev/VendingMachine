@@ -8,10 +8,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 {
     public class OrderBuilder
     {
-        private IEnumerable<OrderItem> _items;
+        private IEnumerable<OrderPosition> _items;
         private Money _amount;
 
-        public OrderBuilder WithItems(IEnumerable<OrderItem> items)
+        public OrderBuilder WithItems(params OrderPosition[] items)
         {
             if (items == null || !items.Any())
                 throw new ArgumentException("Items must be specified");
@@ -37,7 +37,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 
         public OrderBuilder WithTotalAmount(Money amount)
         {
-            if (amount.Value <= 0)
+            if (amount.Value < 0)
                 throw new ArgumentException("Order amount must be positive");
 
             if (_items != null)

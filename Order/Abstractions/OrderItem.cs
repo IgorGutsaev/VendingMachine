@@ -1,21 +1,27 @@
 ﻿using Filuet.Utils.Common.Business;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 {
     public class OrderItem
     {
-        public string Product { get; private set; }
-        public uint Quantity { get; private set; }
-        public Money Amount { get; private set; }
+        public string Product { get; protected set; }
 
-        public OrderItem(string product, uint qty, Money amount)
+        public Money Amount { get; protected set; }
+
+        protected OrderItem() { }
+
+        public static OrderItem Create(string product, Money amount)
         {
-            Product = product;
-            Quantity = qty;
-            Amount = amount;
+            if (string.IsNullOrWhiteSpace(product))
+                throw new ArgumentException("Product must be specified");
+
+            if (amount == null || amount.Value < 0m)
+                throw new ArgumentException("Amount must be specified");
+
+            return new OrderItem { Product = product, Amount = amount };
         }
+
+        public override string ToString() => $"{Product} [{Amount}]";
     }
 }

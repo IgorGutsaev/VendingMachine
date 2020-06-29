@@ -1,15 +1,10 @@
-using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
-using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core;
-using Filuet.Utils.Abstractions.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using System.Linq;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
