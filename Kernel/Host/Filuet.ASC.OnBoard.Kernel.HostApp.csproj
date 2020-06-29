@@ -22,12 +22,14 @@
     <ProjectReference Include="..\..\Common\Platform\Filuet.ASC.Kiosk.OnBoard.Common.Platform.csproj" />
     <ProjectReference Include="..\..\Dispensing\Abstractions\Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.csproj" />
     <ProjectReference Include="..\..\Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj" />
+    <ProjectReference Include="..\..\Fiscal\Abstractions\Filuet.ASC.OnBoard.Fiscal.Abstractions.csproj" />
     <ProjectReference Include="..\..\Maintenance\Dashboard\Client\Filuet.ASC.OnBoard.Dashboard.Client.csproj" />
     <ProjectReference Include="..\..\Maintenance\Dashboard\Shared\Filuet.ASC.OnBoard.Dashboard.Shared.csproj" />
     <ProjectReference Include="..\..\Payment\Cashbox\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.csproj" />
     <ProjectReference Include="..\..\Payment\Cashbox\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core.csproj" />
     <ProjectReference Include="..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />
     <ProjectReference Include="..\..\Storage\Core\Filuet.ASC.Kiosk.OnBoard.Storage.Core.csproj" />
+    <ProjectReference Include="..\Core\Filuet.ASC.OnBoard.Kernel.Core.csproj" />
   </ItemGroup>
 
 

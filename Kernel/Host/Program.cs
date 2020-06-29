@@ -7,6 +7,7 @@ using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.ASC.OnBoard.Kernel.Core;
 using Filuet.Utils.Abstractions.Events;
+using Filuet.Utils.Abstractions.Platform;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
