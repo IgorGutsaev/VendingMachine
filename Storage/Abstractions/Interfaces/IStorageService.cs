@@ -13,5 +13,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
         void Truncate();
 
         int Count();
+        void AddCashPaymentDetails(CashPaymentDetail detail);
+        IEnumerable<CashPaymentDetail> GetCashPaymentDetails(Expression<Func<CashPaymentDetail, bool>> detail);
     }
 }

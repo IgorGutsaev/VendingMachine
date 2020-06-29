@@ -8,4 +8,12 @@
     <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.173" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

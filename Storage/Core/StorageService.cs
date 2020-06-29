@@ -23,9 +23,16 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
             }
         }
 
+        private ICashPaymentDetailRepository _cashPaymentDetailRepository;
+
+        protected ICashPaymentDetailRepository CashPaymentDetailRepository =>
+            _cashPaymentDetailRepository ?? (_cashPaymentDetailRepository = new CashPaymetDetailRepository((LocalStorageContext)_uow?.GetContext()));
+
         public StorageService(IAscUnitOfWork uow) => _uow = uow;
 
         public void Add(Planogram planogram) => PlanogramRepository.Add(planogram);
+
+        public void AddCashPaymentDetails(CashPaymentDetail detail) => CashPaymentDetailRepository.Add(detail);
 
         public void Truncate() => PlanogramRepository.Truncate();
 
@@ -33,6 +40,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
 
         public IEnumerable<Planogram> Get(Expression<Func<Planogram, bool>> planogram)
             => PlanogramRepository.Get(planogram).AsEnumerable();
+
+        public IEnumerable<CashPaymentDetail> GetCashPaymentDetails(Expression<Func<CashPaymentDetail, bool>> detail)
+            => CashPaymentDetailRepository.Get(detail).AsEnumerable();
 
         public void Dispose() => _uow.Dispose();
 
