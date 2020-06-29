@@ -2,7 +2,6 @@
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Events;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
-using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Common.Business;
 using System;
 
@@ -11,107 +10,156 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
     public class CashPaymentService : ICashPaymentService
     {    
         ICashDeviceAdapter _cashDevice;
+
         private IStorageService _storageService;
 
-        public CashPaymentService(ICashDeviceAdapter cashDevice)
-        {
-            _cashDevice = cashDevice;
+        public ICashDeviceAdapter CashDevice 
+        { 
+            get
+            {
+                if (_cashDevice == null)
+                {
+                    throw new ArgumentException("CashPaymnetService has not CashDevice", "CashDevice");
+                }
 
+                return _cashDevice;
+            }
+            private set 
+            {
+                _cashDevice = value;
+            } 
+        }        
+
+        public IStorageService StorageService
+        {
+            get 
+            {
+                if (_storageService == null)
+                {
+                    throw new ArgumentException("CashPaymentService has not StorageService", "StorageService");
+                }
+                return _storageService; 
+            }
+            set 
+            { _storageService = value; }
         }
 
-        public CashPaymentService(ICashDeviceAdapter cashDevice,IStorageService storageService)
+
+        public CashPaymentService()
         {
-            _cashDevice = cashDevice;
+            CashDevice.OnChange += DeviceOnChange;
 
-            _storageService = storageService;
+            CashDevice.OnReceive += DeviceOnReceive;
 
-            _cashDevice.OnChange += DeviceOnChange;
+            CashDevice.OnTest += DeviceOnTest;
 
-            _cashDevice.OnReceive += DeviceOnReceive;
-
-            _cashDevice.OnTest += DeviceOnTest;
-
-            _cashDevice.OnStop += DeviceOnStop;
+            CashDevice.OnStop += DeviceOnStop;
         }
 
-        private void DeviceOnStop(object sender, EventItem e)
+        public CashPaymentService(ICashDeviceAdapter cashDevice,IStorageService storageService):
+            this()
         {
-            if (e.IsError)
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, e.Level.ToString(), e.ErrorMessage));
-            else
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, e.Level.ToString(), e.LayoutMessage));
+            CashDevice = cashDevice;
 
+            StorageService = storageService;
+        }
+
+        private void DeviceOnStop(object sender, StopCashEventArgs e)
+        {
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, e.Description, e.Event.LayoutMessage));
+            
             OnStop?.Invoke(sender, e);
         }
 
         private void DeviceOnTest(object sender, TestResultCash e)
         {
-            _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, e.Result.ToString(), e.Description));
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, e.Result.ToString(), e.Description));
 
             OnTest?.Invoke(sender, e);
         }
 
-        private void DeviceOnReceive(object sender, EventCashReceive e)
+        private void DeviceOnReceive(object sender, CashEventArgs e)
         {
             if (e.Event.IsError)
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.ErrorMessage));
+                StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.ErrorMessage));
             else
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.LayoutMessage));
+                StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.LayoutMessage));
 
             OnReceive?.Invoke(sender, e);
         }
 
-        private void DeviceOnChange(object sender, EventCashReceive e)
+        private void DeviceOnChange(object sender, CashEventArgs e)
         {
             if (e.Event.IsError)
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.ErrorMessage));
+                StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.ErrorMessage));
             else
-                _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.LayoutMessage));
+                StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(e.Money.Value, e.Event.Level.ToString(), e.Event.LayoutMessage));
 
             OnChange?.Invoke(sender, e);
         }
 
-        public CashPaymentService()
-        {
-        }
-
-        public event EventHandler<EventCashReceive> OnChange;
+        public event EventHandler<CashEventArgs> OnChange;
 
 
-        public event EventHandler<EventCashReceive> OnReceive;
+        public event EventHandler<CashEventArgs> OnReceive;
 
 
         public event EventHandler<TestResultCash> OnTest;
 
 
-        public event EventHandler<EventItem> OnStop;
+        public event EventHandler<StopCashEventArgs> OnStop;
 
         public void CashReceive(Money money)
         {
-            _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(money.Value, "Success", "Begin receive"));
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(money.Value, "Success", "Begin receive"));
 
-            _cashDevice.CashReceive(money);
+            CashDevice.CashReceive(money);
         }
 
         public void GiveChange(Money money)
         {
-            _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(money.Value, "Success", "Begin change"));
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(money.Value, "Success", "Begin change"));
 
-            _cashDevice.GiveChange(money);
+            CashDevice.GiveChange(money);
         }
 
         public void StopDevice()
         {
-            _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, "Success", "Begin stop"));
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, "Success", "Begin stop"));
 
-            _cashDevice.Stop();
+            CashDevice.Stop();
         }
 
         public void Test()
         {
-            _storageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, "Success", "Begin test"));
+            StorageService.AddCashPaymentDetails(CashPaymentDetail.Create(0.0m, "Success", "Begin test"));
 
-            _cashDevice.Test();
+            CashDevice.Test();
+        }
+
+        public void AddCashDevice(ICashDeviceAdapter cashDevice)
+        {
+            if (cashDevice == null)
+                throw new ArgumentException("CashDevice is null", "CashDevice");
+
+            CashDevice = cashDevice;
+        }
+
+        public void RemoveCashDevice()
+        {
+            CashDevice = null;
+        }
+
+        public void AddStorage(IStorageService storageService)
+        {
+            if (storageService == null)
+                throw new ArgumentException("StorageService is null", "StorageService");
+            StorageService = storageService;
+        }
+
+        public void RemoveStorage()
+        {
+            StorageService = null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions
 {
@@ -12,7 +13,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions
         CoinAcceptorError = 8
     }
 
-    public struct TestResultCash
+    public sealed class TestResultCash: EventArgs
     {
         public string Description { get; set; }
 

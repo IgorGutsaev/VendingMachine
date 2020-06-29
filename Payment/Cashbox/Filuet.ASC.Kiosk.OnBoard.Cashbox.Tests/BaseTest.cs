@@ -1,4 +1,6 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Cashbox.Core;
+using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,22 +13,24 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
         const string DB_FILEPATH = @"\cache.db";
         const int MAX_DATABASE_SIZE = 1; //MB
 
-        private IServiceProvider _provider;
-
-        public IStorageService StorageService  =>  _provider.GetService<IStorageService>(); 
+        protected ICashPaymentService cashPaymentService;
 
         public BaseTest()
         {
+            cashPaymentService = new CashPaymentService();
+
             string rootDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.
                 GetExecutingAssembly().Location);
 
-            _provider = new ServiceCollection()
+            var provider = new ServiceCollection()
                 .AddStorage()
                 .AddCacheContext(s => {
                     s.CreateDbScriptPath = rootDir + CREATE_DB_SCRIPT_PATH;
                     s.DbFilepath = rootDir + DB_FILEPATH;
                     s.MaxDatabaseSizeMB = MAX_DATABASE_SIZE;
                 }).BuildServiceProvider();
+
+            cashPaymentService.AddStorage(provider.GetService<IStorageService>());
         }
     }
 }

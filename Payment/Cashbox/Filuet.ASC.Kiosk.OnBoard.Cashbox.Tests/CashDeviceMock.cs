@@ -19,10 +19,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
     {
         private TestWork _type;
 
-        public event EventHandler<EventCashReceive> OnReceive;
+        public event EventHandler<CashEventArgs> OnReceive;
         public event EventHandler<TestResultCash> OnTest;
-        public event EventHandler<EventCashReceive> OnChange;
-        public event EventHandler<EventItem> OnStop;
+        public event EventHandler<CashEventArgs> OnChange;
+        public event EventHandler<StopCashEventArgs> OnStop;
 
         public CashDeviceMock(TestWork type)
         {
@@ -31,7 +31,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
         public void CashReceive(Money money)
         {
-            EventCashReceive eventCashReceive = new EventCashReceive();
+            CashEventArgs eventCashReceive = new CashEventArgs();
             switch (_type)
             {
                 case TestWork.CashReceived:
@@ -81,7 +81,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
         public void GiveChange(Money money)
         {
-            EventCashReceive eventCash = new EventCashReceive();
+            CashEventArgs eventCash = new CashEventArgs();
 
             switch (_type)
             {
@@ -106,7 +106,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
         {
             EventItem eventItem = EventItem.Info("Device stoped");
 
-            OnStop?.Invoke(this, eventItem);
+            StopCashEventArgs cashEventArgs = new StopCashEventArgs()
+            {
+                Event = EventItem.Info("Device stoped"),
+                Description = "Stop"
+            };
+
+            OnStop?.Invoke(this, cashEventArgs);
         }
     }
 }
