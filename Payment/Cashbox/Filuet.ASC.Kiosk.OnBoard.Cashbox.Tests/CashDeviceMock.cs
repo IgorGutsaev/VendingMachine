@@ -7,112 +7,143 @@ using System;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 {
-    public enum TestWork
+    public enum TestWorkCash
     {
-        CashReceived,
-        BadCashReceived,
-        GiveChanged,
-        BadGiveChanged
+        GoodReceived,
+        BadReceived,
+        GoodGivedChange,
+        BadGivedChange,
+        GoodStop,
+        BadStop
     }
 
     public class CashDeviceMock : ICashDeviceAdapter
     {
-        private TestWork _type;
+        private TestWorkCash _type;
 
-        public event EventHandler<CashEventArgs> OnReceive;
-        public event EventHandler<TestResultCash> OnTest;
-        public event EventHandler<CashEventArgs> OnChange;
-        public event EventHandler<StopCashEventArgs> OnStop;
 
-        public CashDeviceMock(TestWork type)
+        public CashDeviceMock(TestWorkCash type)
         {
             _type = type;
         }
 
+        public event EventHandler<CashEventArgs> OnReceive;
+        public event EventHandler<TestResultCash> OnTest;
+        public event EventHandler<CashEventArgs> OnChange;
+        public event EventHandler<StopCashEventArgs> OnStopPayment;
+        public event EventHandler<StopCashEventArgs> OnStopDevice;
+
         public void CashReceive(Money money)
         {
-            CashEventArgs eventCashReceive = new CashEventArgs();
             switch (_type)
             {
-                case TestWork.CashReceived:
-                    eventCashReceive.Money = money;
-                    eventCashReceive.Event = EventItem.Info("CashReceived");
-                    
+                case TestWorkCash.GoodReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() {Money = money,Event = EventItem.Info("Cash received good") });
                     break;
-                case TestWork.BadCashReceived:
-                    eventCashReceive.Money = money;
-                    eventCashReceive.Event = EventItem.Error("CashReceived");
+                case TestWorkCash.BadReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received bad") });
+
+                    break;
+                case TestWorkCash.GoodGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change good") });
+
+                    break;
+                case TestWorkCash.BadGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change bad") });
+
+                    break;
+                case TestWorkCash.GoodStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
+
+                    break;
+                case TestWorkCash.BadStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
 
                     break;
                 default:
-                    eventCashReceive.Money = money;
-                    eventCashReceive.Event = EventItem.Debug("CashReceived");
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash accept has error") });
+
                     break;
             }
 
-            OnReceive?.Invoke(this, eventCashReceive);
-
-
-        }
-
-        public void Test()
-        {
-            TestResultCash result = new TestResultCash();
-
-            switch (_type)
-            {
-                case TestWork.CashReceived:
-                    result.Result = TestResultError.None;
-                    result.Description = "None error";
-                    break;
-                case TestWork.BadCashReceived:
-                    result.Result = TestResultError.BillReceiverError;
-                    result.Description = "Bill receiver error";
-                    break;
-                default:
-                    result.Result = TestResultError.None;
-
-                    result.Description = "Cash Tested";
-                    break;
-            }
-
-            OnTest?.Invoke(this, result);
         }
 
         public void GiveChange(Money money)
         {
-            CashEventArgs eventCash = new CashEventArgs();
-
             switch (_type)
             {
-                case TestWork.GiveChanged:
-                    eventCash.Event = EventItem.Info("Give change");
-                    eventCash.Money = money;
+                case TestWorkCash.GoodReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received good") });
                     break;
-                case TestWork.BadGiveChanged:
-                    eventCash.Event = EventItem.Error("Give change error");
-                    eventCash.Money = money;
+                case TestWorkCash.BadReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received bad") });
+
+                    break;
+                case TestWorkCash.GoodGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Info("Cash gived change good") });
+
+                    break;
+                case TestWorkCash.BadGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change bad") });
+
+                    break;
+                case TestWorkCash.GoodStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
+
+                    break;
+                case TestWorkCash.BadStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
+
                     break;
                 default:
-                    eventCash.Money = money;
-                    eventCash.Event = EventItem.Debug("Gived change");
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash accept has error") });
+
                     break;
             }
-
-            OnChange?.Invoke(this, eventCash);
         }
 
-        public void Stop()
+        public void StopDevice()
         {
-            EventItem eventItem = EventItem.Info("Device stoped");
+            throw new NotImplementedException();
+        }
 
-            StopCashEventArgs cashEventArgs = new StopCashEventArgs()
+        public void StopPayment()
+        {
+            switch (_type)
             {
-                Event = EventItem.Info("Device stoped"),
-                Description = "Stop"
-            };
+                case TestWorkCash.GoodReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received good") });
+                    break;
+                case TestWorkCash.BadReceived:
+                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received bad") });
 
-            OnStop?.Invoke(this, cashEventArgs);
+                    break;
+                case TestWorkCash.GoodGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash gived change good") });
+
+                    break;
+                case TestWorkCash.BadGivedChange:
+                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash gived change bad") });
+
+                    break;
+                case TestWorkCash.GoodStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Info("Cash received stoped good") });
+
+                    break;
+                case TestWorkCash.BadStop:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
+
+                    break;
+                default:
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash accept has error") });
+
+                    break;
+            }
+        }
+
+        public void Test()
+        {
+            throw new NotImplementedException();
         }
     }
 }
