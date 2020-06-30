@@ -12,13 +12,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces
 
         event EventHandler<CashEventArgs> OnChange;
 
-        event EventHandler<StopCashEventArgs> OnStop;
+        event EventHandler<StopCashEventArgs> OnStopPayment;
+
+        event EventHandler<StopCashEventArgs> OnStopDevice;
 
         void CashReceive(Money money);
 
         void GiveChange(Money money);
 
         void Test();
-        void Stop();
+        void StopPayment();
+
+        void StopDevice();
     }
 }
