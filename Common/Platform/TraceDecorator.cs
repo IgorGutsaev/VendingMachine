@@ -36,12 +36,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
                 {
                     string argType = convertedArgs[i].GetType().Name;
 
-                    if (argType.Contains("Expression"))
+                    if (argType.Contains("Expression")
+                        || argType.Contains("Action")
+                        || argType.Contains("Func")
+                        || argType.Contains("EventHandler"))
                         convertedArgs[i] = convertedArgs[i].ToString();                    
-                    else if (argType.Contains("Func"))
-                        convertedArgs[i] = convertedArgs[i].ToString();
-                    else if (argType.Contains("EventHandler"))
-                        convertedArgs[i] = convertedArgs[i].ToString();
                 }
 
                 var settings = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };

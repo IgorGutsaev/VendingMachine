@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
-using Filuet.Utils.Abstractions.Event;
+using Filuet.ASC.OnBoard.Kernel.Core;
 using Filuet.Utils.Abstractions.Events;
+using Filuet.Utils.Abstractions.Platform;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -33,6 +27,10 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             // POC
             Task.Run(() =>
             {
+                IAttendant att = host.Services.GetRequiredService<IAttendant>();
+
+                att.StartOrder(b => { });
+
                 IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
                 ISupplyDispenser s1 = host.Services.GetRequiredService<ISupplyDispenser>();
@@ -60,7 +58,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 {
                     HostContext appContext = new FileInfo(CONFIG_FILE).ToConfiguration();
 
-                    services.AddHardware();
+                    services.AddAttendant()
+                        .AddHardware();
 
                     services.AddStorage()
                         .AddCacheContext(settings =>
