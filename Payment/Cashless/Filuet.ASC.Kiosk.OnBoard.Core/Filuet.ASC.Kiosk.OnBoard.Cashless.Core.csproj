@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Platform\Filuet.ASC.Kiosk.OnBoard.Common.Platform.csproj" />
-    <ProjectReference Include="..\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.csproj" />
+    <ProjectReference Include="..\Filuet.ASC.Kiosk.OnBoard.Cashless.Abstractions\Filuet.ASC.Kiosk.OnBoard.Cashless.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

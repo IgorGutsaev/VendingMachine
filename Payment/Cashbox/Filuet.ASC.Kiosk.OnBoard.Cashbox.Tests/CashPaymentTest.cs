@@ -1,178 +1,136 @@
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Events;
+using Filuet.ASC.Kiosk.OnBoard.Cashbox.Core;
 using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Common.Business;
 using Xunit;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 {
-    public class CashPaymentTest:BaseTest
+    public class CashPaymentTest
     {
+        private ICashPaymentService _cashPaymentService = new CashPaymentService();
+
 
         private decimal _amount;
 
         public CashDeviceMock ICashDeviceAdapter { get; private set; }
 
+        private TestWorkCash _type;
+
+        public CashPaymentTest()
+        {
+            _cashPaymentService = new CashPaymentService();
+
+            _cashPaymentService.OnGivedChange += CashPaymentService_OnGivedChange;
+            _cashPaymentService.OnReceived += CashPaymentService_OnReceived;
+            _cashPaymentService.OnStop += CashPaymentService_OnStop;
+
+        }
+
+        private void CashPaymentService_OnStop(object sender, StopCashEventArgs e)
+        {
+            if (_type == TestWorkCash.GoodStop)
+            {
+                Assert.False(e.Event.IsError);
+            }
+            else
+            {
+                Assert.True(e.Event.IsError);
+            }
+        }
+
+        private void CashPaymentService_OnReceived(object sender, CashEventArgs e)
+        {
+            if (_type == TestWorkCash.GoodReceived)
+            {
+                Assert.False(e.Event.IsError);
+            }
+            else
+            {
+                Assert.True(e.Event.IsError);
+            }
+        }
+
+        private void CashPaymentService_OnGivedChange(object sender, CashEventArgs e)
+        {
+            if (_type == TestWorkCash.GoodGivedChange)
+            {
+                Assert.False(e.Event.IsError);
+            }
+            else
+            {
+                Assert.True(e.Event.IsError);
+            }
+        }
+
         [Theory]
-        [InlineData(100.0,CurrencyCode.RussianRouble,TestWork.CashReceived)]
-        [InlineData(99.0,CurrencyCode.RussianRouble,TestWork.BadCashReceived)]
-        [InlineData(98.0,CurrencyCode.RussianRouble,TestWork.GiveChanged)]
-        [InlineData(97.0,CurrencyCode.RussianRouble,TestWork.BadGiveChanged)]
-        public void Test_CashReceive(decimal amount, CurrencyCode currency,TestWork type)
+        [InlineData(100.0,CurrencyCode.RussianRouble,TestWorkCash.GoodReceived)]
+        [InlineData(99.0,CurrencyCode.RussianRouble,TestWorkCash.BadReceived)]
+        [InlineData(98.0,CurrencyCode.RussianRouble,TestWorkCash.GoodGivedChange)]
+        [InlineData(97.0,CurrencyCode.RussianRouble,TestWorkCash.BadGivedChange)]
+        [InlineData(95, CurrencyCode.RussianRouble, TestWorkCash.GoodStop)]
+        [InlineData(95, CurrencyCode.RussianRouble, TestWorkCash.BadStop)]
+        public void Test_CashReceive(decimal amount, CurrencyCode currency,TestWorkCash type)
         {
             //prepare
             _amount = amount;
 
-            cashPaymentService.AddCashDevice(new CashDeviceMock(type));
+            _type = type;
 
-            switch (type)
-            {
-                case TestWork.CashReceived:
-                    cashPaymentService.OnReceive += Service_OnReceived_Good;
-
-                    break;
-                case TestWork.BadCashReceived:
-
-                    cashPaymentService.OnReceive += Service_OnReceived_Bad;
-                    break;
-                default:
-                    cashPaymentService.OnReceive += Service_OnReceived_Another;
-                    break;
-            }
-
-            
+            _cashPaymentService.AddCashDevice(new CashDeviceMock(type));
+           
             Money money = Money.Create(amount, currency);
 
             // Perform
-            cashPaymentService.CashReceive(money);
+            _cashPaymentService.CashReceive(money);
 
-            cashPaymentService.RemoveCashDevice();
-        }
-
-        private void Service_OnReceived_Another(object sender, CashEventArgs e)
-        {
-            Assert.NotNull(e.Event);
-
-            Assert.NotNull(e.Money);
-
-            Assert.Equal(_amount, e.Money.Value);
-
-            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Debug.ToString());
-        }
-
-
-        [Fact]
-        public void Test_CashTest()
-        {
-            //prepare
-            cashPaymentService.AddCashDevice(new CashDeviceMock(TestWork.CashReceived));
-
-            cashPaymentService.OnTest += Service_OnTest;
-
-            //perform
-            cashPaymentService.Test();
-
-            cashPaymentService.RemoveCashDevice();
-        }
-
-        [Fact]
-        public void Test_DeviceStop()
-        {
-            //prepare
-            cashPaymentService.AddCashDevice(new CashDeviceMock(TestWork.CashReceived));
-
-
-            cashPaymentService.OnStop += Service_OnStop;
-
-            //perform
-            cashPaymentService.StopDevice();
-
-            cashPaymentService.RemoveCashDevice();
+            _cashPaymentService.RemoveCashDevice();
         }
 
         [Theory]
-        [InlineData(99.9,CurrencyCode.RussianRouble,TestWork.GiveChanged)]
-        [InlineData(98.9,CurrencyCode.RussianRouble,TestWork.BadGiveChanged)]
-        [InlineData(97,CurrencyCode.RussianRouble,TestWork.BadCashReceived)]
-        [InlineData(95,CurrencyCode.RussianRouble,TestWork.CashReceived)]
-        public void Test_GiveChange(decimal amount,CurrencyCode currencyCode,TestWork type)
+        [InlineData(99.9,CurrencyCode.RussianRouble,TestWorkCash.GoodGivedChange)]
+        [InlineData(98.9,CurrencyCode.RussianRouble,TestWorkCash.BadGivedChange)]
+        [InlineData(97,CurrencyCode.RussianRouble,TestWorkCash.BadReceived)]
+        [InlineData(95,CurrencyCode.RussianRouble,TestWorkCash.GoodReceived)]
+        [InlineData(95,CurrencyCode.RussianRouble,TestWorkCash.GoodStop)]
+        [InlineData(95,CurrencyCode.RussianRouble,TestWorkCash.BadStop)]
+        public void Test_GiveChange(decimal amount,CurrencyCode currencyCode,TestWorkCash type)
         {
             //prepare
-            cashPaymentService.AddCashDevice(new CashDeviceMock(type));
+            _type = type;
+            _cashPaymentService.AddCashDevice(new CashDeviceMock(type));
 
             Money money = Money.Create(amount, currencyCode);
 
             _amount = amount;
 
-            switch (type)
-            {
-                case TestWork.GiveChanged:
-                    cashPaymentService.OnChange += Service_OnChange_Good;
-
-                    break;
-                case TestWork.BadGiveChanged:
-                    cashPaymentService.OnChange += Service_OnChange_Bad;
-
-                    break;
-                default:
-                    cashPaymentService.OnChange += Service_OnChange_Another;
-                    break;
-            }
-
-
             //perform
-            cashPaymentService.GiveChange(money);
+            _cashPaymentService.GiveChange(money);
 
-            cashPaymentService.RemoveCashDevice();
+            _cashPaymentService.RemoveCashDevice();
         }
 
-        private void Service_OnChange_Another(object sender, CashEventArgs e)
+        [Theory]
+        [InlineData( TestWorkCash.GoodGivedChange)]
+        [InlineData( TestWorkCash.BadGivedChange)]
+        [InlineData( TestWorkCash.BadReceived)]
+        [InlineData( TestWorkCash.GoodReceived)]
+        [InlineData( TestWorkCash.GoodStop)]
+        [InlineData( TestWorkCash.BadStop)]
+        public void Test_Stop(TestWorkCash type)
         {
-            Assert.NotNull(e.Event);
+            //prepare
+            _type = type;
 
-            Assert.NotNull(e.Money);
+            _cashPaymentService.AddCashDevice(new CashDeviceMock(type));
 
-            Assert.Equal(_amount, e.Money.Value);
 
-            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Debug.ToString());
+            _cashPaymentService.Stop();
+
+            _cashPaymentService.RemoveCashDevice();
         }
 
-        private void Service_OnChange_Bad(object sender, CashEventArgs e)
-        {
-            Assert.Equal(EventItem.EventLevel.Error.ToString(), e.Event.Level.ToString());
-            Assert.Equal(_amount, e.Money.Value);
-        }
 
-        private void Service_OnChange_Good(object sender, CashEventArgs e)
-        {
-            Assert.Equal(EventItem.EventLevel.Info.ToString(), e.Event.Level.ToString());
-            Assert.Equal(_amount, e.Money.Value);
-        }
-
-        private void Service_OnStop(object sender, CashEventArgs e)
-        {
-            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Info.ToString());
-        }
-
-        private void Service_OnTest(object sender, Abstractions.TestResultCash e)
-        {
-            Assert.Equal(TestResultError.None.ToString(), e.Result.ToString());
-        }
-
-        private void Service_OnReceived_Bad(object sender, CashEventArgs e)
-        {
-            Assert.NotNull(e.Event);
-            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Error.ToString());
-
-            Assert.NotNull(e.Money);
-            Assert.Equal(_amount, e.Money.Value);
-        }
-
-        private void Service_OnReceived_Good(object sender, CashEventArgs e)
-        {
-            Assert.Equal(e.Event.Level.ToString(), EventItem.EventLevel.Info.ToString());
-
-            Assert.Equal(_amount, e.Money.Value);
-        }
     }
 }
