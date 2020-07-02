@@ -13,7 +13,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
         StartedPaymentBad,
         FinishedPaymentGood,//StartedPaymentGood
         FinishedPaymentBad,
-        ReturnPaymentBad,
+        StartReturnPaymentBad,
         StopPaymentGood,
         StopPaymentBad
 
@@ -25,9 +25,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
         public event EventHandler<TestCardEventArgs> OnTest;
         public event EventHandler<StopCardEventArgs> OnStopDevice;
         public event EventHandler<CardEventArgs> OnReturnPayment;
-        public event EventHandler<CardEventArgs> OnFinishedPayment;
         public event EventHandler<StopCardEventArgs> OnStopPayment;
-        public event EventHandler<CardEventArgs> OnStartPayment;
+        public event EventHandler<CardEventArgs> OnPayment;
 
         public CardDeviceMock(TestWorkCard type)
         {
@@ -35,7 +34,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
         }
 
 
-        public void ReturnPayment(Money money)
+        public void StartReturnPayment(Money money)
         {
             EventItem eventItem = new EventItem();
             switch (_type)
@@ -44,14 +43,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
                     OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Started payment started bad") });
                     break;
                 case TestWorkCard.FinishedPaymentGood:
-                    OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("Return payment started good") });
-                    OnFinishedPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("Return payment finished good") });
+                    OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("Return payment finished good") });
                     break;
                 case TestWorkCard.FinishedPaymentBad:
-                    OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("Return payment started good") });
-                    OnFinishedPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Return payment finished bad") });
+                    OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Return payment finished bad") });
                     break;
-                case TestWorkCard.ReturnPaymentBad:
+                case TestWorkCard.StartReturnPaymentBad:
                     OnReturnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Return payment started bad") });
                     break;
                 case TestWorkCard.StopPaymentGood:
@@ -75,29 +72,27 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
             switch (_type)
             {
                 case TestWorkCard.StartedPaymentBad:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Payment started bad") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Payment started bad") });
                     break;
                 case TestWorkCard.FinishedPaymentGood:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("Payment started good") });
-                    OnFinishedPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("payment finished good") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("payment finished good") });
                     break;
                 case TestWorkCard.FinishedPaymentBad:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Info("payment started good") });
-                    OnFinishedPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("payment finished bad") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("payment finished bad") });
                     break;
-                case TestWorkCard.ReturnPaymentBad:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("payment started bad") });
+                case TestWorkCard.StartReturnPaymentBad:
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("payment started bad") });
                     break;
                 case TestWorkCard.StopPaymentGood:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Stop payment is good") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Stop payment is good") });
 
                     break;
                 case TestWorkCard.StopPaymentBad:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Stop payment is bad") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Stop payment is bad") });
 
                     break;
                 default:
-                    OnStartPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Return payment has error") });
+                    OnPayment?.Invoke(this, new CardEventArgs() { Money = money, Event = EventItem.Error("Return payment has error") });
 
                     break;
             }
@@ -122,7 +117,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Tests
                 case TestWorkCard.FinishedPaymentBad:
                     OnStopPayment?.Invoke(this, new StopCardEventArgs() { Description = "Bad", Event = EventItem.Error("Payment finished bad") });
                     break;
-                case TestWorkCard.ReturnPaymentBad:
+                case TestWorkCard.StartReturnPaymentBad:
                     OnStopPayment?.Invoke(this, new StopCardEventArgs() { Description = "Bad", Event = EventItem.Error("Return payment started bad") });
                     break;
                 case TestWorkCard.StopPaymentGood:

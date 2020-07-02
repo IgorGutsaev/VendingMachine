@@ -1,10 +1,6 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Cashless.Abstractions.Events;
-using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.Utils.Common.Business;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Abstractions
 {
@@ -18,15 +14,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Abstractions
 
         void StartPayment(Money money);
 
-        void ReturnPayment(Money money);
+        void StartReturnPayment(Money money);
 
-        event EventHandler<StopCardEventArgs> OnGoodStop;
-        event EventHandler<StopCardEventArgs> OnBadStop;
-
-        event EventHandler<CardEventArgs> OnGoodPayment;
-        event EventHandler<CardEventArgs> OnBadPayment;
-
-        event EventHandler<CardEventArgs> OnGoodReturnPayment;
-        event EventHandler<CardEventArgs> OnBadReturnPayment;
+        event EventHandler<StopCardEventArgs> OnStop;
+        event EventHandler<CardEventArgs> OnPayment;
+        event EventHandler<CardEventArgs> OnReturnPayment;
     }
 }

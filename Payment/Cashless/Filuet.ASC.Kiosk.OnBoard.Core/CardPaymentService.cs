@@ -10,20 +10,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Core
     {
         private ICardDeviceAdapter _cardDevice;
 
-        public event EventHandler<StopCardEventArgs> OnGoodStop;
-        public event EventHandler<StopCardEventArgs> OnBadStop;
-        public event EventHandler<CardEventArgs> OnGoodPayment;
-        public event EventHandler<CardEventArgs> OnBadPayment;
-        public event EventHandler<CardEventArgs> OnGoodReturnPayment;
-        public event EventHandler<CardEventArgs> OnBadReturnPayment;   
+        public event EventHandler<StopCardEventArgs> OnStop;
+        public event EventHandler<CardEventArgs> OnPayment;
+        public event EventHandler<CardEventArgs> OnReturnPayment;
         
-        private enum TypePayment
-        {
-            Payment,
-            ReturnPayment
-        }
 
-        private TypePayment _currentTypePayment;
 
         private ICardDeviceAdapter CardDevice
         {
@@ -61,67 +52,25 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Core
 
         private void CardDevice_OnReturnPayment(object sender, CardEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadReturnPayment?.Invoke(this, e);
-            }
-        }
-
-        private void CardDevice_OnFinishedPayment(object sender, CardEventArgs e)
-        {
-            switch (_currentTypePayment)
-            {
-                case TypePayment.Payment:
-                    if (e.Event.IsError)
-                    {
-                        OnBadPayment?.Invoke(this, e);
-                    }
-                    else
-                    {
-                        OnGoodPayment?.Invoke(this, e);
-                    }
-                    break;
-                case TypePayment.ReturnPayment:
-                    if (e.Event.IsError)
-                    {
-                        OnBadReturnPayment?.Invoke(this, e);
-                    }
-                    else
-                    {
-                        OnGoodReturnPayment?.Invoke(this, e);
-                    }
-                    break;
-            }
-
+            OnReturnPayment?.Invoke(this, e);
         }
 
         private void CardDevice_OnStopPayment(object sender, StopCardEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadStop?.Invoke(this, e);
-            }
-            else
-            {
-                OnGoodStop?.Invoke(this, e);
-            }
+             OnStop?.Invoke(this, e);
         }
 
         private void CardDevice_OnStartPayment(object sender, CardEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadPayment?.Invoke(this, e);
-            }
+             OnPayment?.Invoke(this, e);
         }
 
         public void AddCardDevice(ICardDeviceAdapter cardDevice)
         {
             CardDevice = cardDevice;
 
-            CardDevice.OnStartPayment += CardDevice_OnStartPayment;
+            CardDevice.OnPayment += CardDevice_OnStartPayment;
             CardDevice.OnStopPayment += CardDevice_OnStopPayment;
-            CardDevice.OnFinishedPayment += CardDevice_OnFinishedPayment;
             CardDevice.OnReturnPayment += CardDevice_OnReturnPayment;
             CardDevice.OnStopDevice += CardDevice_OnStopDevice;
             CardDevice.OnTest += CardDevice_OnTest;
@@ -130,9 +79,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Core
         public void RemoveCardDevice()
         {
 
-            CardDevice.OnStartPayment -= CardDevice_OnStartPayment;
+            CardDevice.OnPayment -= CardDevice_OnStartPayment;
             CardDevice.OnStopPayment -= CardDevice_OnStopPayment;
-            CardDevice.OnFinishedPayment -= CardDevice_OnFinishedPayment;
             CardDevice.OnReturnPayment -= CardDevice_OnReturnPayment;
             CardDevice.OnStopDevice -= CardDevice_OnStopDevice;
             CardDevice.OnTest -= CardDevice_OnTest;
@@ -147,16 +95,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashless.Core
 
         public void StartPayment(Money money)
         {
-            _currentTypePayment = TypePayment.Payment;
 
             CardDevice.StartPayment(money);
         }
 
-        public void ReturnPayment(Money money)
+        public void StartReturnPayment(Money money)
         {
-            _currentTypePayment = TypePayment.ReturnPayment;
-
-            CardDevice.ReturnPayment(money);
+            CardDevice.StartReturnPayment(money);
         }
     }
 }
