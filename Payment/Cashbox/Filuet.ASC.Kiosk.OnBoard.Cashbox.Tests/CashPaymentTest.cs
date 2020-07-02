@@ -22,15 +22,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
         {
             _cashPaymentService = new CashPaymentService();
 
-            _cashPaymentService.OnBadGivedChange += CashPaymentService_OnBadGivedChange;
-            _cashPaymentService.OnBadReceived += CashPaymentService_OnBadReceived;
-            _cashPaymentService.OnBadStop += CashPaymentService_OnBadStop;
-            _cashPaymentService.OnGoodGivedChange += CashPaymentService_OnGoodGivedChange;
-            _cashPaymentService.OnGoodReceived += CashPaymentService_OnGoodReceived;
-            _cashPaymentService.OnGoodStop += CashPaymentService_OnGoodStop;
+            _cashPaymentService.OnGivedChange += CashPaymentService_OnGivedChange;
+            _cashPaymentService.OnReceived += CashPaymentService_OnReceived;
+            _cashPaymentService.OnStop += CashPaymentService_OnStop;
+
         }
 
-        private void CashPaymentService_OnGoodStop(object sender, StopCashEventArgs e)
+        private void CashPaymentService_OnStop(object sender, StopCashEventArgs e)
         {
             if (_type == TestWorkCash.GoodStop)
             {
@@ -42,7 +40,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             }
         }
 
-        private void CashPaymentService_OnGoodReceived(object sender, CashEventArgs e)
+        private void CashPaymentService_OnReceived(object sender, CashEventArgs e)
         {
             if (_type == TestWorkCash.GoodReceived)
             {
@@ -54,7 +52,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             }
         }
 
-        private void CashPaymentService_OnGoodGivedChange(object sender, CashEventArgs e)
+        private void CashPaymentService_OnGivedChange(object sender, CashEventArgs e)
         {
             if (_type == TestWorkCash.GoodGivedChange)
             {
@@ -64,21 +62,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             {
                 Assert.True(e.Event.IsError);
             }
-        }
-
-        private void CashPaymentService_OnBadStop(object sender, StopCashEventArgs e)
-        {
-            Assert.True(e.Event.IsError);
-        }
-
-        private void CashPaymentService_OnBadReceived(object sender, CashEventArgs e)
-        {
-            Assert.True(e.Event.IsError);
-        }
-
-        private void CashPaymentService_OnBadGivedChange(object sender, CashEventArgs e)
-        {
-            Assert.True(e.Event.IsError);
         }
 
         [Theory]
@@ -141,6 +124,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             _type = type;
 
             _cashPaymentService.AddCashDevice(new CashDeviceMock(type));
+
 
             _cashPaymentService.Stop();
 

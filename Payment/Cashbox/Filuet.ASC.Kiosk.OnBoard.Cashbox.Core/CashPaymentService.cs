@@ -10,12 +10,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
     {    
         ICashDeviceAdapter _cashDevice;
 
-        public event EventHandler<CashEventArgs> OnGoodReceived;
-        public event EventHandler<CashEventArgs> OnBadReceived;
-        public event EventHandler<CashEventArgs> OnGoodGivedChange;
-        public event EventHandler<CashEventArgs> OnBadGivedChange;
-        public event EventHandler<StopCashEventArgs> OnGoodStop;
-        public event EventHandler<StopCashEventArgs> OnBadStop;
+        public event EventHandler<CashEventArgs> OnReceived;
+        public event EventHandler<CashEventArgs> OnGivedChange;
+        public event EventHandler<StopCashEventArgs> OnStop;
 
         private ICashDeviceAdapter CashDevice 
         { 
@@ -72,14 +69,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 
         private void CashDevice_OnStopPayment(object sender, StopCashEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadStop?.Invoke(this, e);
-            }
-            else
-	        {
-                OnGoodStop?.Invoke(this, e);
-	        }
+            OnStop?.Invoke(this, e);
         }
 
         private void CashDevice_OnStopDevice(object sender, StopCashEventArgs e)
@@ -89,26 +79,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 
         private void CashDevice_OnReceive(object sender, CashEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadReceived?.Invoke(this, e);
-            }
-            else
-            {
-                OnGoodReceived?.Invoke(this, e);
-            }
+                OnReceived?.Invoke(this, e);
         }
 
         private void CashDevice_OnChange(object sender, CashEventArgs e)
         {
-            if (e.Event.IsError)
-            {
-                OnBadGivedChange?.Invoke(this, e);
-            }
-            else
-            {
-                OnGoodGivedChange?.Invoke(this, e);
-            }
+                OnGivedChange?.Invoke(this, e);
         }
 
         public void RemoveCashDevice()

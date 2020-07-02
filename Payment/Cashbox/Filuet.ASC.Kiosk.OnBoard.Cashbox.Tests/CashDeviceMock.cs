@@ -45,19 +45,19 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
                     break;
                 case TestWorkCash.GoodGivedChange:
-                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change good") });
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change good") });
 
                     break;
                 case TestWorkCash.BadGivedChange:
-                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change bad") });
+                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash gived change bad") });
 
                     break;
                 case TestWorkCash.GoodStop:
-                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
+                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
 
                     break;
                 case TestWorkCash.BadStop:
-                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
+                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
 
                     break;
                 default:
@@ -73,10 +73,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             switch (_type)
             {
                 case TestWorkCash.GoodReceived:
-                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received good") });
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received good") });
                     break;
                 case TestWorkCash.BadReceived:
-                    OnReceive?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received bad") });
+                    OnChange?.Invoke(this, new CashEventArgs() { Money = money, Event = EventItem.Error("Cash received bad") });
 
                     break;
                 case TestWorkCash.GoodGivedChange:
@@ -88,11 +88,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
 
                     break;
                 case TestWorkCash.GoodStop:
-                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
+                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received stoped good") });
 
                     break;
                 case TestWorkCash.BadStop:
-                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
+                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received stoped bed") });
 
                     break;
                 default:
@@ -112,18 +112,18 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
             switch (_type)
             {
                 case TestWorkCash.GoodReceived:
-                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received good") });
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received good") });
                     break;
                 case TestWorkCash.BadReceived:
-                    OnReceive?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash received bad") });
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash received bad") });
 
                     break;
                 case TestWorkCash.GoodGivedChange:
-                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash gived change good") });
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash gived change good") });
 
                     break;
                 case TestWorkCash.BadGivedChange:
-                    OnChange?.Invoke(this, new CashEventArgs() {  Event = EventItem.Error("Cash gived change bad") });
+                    OnStopPayment?.Invoke(this, new StopCashEventArgs() {  Event = EventItem.Error("Cash gived change bad") });
 
                     break;
                 case TestWorkCash.GoodStop:
