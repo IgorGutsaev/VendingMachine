@@ -74,6 +74,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "printer", "printer", "{A3C3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Printer.Abstractions", "Printer\Abstractions\Filuet.ASC.Kiosk.OnBoard.Printer.Abstractions.csproj", "{DED4942A-F2A3-4AD7-95BB-72B333D7BC86}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UVS", "UVS", "{FB8927FF-8892-4DA0-A973-0646FA98E41C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Core", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Core\Filuet.ASC.Kiosk.OnBoard.UVS.Core.csproj", "{F7DD14A4-18F2-4D48-8568-6171688AFD17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +176,10 @@ Global
 		{DED4942A-F2A3-4AD7-95BB-72B333D7BC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DED4942A-F2A3-4AD7-95BB-72B333D7BC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DED4942A-F2A3-4AD7-95BB-72B333D7BC86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7DD14A4-18F2-4D48-8568-6171688AFD17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7DD14A4-18F2-4D48-8568-6171688AFD17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7DD14A4-18F2-4D48-8568-6171688AFD17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7DD14A4-18F2-4D48-8568-6171688AFD17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,6 +210,8 @@ Global
 		{10BACA07-B92A-4574-B9CB-442CB4E537DB} = {F69CFBCC-833E-47BA-B8D8-E35F65F59F47}
 		{BF8045CD-A457-4DEB-B6C3-A5F49A4B1B6D} = {9AF1BDF8-3B94-45D2-9DE2-3ADA0F630465}
 		{DED4942A-F2A3-4AD7-95BB-72B333D7BC86} = {A3C376D4-D155-4672-A47E-B02FBEAD2467}
+		{FB8927FF-8892-4DA0-A973-0646FA98E41C} = {9AF1BDF8-3B94-45D2-9DE2-3ADA0F630465}
+		{F7DD14A4-18F2-4D48-8568-6171688AFD17} = {FB8927FF-8892-4DA0-A973-0646FA98E41C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A02BEFA1-73D8-435F-8D33-C1AB99ACD5C2}
