@@ -17,4 +17,8 @@
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
