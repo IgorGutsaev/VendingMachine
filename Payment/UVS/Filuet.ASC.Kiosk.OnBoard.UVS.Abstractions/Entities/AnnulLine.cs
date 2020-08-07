@@ -1,5 +1,8 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{    
+{
     public partial class AnnulLine
     {
         public int Id { get; set; }
@@ -15,7 +18,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public double PackCount { get; set; }
         public double RealPrice { get; set; }
         public int PriceOption { get; set; }
-    
-        public virtual AnnulHead AnnulHead { get; set; }
+
+        public virtual AnnulHead Head { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
@@ -15,8 +16,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public double? VandensLygis { get; set; }
         public DateTime? MatavimoLaikas { get; set; }
         public bool? IsDevice { get; set; }
-        public int? PrekyvID { get; set; }
+        public int? PrekyvId { get; set; }
         public int? Zetas { get; set; }
-        public int ID { get; set; }
+        public int Id { get; set; }
     }
 }

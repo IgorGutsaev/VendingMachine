@@ -1,13 +1,14 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
     public partial class PrekesIstorija
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public DateTime? Laikas { get; set; }
         public int? PrekesKodas { get; set; }
-        public int? PrekesID { get; set; }
+        public int? PrekesId { get; set; }
         public int? Operacija { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }

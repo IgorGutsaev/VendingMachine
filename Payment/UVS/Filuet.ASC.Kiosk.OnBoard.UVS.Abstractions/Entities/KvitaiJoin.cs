@@ -1,10 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{    
+{
     public partial class KvitaiJoin
     {
-        public int KvGID { get; set; }
-        public int KvEID { get; set; }
-        public int AparatoID { get; set; }
+        public int KvGid { get; set; }
+        public int KvEid { get; set; }
+        public int AparatoId { get; set; }
         public int KvitoNr { get; set; }
         public short? Year { get; set; }
         public byte? Month { get; set; }

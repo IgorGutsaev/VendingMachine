@@ -1,10 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
-    using System;
-    
-    public partial class UpdatePLU
+    public partial class UpdatePlu
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int? Dep { get; set; }
         public string Title { get; set; }
         public string Comment { get; set; }

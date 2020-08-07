@@ -1,1675 +1,2084 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Configuration;
+using System.Net.NetworkInformation;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
     public partial class UvsDataEntities : DbContext
     {
-        public UvsDataEntities() { }
+        public UvsDataEntities()
+        {
+        }
+
+        public UvsDataEntities(DbContextOptions<UvsDataEntities> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<AgeVerification> AgeVerification { get; set; }
+        public virtual DbSet<AnnulHead> AnnulHead { get; set; }
+        public virtual DbSet<AnnulLine> AnnulLine { get; set; }
+        public virtual DbSet<Aparatai> Aparatai { get; set; }
+        public virtual DbSet<AparatoGrupes> AparatoGrupes { get; set; }
+        public virtual DbSet<Ataskaitos> Ataskaitos { get; set; }
+        public virtual DbSet<Attributes> Attributes { get; set; }
+        public virtual DbSet<AurimasNk> AurimasNk { get; set; }
+        public virtual DbSet<BarKodai> BarKodai { get; set; }
+        public virtual DbSet<CashierLogs> CashierLogs { get; set; }
+        public virtual DbSet<CatPictures> CatPictures { get; set; }
+        public virtual DbSet<ClientInfo> ClientInfo { get; set; }
+        public virtual DbSet<CompPlu> CompPlu { get; set; }
+        public virtual DbSet<CouponActivate> CouponActivate { get; set; }
+        public virtual DbSet<EuroStages> EuroStages { get; set; }
+        public virtual DbSet<GetBarcodeByPrekesId> GetBarcodeByPrekesId { get; set; }
+        public virtual DbSet<GetGrupeById> GetGrupeById { get; set; }
+        public virtual DbSet<GetKasininkasById> GetKasininkasById { get; set; }
+        public virtual DbSet<GetKorteleById> GetKorteleById { get; set; }
+        public virtual DbSet<GetLastKvitoNr> GetLastKvitoNr { get; set; }
+        public virtual DbSet<GetMatasById> GetMatasById { get; set; }
+        public virtual DbSet<GetPrekeById> GetPrekeById { get; set; }
+        public virtual DbSet<GetPrekesIdbyLaikas1> GetPrekesIdbyLaikas1 { get; set; }
+        public virtual DbSet<GetPrekesIdbyLaikas2> GetPrekesIdbyLaikas2 { get; set; }
+        public virtual DbSet<GetStartParamByApId> GetStartParamByApId { get; set; }
+        public virtual DbSet<GroupsDeps> GroupsDeps { get; set; }
+        public virtual DbSet<Grupes> Grupes { get; set; }
+        public virtual DbSet<GrupesScan> GrupesScan { get; set; }
+        public virtual DbSet<InactivityTime> InactivityTime { get; set; }
+        public virtual DbSet<Inkasac> Inkasac { get; set; }
+        public virtual DbSet<Kasininkai> Kasininkai { get; set; }
+        public virtual DbSet<KasininkaiScan> KasininkaiScan { get; set; }
+        public virtual DbSet<Korteles> Korteles { get; set; }
+        public virtual DbSet<KupList> KupList { get; set; }
+        public virtual DbSet<KvitaiJoin> KvitaiJoin { get; set; }
+        public virtual DbSet<KvitoEilute> KvitoEilute { get; set; }
+        public virtual DbSet<KvitoGalva> KvitoGalva { get; set; }
+        public virtual DbSet<LastChecks> LastChecks { get; set; }
+        public virtual DbSet<LastVnr> LastVnr { get; set; }
+        public virtual DbSet<LastZnr> LastZnr { get; set; }
+        public virtual DbSet<LogAs> LogAs { get; set; }
+        public virtual DbSet<MataiScan> MataiScan { get; set; }
+        public virtual DbSet<MatavimoVienetai> MatavimoVienetai { get; set; }
+        public virtual DbSet<MaxKvitai> MaxKvitai { get; set; }
+        public virtual DbSet<Mokesciai> Mokesciai { get; set; }
+        public virtual DbSet<NaujienosSvarstyklems> NaujienosSvarstyklems { get; set; }
+        public virtual DbSet<Option> Options { get; set; }
+        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<PaymentBank> PaymentBank { get; set; }
+        public virtual DbSet<PluAttributeAssigments> PluAttributeAssigments { get; set; }
+        public virtual DbSet<Plupictures> Plupictures { get; set; }
+        public virtual DbSet<Pluset> Plusets { get; set; }
+        public virtual DbSet<PlusetAttribute> PlusetAttributes { get; set; }
+        public virtual DbSet<PlusetLineAttributes> PlusetLineAttributes { get; set; }
+        public virtual DbSet<PlusetLine> PlusetLines { get; set; }
+        public virtual DbSet<PointsHeaders> PointsHeaders { get; set; }
+        public virtual DbSet<PointsItems> PointsItems { get; set; }
+        public virtual DbSet<Preke> Prekes { get; set; }
+        public virtual DbSet<Prekes2> Prekes2 { get; set; }
+        public virtual DbSet<PrekesIstorija> PrekesIstorija { get; set; }
+        public virtual DbSet<PrekesIstorijosOperacijos> PrekesIstorijosOperacijos { get; set; }
+        public virtual DbSet<PrekesScan> PrekesScan { get; set; }
+        public virtual DbSet<PriceDiscountsItem> PriceDiscountsItems { get; set; }
+        public virtual DbSet<Prices> Prices { get; set; }
+        public virtual DbSet<ReceiptHeadAttributeAssignments> ReceiptHeadAttributeAssignments { get; set; }
+        public virtual DbSet<ReceiptHeadAttributes> ReceiptHeadAttributes { get; set; }
+        public virtual DbSet<ReceiptLineAttributes> ReceiptLineAttributes { get; set; }
+        public virtual DbSet<Reward> Reward { get; set; }
+        public virtual DbSet<SellDiscount> SellDiscounts { get; set; }
+        public virtual DbSet<SellEntry> SellEntry { get; set; }
+        public virtual DbSet<Skaitliukai> Skaitliukai { get; set; }
+        public virtual DbSet<StartLikuciai> StartLikuciai { get; set; }
+        public virtual DbSet<StartParam> StartParam { get; set; }
+        public virtual DbSet<Talpos> Talpos { get; set; }
+        public virtual DbSet<TalposCfg> TalposCfg { get; set; }
+        public virtual DbSet<Terminals> Terminals { get; set; }
+        public virtual DbSet<Tiekejai> Tiekejai { get; set; }
+        public virtual DbSet<TimeStamp> TimeStamps { get; set; }
+        public virtual DbSet<TomraAllowedDeps> TomraAllowedDeps { get; set; }
+        public virtual DbSet<TomraBarcode> TomraBarcodes { get; set; }
+        public virtual DbSet<TomraLog> TomraLog { get; set; }
+        public virtual DbSet<UpdateFh> UpdateFh { get; set; }
+        public virtual DbSet<UpdatePlu> UpdatePlu { get; set; }
+        public virtual DbSet<UpdateTax> UpdateTax { get; set; }
+        public virtual DbSet<Utility> Utility { get; set; }
+        public virtual DbSet<Vaztarasciai> Vaztarasciai { get; set; }
+        public virtual DbSet<VaztarascioEilute> VaztarascioEilute { get; set; }
+        public virtual DbSet<View1> View1 { get; set; }
+        public virtual DbSet<Zetai> Zetai { get; set; }
+        public virtual DbSet<Zetai4> Zetai4 { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["Uvs"].ConnectionString);
+                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=rdata;Trusted_Connection=True;");
             }
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AgeVerification>(entity =>
+            {
+                entity.Property(e => e.Bdate)
+                    .HasColumnName("BDate")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
-        public virtual DbSet<AgeVerification> AgeVerifications { get; set; }
-        public virtual DbSet<AnnulHead> AnnulHeads { get; set; }
-        public virtual DbSet<AnnulLine> AnnulLines { get; set; }
-        public virtual DbSet<Aparatai> Aparatais { get; set; }
-        public virtual DbSet<AparatoGrupe> AparatoGrupes { get; set; }
-        public virtual DbSet<Attribute> Attributes { get; set; }
-        public virtual DbSet<BarKodai> BarKodais { get; set; }
-        public virtual DbSet<CashierLog> CashierLogs { get; set; }
-        public virtual DbSet<CatPicture> CatPictures { get; set; }
-        public virtual DbSet<ClientInfo> ClientInfoes { get; set; }
-        public virtual DbSet<CompPLU> CompPLUs { get; set; }
-        public virtual DbSet<CouponActivate> CouponActivates { get; set; }
-        public virtual DbSet<EuroStage> EuroStages { get; set; }
-        public virtual DbSet<GroupsDep> GroupsDeps { get; set; }
-        public virtual DbSet<Grupe> Grupes { get; set; }
-        public virtual DbSet<InactivityTime> InactivityTimes { get; set; }
-        public virtual DbSet<Inkasac> Inkasacs { get; set; }
-        public virtual DbSet<Kasininkai> Kasininkais { get; set; }
-        public virtual DbSet<Kortele> Korteles { get; set; }
-        public virtual DbSet<KupList> KupLists { get; set; }
-        public virtual DbSet<KvitoEilute> KvitoEilutes { get; set; }
-        public virtual DbSet<KvitoGalva> KvitoGalvas { get; set; }
-        public virtual DbSet<MatavimoVienetai> MatavimoVienetais { get; set; }
-        public virtual DbSet<Mokesciai> Mokesciais { get; set; }
-        public virtual DbSet<NaujienosSvarstyklem> NaujienosSvarstyklems { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
-        public virtual DbSet<PaymentBank> PaymentBanks { get; set; }
-        public virtual DbSet<PluAttributeAssigment> PluAttributeAssigments { get; set; }
-        public virtual DbSet<PLUPicture> PLUPictures { get; set; }
-        public virtual DbSet<PLUSet> PLUSets { get; set; }
-        public virtual DbSet<PLUSetLine> PLUSetLines { get; set; }
-        public virtual DbSet<Points_Headers> Points_Headers { get; set; }
-        public virtual DbSet<Points_Items> Points_Items { get; set; }
-        public virtual DbSet<Preke> Prekes { get; set; }
-        public virtual DbSet<Prekes2> Prekes2 { get; set; }
-        public virtual DbSet<Price_Discounts_Items> Price_Discounts_Items { get; set; }
-        public virtual DbSet<Price> Prices { get; set; }
-        public virtual DbSet<ReceiptHeadAttributeAssignment> ReceiptHeadAttributeAssignments { get; set; }
-        public virtual DbSet<ReceiptHeadAttribute> ReceiptHeadAttributes { get; set; }
-        public virtual DbSet<ReceiptLineAttribute> ReceiptLineAttributes { get; set; }
-        public virtual DbSet<Reward> Rewards { get; set; }
-        public virtual DbSet<SellDiscount> SellDiscounts { get; set; }
-        public virtual DbSet<SellEntry> SellEntries { get; set; }
-        public virtual DbSet<Skaitliukai> Skaitliukais { get; set; }
-        public virtual DbSet<StartLikuciai> StartLikuciais { get; set; }
-        public virtual DbSet<StartParam> StartParams { get; set; }
-        public virtual DbSet<TimeStamp> TimeStamps { get; set; }
-        public virtual DbSet<Tomra_AllowedDeps> Tomra_AllowedDeps { get; set; }
-        public virtual DbSet<Tomra_Barcodes> Tomra_Barcodes { get; set; }
-        public virtual DbSet<Tomra_Log> Tomra_Log { get; set; }
-        public virtual DbSet<UpdateFH> UpdateFHs { get; set; }
-        public virtual DbSet<UpdatePLU> UpdatePLUs { get; set; }
-        public virtual DbSet<UpdateTax> UpdateTaxes { get; set; }
-        public virtual DbSet<Utility> Utilities { get; set; }
-        public virtual DbSet<Vaztarasciai> Vaztarasciais { get; set; }
-        public virtual DbSet<VaztarascioEilute> VaztarascioEilutes { get; set; }
-        public virtual DbSet<zetai> zetais { get; set; }
-        public virtual DbSet<Zetai4> Zetai4 { get; set; }
-        public virtual DbSet<Ataskaito> Ataskaitos { get; set; }
-        public virtual DbSet<Option> Options { get; set; }
-        public virtual DbSet<PrekesIstorija> PrekesIstorijas { get; set; }
-        public virtual DbSet<Talpos> Talpos { get; set; }
-        public virtual DbSet<Tiekejai> Tiekejais { get; set; }
-        public virtual DbSet<Aurimas_NK> Aurimas_NK { get; set; }
-        public virtual DbSet<GetGrupeByID> GetGrupeByIDs { get; set; }
-        public virtual DbSet<GetKasininkasByID> GetKasininkasByIDs { get; set; }
-        public virtual DbSet<GetKorteleByID> GetKorteleByIDs { get; set; }
-        public virtual DbSet<GetMatasByID> GetMatasByIDs { get; set; }
-        public virtual DbSet<GetPrekeByID> GetPrekeByIDs { get; set; }
-        public virtual DbSet<GetStartParamByApID> GetStartParamByApIDs { get; set; }
-        public virtual DbSet<GrupesScan> GrupesScans { get; set; }
-        public virtual DbSet<KasininkaiScan> KasininkaiScans { get; set; }
-        public virtual DbSet<KvitaiJoin> KvitaiJoins { get; set; }
-        public virtual DbSet<LastCheck> LastChecks { get; set; }
-        public virtual DbSet<MataiScan> MataiScans { get; set; }
-        public virtual DbSet<MaxKvitai> MaxKvitais { get; set; }
-        public virtual DbSet<PrekesScan> PrekesScans { get; set; }
-        public virtual DbSet<View1> View1 { get; set; }
-        public virtual DbSet<PLUSetAttribute> PLUSetAttributes { get; set; }
-        public virtual DbSet<PLUSetLineAttribute> PLUSetLineAttributes { get; set; }
-    
-        //public virtual int ClearAparatai()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ClearAparatai");
-        //}
-    
-        //public virtual ObjectResult<LastKvitai_Result> LastKvitai()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LastKvitai_Result>("LastKvitai");
-        //}
-    
-        //public virtual int MarkGroupByPLUId(int? pOSId, int? pluId)
-        //{
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    var pluIdParameter = pluId.HasValue ?
-        //        new ObjectParameter("pluId", pluId) :
-        //        new ObjectParameter("pluId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MarkGroupByPLUId", pOSIdParameter, pluIdParameter);
-        //}
-    
-        //public virtual ObjectResult<rq_ReadPreke_Result> rq_ReadPreke(int? prekesID, int? bitoNr)
-        //{
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ReadPreke_Result>("rq_ReadPreke", prekesIDParameter, bitoNrParameter);
-        //}
-    
-        //public virtual ObjectResult<rq_ScanCardsAll_Result> rq_ScanCardsAll()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanCardsAll_Result>("rq_ScanCardsAll");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanGrupes_Result> rq_ScanGrupes()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanGrupes_Result>("rq_ScanGrupes");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanGrupesAll_Result> rq_ScanGrupesAll()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanGrupesAll_Result>("rq_ScanGrupesAll");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanKasininkai_Result> rq_ScanKasininkai()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanKasininkai_Result>("rq_ScanKasininkai");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanKasininkaiByDep_Result> rq_ScanKasininkaiByDep(int? dep)
-        //{
-        //    var depParameter = dep.HasValue ?
-        //        new ObjectParameter("dep", dep) :
-        //        new ObjectParameter("dep", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanKasininkaiByDep_Result>("rq_ScanKasininkaiByDep", depParameter);
-        //}
-    
-        //public virtual ObjectResult<rq_ScanKorteles_Result> rq_ScanKorteles()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanKorteles_Result>("rq_ScanKorteles");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanMatai_Result> rq_ScanMatai()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanMatai_Result>("rq_ScanMatai");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanPrekes_Result> rq_ScanPrekes()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanPrekes_Result>("rq_ScanPrekes");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanPrekesAll_Result> rq_ScanPrekesAll()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanPrekesAll_Result>("rq_ScanPrekesAll");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanPrekesAllEx_Result> rq_ScanPrekesAllEx()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanPrekesAllEx_Result>("rq_ScanPrekesAllEx");
-        //}
-    
-        //public virtual ObjectResult<rq_ScanPrekesByDep_Result> rq_ScanPrekesByDep(int? dep)
-        //{
-        //    var depParameter = dep.HasValue ?
-        //        new ObjectParameter("dep", dep) :
-        //        new ObjectParameter("dep", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<rq_ScanPrekesByDep_Result>("rq_ScanPrekesByDep", depParameter);
-        //}
-    
-        //public virtual int rq_SetBitByVal(int? baitas, int? bitas, int? bval, ObjectParameter data)
-        //{
-        //    var baitasParameter = baitas.HasValue ?
-        //        new ObjectParameter("baitas", baitas) :
-        //        new ObjectParameter("baitas", typeof(int));
-    
-        //    var bitasParameter = bitas.HasValue ?
-        //        new ObjectParameter("bitas", bitas) :
-        //        new ObjectParameter("bitas", typeof(int));
-    
-        //    var bvalParameter = bval.HasValue ?
-        //        new ObjectParameter("bval", bval) :
-        //        new ObjectParameter("bval", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_SetBitByVal", baitasParameter, bitasParameter, bvalParameter, data);
-        //}
-    
-        //public virtual int rq_SetPOSBits(int? pOSId)
-        //{
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_SetPOSBits", pOSIdParameter);
-        //}
-    
-        //public virtual int rq_SetPOSBitsPictures(int? pOSId)
-        //{
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_SetPOSBitsPictures", pOSIdParameter);
-        //}
-    
-        //public virtual int rq_StoreAnnulHead(int? pOSId, int? idOnPos, int? checkNr, int? zNr, int? cashierId, DateTime? annulTime, int? annulType, ObjectParameter iD)
-        //{
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    var idOnPosParameter = idOnPos.HasValue ?
-        //        new ObjectParameter("IdOnPos", idOnPos) :
-        //        new ObjectParameter("IdOnPos", typeof(int));
-    
-        //    var checkNrParameter = checkNr.HasValue ?
-        //        new ObjectParameter("CheckNr", checkNr) :
-        //        new ObjectParameter("CheckNr", typeof(int));
-    
-        //    var zNrParameter = zNr.HasValue ?
-        //        new ObjectParameter("ZNr", zNr) :
-        //        new ObjectParameter("ZNr", typeof(int));
-    
-        //    var cashierIdParameter = cashierId.HasValue ?
-        //        new ObjectParameter("CashierId", cashierId) :
-        //        new ObjectParameter("CashierId", typeof(int));
-    
-        //    var annulTimeParameter = annulTime.HasValue ?
-        //        new ObjectParameter("AnnulTime", annulTime) :
-        //        new ObjectParameter("AnnulTime", typeof(System.DateTime));
-    
-        //    var annulTypeParameter = annulType.HasValue ?
-        //        new ObjectParameter("AnnulType", annulType) :
-        //        new ObjectParameter("AnnulType", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreAnnulHead", pOSIdParameter, idOnPosParameter, checkNrParameter, zNrParameter, cashierIdParameter, annulTimeParameter, annulTypeParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreAnnulLine(int? headId, int? lineNumber, double? price, double? amount, double? count, double? discount, double? vatAmount, int? vatType, string barCode, double? packCount, double? realPrice, int? priceOption, ObjectParameter iD)
-        //{
-        //    var headIdParameter = headId.HasValue ?
-        //        new ObjectParameter("HeadId", headId) :
-        //        new ObjectParameter("HeadId", typeof(int));
-    
-        //    var lineNumberParameter = lineNumber.HasValue ?
-        //        new ObjectParameter("LineNumber", lineNumber) :
-        //        new ObjectParameter("LineNumber", typeof(int));
-    
-        //    var priceParameter = price.HasValue ?
-        //        new ObjectParameter("Price", price) :
-        //        new ObjectParameter("Price", typeof(double));
-    
-        //    var amountParameter = amount.HasValue ?
-        //        new ObjectParameter("Amount", amount) :
-        //        new ObjectParameter("Amount", typeof(double));
-    
-        //    var countParameter = count.HasValue ?
-        //        new ObjectParameter("Count", count) :
-        //        new ObjectParameter("Count", typeof(double));
-    
-        //    var discountParameter = discount.HasValue ?
-        //        new ObjectParameter("Discount", discount) :
-        //        new ObjectParameter("Discount", typeof(double));
-    
-        //    var vatAmountParameter = vatAmount.HasValue ?
-        //        new ObjectParameter("VatAmount", vatAmount) :
-        //        new ObjectParameter("VatAmount", typeof(double));
-    
-        //    var vatTypeParameter = vatType.HasValue ?
-        //        new ObjectParameter("VatType", vatType) :
-        //        new ObjectParameter("VatType", typeof(int));
-    
-        //    var barCodeParameter = barCode != null ?
-        //        new ObjectParameter("BarCode", barCode) :
-        //        new ObjectParameter("BarCode", typeof(string));
-    
-        //    var packCountParameter = packCount.HasValue ?
-        //        new ObjectParameter("PackCount", packCount) :
-        //        new ObjectParameter("PackCount", typeof(double));
-    
-        //    var realPriceParameter = realPrice.HasValue ?
-        //        new ObjectParameter("RealPrice", realPrice) :
-        //        new ObjectParameter("RealPrice", typeof(double));
-    
-        //    var priceOptionParameter = priceOption.HasValue ?
-        //        new ObjectParameter("PriceOption", priceOption) :
-        //        new ObjectParameter("PriceOption", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreAnnulLine", headIdParameter, lineNumberParameter, priceParameter, amountParameter, countParameter, discountParameter, vatAmountParameter, vatTypeParameter, barCodeParameter, packCountParameter, realPriceParameter, priceOptionParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreAparatasVersion(int? apId, string version, string fiskalNr, string fiskalVersion)
-        //{
-        //    var apIdParameter = apId.HasValue ?
-        //        new ObjectParameter("ApId", apId) :
-        //        new ObjectParameter("ApId", typeof(int));
-    
-        //    var versionParameter = version != null ?
-        //        new ObjectParameter("version", version) :
-        //        new ObjectParameter("version", typeof(string));
-    
-        //    var fiskalNrParameter = fiskalNr != null ?
-        //        new ObjectParameter("fiskalNr", fiskalNr) :
-        //        new ObjectParameter("fiskalNr", typeof(string));
-    
-        //    var fiskalVersionParameter = fiskalVersion != null ?
-        //        new ObjectParameter("fiskalVersion", fiskalVersion) :
-        //        new ObjectParameter("fiskalVersion", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreAparatasVersion", apIdParameter, versionParameter, fiskalNrParameter, fiskalVersionParameter);
-        //}
-    
-        //public virtual int rq_StoreAparatasVersionHw(int? apId, string version, string fiskalNr, string fiskalVersion, string cPUName, int? cPUFreq, string hardDriveModel, string hardDriveSerial, double? hardDriveSize_Mb, string videoName, int? videoRAM_Kb, int? rAM_Mb)
-        //{
-        //    var apIdParameter = apId.HasValue ?
-        //        new ObjectParameter("ApId", apId) :
-        //        new ObjectParameter("ApId", typeof(int));
-    
-        //    var versionParameter = version != null ?
-        //        new ObjectParameter("version", version) :
-        //        new ObjectParameter("version", typeof(string));
-    
-        //    var fiskalNrParameter = fiskalNr != null ?
-        //        new ObjectParameter("fiskalNr", fiskalNr) :
-        //        new ObjectParameter("fiskalNr", typeof(string));
-    
-        //    var fiskalVersionParameter = fiskalVersion != null ?
-        //        new ObjectParameter("fiskalVersion", fiskalVersion) :
-        //        new ObjectParameter("fiskalVersion", typeof(string));
-    
-        //    var cPUNameParameter = cPUName != null ?
-        //        new ObjectParameter("CPUName", cPUName) :
-        //        new ObjectParameter("CPUName", typeof(string));
-    
-        //    var cPUFreqParameter = cPUFreq.HasValue ?
-        //        new ObjectParameter("CPUFreq", cPUFreq) :
-        //        new ObjectParameter("CPUFreq", typeof(int));
-    
-        //    var hardDriveModelParameter = hardDriveModel != null ?
-        //        new ObjectParameter("HardDriveModel", hardDriveModel) :
-        //        new ObjectParameter("HardDriveModel", typeof(string));
-    
-        //    var hardDriveSerialParameter = hardDriveSerial != null ?
-        //        new ObjectParameter("HardDriveSerial", hardDriveSerial) :
-        //        new ObjectParameter("HardDriveSerial", typeof(string));
-    
-        //    var hardDriveSize_MbParameter = hardDriveSize_Mb.HasValue ?
-        //        new ObjectParameter("HardDriveSize_Mb", hardDriveSize_Mb) :
-        //        new ObjectParameter("HardDriveSize_Mb", typeof(double));
-    
-        //    var videoNameParameter = videoName != null ?
-        //        new ObjectParameter("VideoName", videoName) :
-        //        new ObjectParameter("VideoName", typeof(string));
-    
-        //    var videoRAM_KbParameter = videoRAM_Kb.HasValue ?
-        //        new ObjectParameter("VideoRAM_Kb", videoRAM_Kb) :
-        //        new ObjectParameter("VideoRAM_Kb", typeof(int));
-    
-        //    var rAM_MbParameter = rAM_Mb.HasValue ?
-        //        new ObjectParameter("RAM_Mb", rAM_Mb) :
-        //        new ObjectParameter("RAM_Mb", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreAparatasVersionHw", apIdParameter, versionParameter, fiskalNrParameter, fiskalVersionParameter, cPUNameParameter, cPUFreqParameter, hardDriveModelParameter, hardDriveSerialParameter, hardDriveSize_MbParameter, videoNameParameter, videoRAM_KbParameter, rAM_MbParameter);
-        //}
-    
-        //public virtual int rq_StoreCashierLog(int? cashierId, int? aparatoId, DateTime? logOnTime, DateTime? logOffTime, int? idOnPos, ObjectParameter iD)
-        //{
-        //    var cashierIdParameter = cashierId.HasValue ?
-        //        new ObjectParameter("CashierId", cashierId) :
-        //        new ObjectParameter("CashierId", typeof(int));
-    
-        //    var aparatoIdParameter = aparatoId.HasValue ?
-        //        new ObjectParameter("AparatoId", aparatoId) :
-        //        new ObjectParameter("AparatoId", typeof(int));
-    
-        //    var logOnTimeParameter = logOnTime.HasValue ?
-        //        new ObjectParameter("LogOnTime", logOnTime) :
-        //        new ObjectParameter("LogOnTime", typeof(System.DateTime));
-    
-        //    var logOffTimeParameter = logOffTime.HasValue ?
-        //        new ObjectParameter("LogOffTime", logOffTime) :
-        //        new ObjectParameter("LogOffTime", typeof(System.DateTime));
-    
-        //    var idOnPosParameter = idOnPos.HasValue ?
-        //        new ObjectParameter("IdOnPos", idOnPos) :
-        //        new ObjectParameter("IdOnPos", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreCashierLog", cashierIdParameter, aparatoIdParameter, logOnTimeParameter, logOffTimeParameter, idOnPosParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreCouponActivate(int? idOnPos, int? pOSId, DateTime? opTime, double? balance, int? cashierId, int? receiptNr, string couponNumber, int? clientId, ObjectParameter iD)
-        //{
-        //    var idOnPosParameter = idOnPos.HasValue ?
-        //        new ObjectParameter("IdOnPos", idOnPos) :
-        //        new ObjectParameter("IdOnPos", typeof(int));
-    
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    var opTimeParameter = opTime.HasValue ?
-        //        new ObjectParameter("OpTime", opTime) :
-        //        new ObjectParameter("OpTime", typeof(System.DateTime));
-    
-        //    var balanceParameter = balance.HasValue ?
-        //        new ObjectParameter("balance", balance) :
-        //        new ObjectParameter("balance", typeof(double));
-    
-        //    var cashierIdParameter = cashierId.HasValue ?
-        //        new ObjectParameter("CashierId", cashierId) :
-        //        new ObjectParameter("CashierId", typeof(int));
-    
-        //    var receiptNrParameter = receiptNr.HasValue ?
-        //        new ObjectParameter("ReceiptNr", receiptNr) :
-        //        new ObjectParameter("ReceiptNr", typeof(int));
-    
-        //    var couponNumberParameter = couponNumber != null ?
-        //        new ObjectParameter("CouponNumber", couponNumber) :
-        //        new ObjectParameter("CouponNumber", typeof(string));
-    
-        //    var clientIdParameter = clientId.HasValue ?
-        //        new ObjectParameter("ClientId", clientId) :
-        //        new ObjectParameter("ClientId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreCouponActivate", idOnPosParameter, pOSIdParameter, opTimeParameter, balanceParameter, cashierIdParameter, receiptNrParameter, couponNumberParameter, clientIdParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreEuroStage(int? posId, int? stageNr, DateTime? when)
-        //{
-        //    var posIdParameter = posId.HasValue ?
-        //        new ObjectParameter("PosId", posId) :
-        //        new ObjectParameter("PosId", typeof(int));
-    
-        //    var stageNrParameter = stageNr.HasValue ?
-        //        new ObjectParameter("StageNr", stageNr) :
-        //        new ObjectParameter("StageNr", typeof(int));
-    
-        //    var whenParameter = when.HasValue ?
-        //        new ObjectParameter("When", when) :
-        //        new ObjectParameter("When", typeof(System.DateTime));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreEuroStage", posIdParameter, stageNrParameter, whenParameter);
-        //}
-    
-        //public virtual int rq_StoreInactivityTime(int? kvitoEiluteId, double? duration, ObjectParameter iD)
-        //{
-        //    var kvitoEiluteIdParameter = kvitoEiluteId.HasValue ?
-        //        new ObjectParameter("KvitoEiluteId", kvitoEiluteId) :
-        //        new ObjectParameter("KvitoEiluteId", typeof(int));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreInactivityTime", kvitoEiluteIdParameter, durationParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreInkasac(int? idOnPos, int? pOSId, DateTime? opTime, double? amount, int? opType, int? zNr, int? cashierId, ObjectParameter iD)
-        //{
-        //    var idOnPosParameter = idOnPos.HasValue ?
-        //        new ObjectParameter("IdOnPos", idOnPos) :
-        //        new ObjectParameter("IdOnPos", typeof(int));
-    
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    var opTimeParameter = opTime.HasValue ?
-        //        new ObjectParameter("OpTime", opTime) :
-        //        new ObjectParameter("OpTime", typeof(System.DateTime));
-    
-        //    var amountParameter = amount.HasValue ?
-        //        new ObjectParameter("amount", amount) :
-        //        new ObjectParameter("amount", typeof(double));
-    
-        //    var opTypeParameter = opType.HasValue ?
-        //        new ObjectParameter("OpType", opType) :
-        //        new ObjectParameter("OpType", typeof(int));
-    
-        //    var zNrParameter = zNr.HasValue ?
-        //        new ObjectParameter("ZNr", zNr) :
-        //        new ObjectParameter("ZNr", typeof(int));
-    
-        //    var cashierIdParameter = cashierId.HasValue ?
-        //        new ObjectParameter("CashierId", cashierId) :
-        //        new ObjectParameter("CashierId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreInkasac", idOnPosParameter, pOSIdParameter, opTimeParameter, amountParameter, opTypeParameter, zNrParameter, cashierIdParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreInkasacEx(int? idOnPos, int? pOSId, DateTime? opTime, double? amount, int? opType, int? zNr, int? cashierId, string opName, string objId, string objName, ObjectParameter iD)
-        //{
-        //    var idOnPosParameter = idOnPos.HasValue ?
-        //        new ObjectParameter("IdOnPos", idOnPos) :
-        //        new ObjectParameter("IdOnPos", typeof(int));
-    
-        //    var pOSIdParameter = pOSId.HasValue ?
-        //        new ObjectParameter("POSId", pOSId) :
-        //        new ObjectParameter("POSId", typeof(int));
-    
-        //    var opTimeParameter = opTime.HasValue ?
-        //        new ObjectParameter("OpTime", opTime) :
-        //        new ObjectParameter("OpTime", typeof(System.DateTime));
-    
-        //    var amountParameter = amount.HasValue ?
-        //        new ObjectParameter("amount", amount) :
-        //        new ObjectParameter("amount", typeof(double));
-    
-        //    var opTypeParameter = opType.HasValue ?
-        //        new ObjectParameter("OpType", opType) :
-        //        new ObjectParameter("OpType", typeof(int));
-    
-        //    var zNrParameter = zNr.HasValue ?
-        //        new ObjectParameter("ZNr", zNr) :
-        //        new ObjectParameter("ZNr", typeof(int));
-    
-        //    var cashierIdParameter = cashierId.HasValue ?
-        //        new ObjectParameter("CashierId", cashierId) :
-        //        new ObjectParameter("CashierId", typeof(int));
-    
-        //    var opNameParameter = opName != null ?
-        //        new ObjectParameter("OpName", opName) :
-        //        new ObjectParameter("OpName", typeof(string));
-    
-        //    var objIdParameter = objId != null ?
-        //        new ObjectParameter("ObjId", objId) :
-        //        new ObjectParameter("ObjId", typeof(string));
-    
-        //    var objNameParameter = objName != null ?
-        //        new ObjectParameter("ObjName", objName) :
-        //        new ObjectParameter("ObjName", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreInkasacEx", idOnPosParameter, pOSIdParameter, opTimeParameter, amountParameter, opTypeParameter, zNrParameter, cashierIdParameter, opNameParameter, objIdParameter, objNameParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoEilute(int? galvosID, int? prekesKodas, double? kiekis, double? kaina, double? suma, double? mokesciai, double? nuolaida, int? prekesID, string barkodas, double? vietDez, double? savikaina, double? realKaina, int? priceOption, int? vAT, int? sellFlags, int? lineNumber, ObjectParameter iD)
-        //{
-        //    var galvosIDParameter = galvosID.HasValue ?
-        //        new ObjectParameter("GalvosID", galvosID) :
-        //        new ObjectParameter("GalvosID", typeof(int));
-    
-        //    var prekesKodasParameter = prekesKodas.HasValue ?
-        //        new ObjectParameter("PrekesKodas", prekesKodas) :
-        //        new ObjectParameter("PrekesKodas", typeof(int));
-    
-        //    var kiekisParameter = kiekis.HasValue ?
-        //        new ObjectParameter("Kiekis", kiekis) :
-        //        new ObjectParameter("Kiekis", typeof(double));
-    
-        //    var kainaParameter = kaina.HasValue ?
-        //        new ObjectParameter("Kaina", kaina) :
-        //        new ObjectParameter("Kaina", typeof(double));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var barkodasParameter = barkodas != null ?
-        //        new ObjectParameter("Barkodas", barkodas) :
-        //        new ObjectParameter("Barkodas", typeof(string));
-    
-        //    var vietDezParameter = vietDez.HasValue ?
-        //        new ObjectParameter("VietDez", vietDez) :
-        //        new ObjectParameter("VietDez", typeof(double));
-    
-        //    var savikainaParameter = savikaina.HasValue ?
-        //        new ObjectParameter("Savikaina", savikaina) :
-        //        new ObjectParameter("Savikaina", typeof(double));
-    
-        //    var realKainaParameter = realKaina.HasValue ?
-        //        new ObjectParameter("RealKaina", realKaina) :
-        //        new ObjectParameter("RealKaina", typeof(double));
-    
-        //    var priceOptionParameter = priceOption.HasValue ?
-        //        new ObjectParameter("PriceOption", priceOption) :
-        //        new ObjectParameter("PriceOption", typeof(int));
-    
-        //    var vATParameter = vAT.HasValue ?
-        //        new ObjectParameter("VAT", vAT) :
-        //        new ObjectParameter("VAT", typeof(int));
-    
-        //    var sellFlagsParameter = sellFlags.HasValue ?
-        //        new ObjectParameter("SellFlags", sellFlags) :
-        //        new ObjectParameter("SellFlags", typeof(int));
-    
-        //    var lineNumberParameter = lineNumber.HasValue ?
-        //        new ObjectParameter("LineNumber", lineNumber) :
-        //        new ObjectParameter("LineNumber", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoEilute", galvosIDParameter, prekesKodasParameter, kiekisParameter, kainaParameter, sumaParameter, mokesciaiParameter, nuolaidaParameter, prekesIDParameter, barkodasParameter, vietDezParameter, savikainaParameter, realKainaParameter, priceOptionParameter, vATParameter, sellFlagsParameter, lineNumberParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoEiluteEx(int? galvosID, int? prekesKodas, double? kiekis, double? kaina, double? suma, double? mokesciai, double? nuolaida, int? prekesID, string barkodas, double? vietDez, double? savikaina, double? realKaina, int? priceOption, int? vAT, int? sellFlags, int? lineNumber, double? duration, short? priceType, ObjectParameter iD)
-        //{
-        //    var galvosIDParameter = galvosID.HasValue ?
-        //        new ObjectParameter("GalvosID", galvosID) :
-        //        new ObjectParameter("GalvosID", typeof(int));
-    
-        //    var prekesKodasParameter = prekesKodas.HasValue ?
-        //        new ObjectParameter("PrekesKodas", prekesKodas) :
-        //        new ObjectParameter("PrekesKodas", typeof(int));
-    
-        //    var kiekisParameter = kiekis.HasValue ?
-        //        new ObjectParameter("Kiekis", kiekis) :
-        //        new ObjectParameter("Kiekis", typeof(double));
-    
-        //    var kainaParameter = kaina.HasValue ?
-        //        new ObjectParameter("Kaina", kaina) :
-        //        new ObjectParameter("Kaina", typeof(double));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var barkodasParameter = barkodas != null ?
-        //        new ObjectParameter("Barkodas", barkodas) :
-        //        new ObjectParameter("Barkodas", typeof(string));
-    
-        //    var vietDezParameter = vietDez.HasValue ?
-        //        new ObjectParameter("VietDez", vietDez) :
-        //        new ObjectParameter("VietDez", typeof(double));
-    
-        //    var savikainaParameter = savikaina.HasValue ?
-        //        new ObjectParameter("Savikaina", savikaina) :
-        //        new ObjectParameter("Savikaina", typeof(double));
-    
-        //    var realKainaParameter = realKaina.HasValue ?
-        //        new ObjectParameter("RealKaina", realKaina) :
-        //        new ObjectParameter("RealKaina", typeof(double));
-    
-        //    var priceOptionParameter = priceOption.HasValue ?
-        //        new ObjectParameter("PriceOption", priceOption) :
-        //        new ObjectParameter("PriceOption", typeof(int));
-    
-        //    var vATParameter = vAT.HasValue ?
-        //        new ObjectParameter("VAT", vAT) :
-        //        new ObjectParameter("VAT", typeof(int));
-    
-        //    var sellFlagsParameter = sellFlags.HasValue ?
-        //        new ObjectParameter("SellFlags", sellFlags) :
-        //        new ObjectParameter("SellFlags", typeof(int));
-    
-        //    var lineNumberParameter = lineNumber.HasValue ?
-        //        new ObjectParameter("LineNumber", lineNumber) :
-        //        new ObjectParameter("LineNumber", typeof(int));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var priceTypeParameter = priceType.HasValue ?
-        //        new ObjectParameter("PriceType", priceType) :
-        //        new ObjectParameter("PriceType", typeof(short));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoEiluteEx", galvosIDParameter, prekesKodasParameter, kiekisParameter, kainaParameter, sumaParameter, mokesciaiParameter, nuolaidaParameter, prekesIDParameter, barkodasParameter, vietDezParameter, savikainaParameter, realKainaParameter, priceOptionParameter, vATParameter, sellFlagsParameter, lineNumberParameter, durationParameter, priceTypeParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoEiluteEx2(int? galvosID, int? prekesKodas, double? kiekis, double? kaina, double? suma, double? mokesciai, double? nuolaida, int? prekesID, string barkodas, double? vietDez, double? savikaina, double? realKaina, int? priceOption, int? vAT, int? sellFlags, int? lineNumber, double? duration, short? priceType, string priceOriginType,long? priceIdentificator, ObjectParameter iD)
-        //{
-        //    var galvosIDParameter = galvosID.HasValue ?
-        //        new ObjectParameter("GalvosID", galvosID) :
-        //        new ObjectParameter("GalvosID", typeof(int));
-    
-        //    var prekesKodasParameter = prekesKodas.HasValue ?
-        //        new ObjectParameter("PrekesKodas", prekesKodas) :
-        //        new ObjectParameter("PrekesKodas", typeof(int));
-    
-        //    var kiekisParameter = kiekis.HasValue ?
-        //        new ObjectParameter("Kiekis", kiekis) :
-        //        new ObjectParameter("Kiekis", typeof(double));
-    
-        //    var kainaParameter = kaina.HasValue ?
-        //        new ObjectParameter("Kaina", kaina) :
-        //        new ObjectParameter("Kaina", typeof(double));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var barkodasParameter = barkodas != null ?
-        //        new ObjectParameter("Barkodas", barkodas) :
-        //        new ObjectParameter("Barkodas", typeof(string));
-    
-        //    var vietDezParameter = vietDez.HasValue ?
-        //        new ObjectParameter("VietDez", vietDez) :
-        //        new ObjectParameter("VietDez", typeof(double));
-    
-        //    var savikainaParameter = savikaina.HasValue ?
-        //        new ObjectParameter("Savikaina", savikaina) :
-        //        new ObjectParameter("Savikaina", typeof(double));
-    
-        //    var realKainaParameter = realKaina.HasValue ?
-        //        new ObjectParameter("RealKaina", realKaina) :
-        //        new ObjectParameter("RealKaina", typeof(double));
-    
-        //    var priceOptionParameter = priceOption.HasValue ?
-        //        new ObjectParameter("PriceOption", priceOption) :
-        //        new ObjectParameter("PriceOption", typeof(int));
-    
-        //    var vATParameter = vAT.HasValue ?
-        //        new ObjectParameter("VAT", vAT) :
-        //        new ObjectParameter("VAT", typeof(int));
-    
-        //    var sellFlagsParameter = sellFlags.HasValue ?
-        //        new ObjectParameter("SellFlags", sellFlags) :
-        //        new ObjectParameter("SellFlags", typeof(int));
-    
-        //    var lineNumberParameter = lineNumber.HasValue ?
-        //        new ObjectParameter("LineNumber", lineNumber) :
-        //        new ObjectParameter("LineNumber", typeof(int));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var priceTypeParameter = priceType.HasValue ?
-        //        new ObjectParameter("PriceType", priceType) :
-        //        new ObjectParameter("PriceType", typeof(short));
-    
-        //    var priceOriginTypeParameter = priceOriginType != null ?
-        //        new ObjectParameter("PriceOriginType", priceOriginType) :
-        //        new ObjectParameter("PriceOriginType", typeof(string));
-    
-        //    var priceIdentificatorParameter = priceIdentificator.HasValue ?
-        //        new ObjectParameter("PriceIdentificator", priceIdentificator) :
-        //        new ObjectParameter("PriceIdentificator", typeof(long));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoEiluteEx2", galvosIDParameter, prekesKodasParameter, kiekisParameter, kainaParameter, sumaParameter, mokesciaiParameter, nuolaidaParameter, prekesIDParameter, barkodasParameter, vietDezParameter, savikainaParameter, realKainaParameter, priceOptionParameter, vATParameter, sellFlagsParameter, lineNumberParameter, durationParameter, priceTypeParameter, priceOriginTypeParameter, priceIdentificatorParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoEiluteEx3(int? galvosID, int? prekesKodas, double? kiekis, double? kaina, double? suma, double? mokesciai, double? nuolaida, int? prekesID, string barkodas, double? vietDez, double? savikaina, double? realKaina, int? priceOption, int? vAT, int? sellFlags, int? lineNumber, double? duration, short? priceType, string priceOriginType,long? priceIdentificator, string packerId, ObjectParameter iD)
-        //{
-        //    var galvosIDParameter = galvosID.HasValue ?
-        //        new ObjectParameter("GalvosID", galvosID) :
-        //        new ObjectParameter("GalvosID", typeof(int));
-    
-        //    var prekesKodasParameter = prekesKodas.HasValue ?
-        //        new ObjectParameter("PrekesKodas", prekesKodas) :
-        //        new ObjectParameter("PrekesKodas", typeof(int));
-    
-        //    var kiekisParameter = kiekis.HasValue ?
-        //        new ObjectParameter("Kiekis", kiekis) :
-        //        new ObjectParameter("Kiekis", typeof(double));
-    
-        //    var kainaParameter = kaina.HasValue ?
-        //        new ObjectParameter("Kaina", kaina) :
-        //        new ObjectParameter("Kaina", typeof(double));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var barkodasParameter = barkodas != null ?
-        //        new ObjectParameter("Barkodas", barkodas) :
-        //        new ObjectParameter("Barkodas", typeof(string));
-    
-        //    var vietDezParameter = vietDez.HasValue ?
-        //        new ObjectParameter("VietDez", vietDez) :
-        //        new ObjectParameter("VietDez", typeof(double));
-    
-        //    var savikainaParameter = savikaina.HasValue ?
-        //        new ObjectParameter("Savikaina", savikaina) :
-        //        new ObjectParameter("Savikaina", typeof(double));
-    
-        //    var realKainaParameter = realKaina.HasValue ?
-        //        new ObjectParameter("RealKaina", realKaina) :
-        //        new ObjectParameter("RealKaina", typeof(double));
-    
-        //    var priceOptionParameter = priceOption.HasValue ?
-        //        new ObjectParameter("PriceOption", priceOption) :
-        //        new ObjectParameter("PriceOption", typeof(int));
-    
-        //    var vATParameter = vAT.HasValue ?
-        //        new ObjectParameter("VAT", vAT) :
-        //        new ObjectParameter("VAT", typeof(int));
-    
-        //    var sellFlagsParameter = sellFlags.HasValue ?
-        //        new ObjectParameter("SellFlags", sellFlags) :
-        //        new ObjectParameter("SellFlags", typeof(int));
-    
-        //    var lineNumberParameter = lineNumber.HasValue ?
-        //        new ObjectParameter("LineNumber", lineNumber) :
-        //        new ObjectParameter("LineNumber", typeof(int));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var priceTypeParameter = priceType.HasValue ?
-        //        new ObjectParameter("PriceType", priceType) :
-        //        new ObjectParameter("PriceType", typeof(short));
-    
-        //    var priceOriginTypeParameter = priceOriginType != null ?
-        //        new ObjectParameter("PriceOriginType", priceOriginType) :
-        //        new ObjectParameter("PriceOriginType", typeof(string));
-    
-        //    var priceIdentificatorParameter = priceIdentificator.HasValue ?
-        //        new ObjectParameter("PriceIdentificator", priceIdentificator) :
-        //        new ObjectParameter("PriceIdentificator", typeof(long));
-    
-        //    var packerIdParameter = packerId != null ?
-        //        new ObjectParameter("PackerId", packerId) :
-        //        new ObjectParameter("PackerId", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoEiluteEx3", galvosIDParameter, prekesKodasParameter, kiekisParameter, kainaParameter, sumaParameter, mokesciaiParameter, nuolaidaParameter, prekesIDParameter, barkodasParameter, vietDezParameter, savikainaParameter, realKainaParameter, priceOptionParameter, vATParameter, sellFlagsParameter, lineNumberParameter, durationParameter, priceTypeParameter, priceOriginTypeParameter, priceIdentificatorParameter, packerIdParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoGalva(int? aparatoID, int? kvitoNr, short? year, byte? month, byte? day, byte? hour, byte? minute, byte? apmokejimoRusis, double? suma, double? nuolaida, double? antkainis, double? mokesciai, string kortelesNr, int? kasininkas, int? znr, string kvitoNr2, string nlKort, double? sumaGryni, ObjectParameter iD)
-        //{
-        //    var aparatoIDParameter = aparatoID.HasValue ?
-        //        new ObjectParameter("AparatoID", aparatoID) :
-        //        new ObjectParameter("AparatoID", typeof(int));
-    
-        //    var kvitoNrParameter = kvitoNr.HasValue ?
-        //        new ObjectParameter("KvitoNr", kvitoNr) :
-        //        new ObjectParameter("KvitoNr", typeof(int));
-    
-        //    var yearParameter = year.HasValue ?
-        //        new ObjectParameter("Year", year) :
-        //        new ObjectParameter("Year", typeof(short));
-    
-        //    var monthParameter = month.HasValue ?
-        //        new ObjectParameter("Month", month) :
-        //        new ObjectParameter("Month", typeof(byte));
-    
-        //    var dayParameter = day.HasValue ?
-        //        new ObjectParameter("Day", day) :
-        //        new ObjectParameter("Day", typeof(byte));
-    
-        //    var hourParameter = hour.HasValue ?
-        //        new ObjectParameter("Hour", hour) :
-        //        new ObjectParameter("Hour", typeof(byte));
-    
-        //    var minuteParameter = minute.HasValue ?
-        //        new ObjectParameter("Minute", minute) :
-        //        new ObjectParameter("Minute", typeof(byte));
-    
-        //    var apmokejimoRusisParameter = apmokejimoRusis.HasValue ?
-        //        new ObjectParameter("ApmokejimoRusis", apmokejimoRusis) :
-        //        new ObjectParameter("ApmokejimoRusis", typeof(byte));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var antkainisParameter = antkainis.HasValue ?
-        //        new ObjectParameter("Antkainis", antkainis) :
-        //        new ObjectParameter("Antkainis", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var kortelesNrParameter = kortelesNr != null ?
-        //        new ObjectParameter("KortelesNr", kortelesNr) :
-        //        new ObjectParameter("KortelesNr", typeof(string));
-    
-        //    var kasininkasParameter = kasininkas.HasValue ?
-        //        new ObjectParameter("Kasininkas", kasininkas) :
-        //        new ObjectParameter("Kasininkas", typeof(int));
-    
-        //    var znrParameter = znr.HasValue ?
-        //        new ObjectParameter("Znr", znr) :
-        //        new ObjectParameter("Znr", typeof(int));
-    
-        //    var kvitoNr2Parameter = kvitoNr2 != null ?
-        //        new ObjectParameter("KvitoNr2", kvitoNr2) :
-        //        new ObjectParameter("KvitoNr2", typeof(string));
-    
-        //    var nlKortParameter = nlKort != null ?
-        //        new ObjectParameter("NlKort", nlKort) :
-        //        new ObjectParameter("NlKort", typeof(string));
-    
-        //    var sumaGryniParameter = sumaGryni.HasValue ?
-        //        new ObjectParameter("SumaGryni", sumaGryni) :
-        //        new ObjectParameter("SumaGryni", typeof(double));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoGalva", aparatoIDParameter, kvitoNrParameter, yearParameter, monthParameter, dayParameter, hourParameter, minuteParameter, apmokejimoRusisParameter, sumaParameter, nuolaidaParameter, antkainisParameter, mokesciaiParameter, kortelesNrParameter, kasininkasParameter, znrParameter, kvitoNr2Parameter, nlKortParameter, sumaGryniParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoGalvaEx(int? aparatoID, int? kvitoNr, short? year, byte? month, byte? day, byte? hour, byte? minute, byte? apmokejimoRusis, double? suma, double? nuolaida, double? antkainis, double? mokesciai, string kortelesNr, int? kasininkas, int? znr, string kvitoNr2, string nlKort, double? sumaGryni, byte? seconds, double? duration, double? durationToPushTotal, ObjectParameter iD)
-        //{
-        //    var aparatoIDParameter = aparatoID.HasValue ?
-        //        new ObjectParameter("AparatoID", aparatoID) :
-        //        new ObjectParameter("AparatoID", typeof(int));
-    
-        //    var kvitoNrParameter = kvitoNr.HasValue ?
-        //        new ObjectParameter("KvitoNr", kvitoNr) :
-        //        new ObjectParameter("KvitoNr", typeof(int));
-    
-        //    var yearParameter = year.HasValue ?
-        //        new ObjectParameter("Year", year) :
-        //        new ObjectParameter("Year", typeof(short));
-    
-        //    var monthParameter = month.HasValue ?
-        //        new ObjectParameter("Month", month) :
-        //        new ObjectParameter("Month", typeof(byte));
-    
-        //    var dayParameter = day.HasValue ?
-        //        new ObjectParameter("Day", day) :
-        //        new ObjectParameter("Day", typeof(byte));
-    
-        //    var hourParameter = hour.HasValue ?
-        //        new ObjectParameter("Hour", hour) :
-        //        new ObjectParameter("Hour", typeof(byte));
-    
-        //    var minuteParameter = minute.HasValue ?
-        //        new ObjectParameter("Minute", minute) :
-        //        new ObjectParameter("Minute", typeof(byte));
-    
-        //    var apmokejimoRusisParameter = apmokejimoRusis.HasValue ?
-        //        new ObjectParameter("ApmokejimoRusis", apmokejimoRusis) :
-        //        new ObjectParameter("ApmokejimoRusis", typeof(byte));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var antkainisParameter = antkainis.HasValue ?
-        //        new ObjectParameter("Antkainis", antkainis) :
-        //        new ObjectParameter("Antkainis", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var kortelesNrParameter = kortelesNr != null ?
-        //        new ObjectParameter("KortelesNr", kortelesNr) :
-        //        new ObjectParameter("KortelesNr", typeof(string));
-    
-        //    var kasininkasParameter = kasininkas.HasValue ?
-        //        new ObjectParameter("Kasininkas", kasininkas) :
-        //        new ObjectParameter("Kasininkas", typeof(int));
-    
-        //    var znrParameter = znr.HasValue ?
-        //        new ObjectParameter("Znr", znr) :
-        //        new ObjectParameter("Znr", typeof(int));
-    
-        //    var kvitoNr2Parameter = kvitoNr2 != null ?
-        //        new ObjectParameter("KvitoNr2", kvitoNr2) :
-        //        new ObjectParameter("KvitoNr2", typeof(string));
-    
-        //    var nlKortParameter = nlKort != null ?
-        //        new ObjectParameter("NlKort", nlKort) :
-        //        new ObjectParameter("NlKort", typeof(string));
-    
-        //    var sumaGryniParameter = sumaGryni.HasValue ?
-        //        new ObjectParameter("SumaGryni", sumaGryni) :
-        //        new ObjectParameter("SumaGryni", typeof(double));
-    
-        //    var secondsParameter = seconds.HasValue ?
-        //        new ObjectParameter("Seconds", seconds) :
-        //        new ObjectParameter("Seconds", typeof(byte));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var durationToPushTotalParameter = durationToPushTotal.HasValue ?
-        //        new ObjectParameter("DurationToPushTotal", durationToPushTotal) :
-        //        new ObjectParameter("DurationToPushTotal", typeof(double));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoGalvaEx", aparatoIDParameter, kvitoNrParameter, yearParameter, monthParameter, dayParameter, hourParameter, minuteParameter, apmokejimoRusisParameter, sumaParameter, nuolaidaParameter, antkainisParameter, mokesciaiParameter, kortelesNrParameter, kasininkasParameter, znrParameter, kvitoNr2Parameter, nlKortParameter, sumaGryniParameter, secondsParameter, durationParameter, durationToPushTotalParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoGalvaEx2(int? aparatoID, int? kvitoNr, short? year, byte? month, byte? day, byte? hour, byte? minute, byte? apmokejimoRusis, double? suma, double? nuolaida, double? antkainis, double? mokesciai, string kortelesNr, int? kasininkas, int? znr, string kvitoNr2, string nlKort, double? sumaGryni, byte? seconds, double? duration, double? durationToPushTotal, int? flags, ObjectParameter iD)
-        //{
-        //    var aparatoIDParameter = aparatoID.HasValue ?
-        //        new ObjectParameter("AparatoID", aparatoID) :
-        //        new ObjectParameter("AparatoID", typeof(int));
-    
-        //    var kvitoNrParameter = kvitoNr.HasValue ?
-        //        new ObjectParameter("KvitoNr", kvitoNr) :
-        //        new ObjectParameter("KvitoNr", typeof(int));
-    
-        //    var yearParameter = year.HasValue ?
-        //        new ObjectParameter("Year", year) :
-        //        new ObjectParameter("Year", typeof(short));
-    
-        //    var monthParameter = month.HasValue ?
-        //        new ObjectParameter("Month", month) :
-        //        new ObjectParameter("Month", typeof(byte));
-    
-        //    var dayParameter = day.HasValue ?
-        //        new ObjectParameter("Day", day) :
-        //        new ObjectParameter("Day", typeof(byte));
-    
-        //    var hourParameter = hour.HasValue ?
-        //        new ObjectParameter("Hour", hour) :
-        //        new ObjectParameter("Hour", typeof(byte));
-    
-        //    var minuteParameter = minute.HasValue ?
-        //        new ObjectParameter("Minute", minute) :
-        //        new ObjectParameter("Minute", typeof(byte));
-    
-        //    var apmokejimoRusisParameter = apmokejimoRusis.HasValue ?
-        //        new ObjectParameter("ApmokejimoRusis", apmokejimoRusis) :
-        //        new ObjectParameter("ApmokejimoRusis", typeof(byte));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var antkainisParameter = antkainis.HasValue ?
-        //        new ObjectParameter("Antkainis", antkainis) :
-        //        new ObjectParameter("Antkainis", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var kortelesNrParameter = kortelesNr != null ?
-        //        new ObjectParameter("KortelesNr", kortelesNr) :
-        //        new ObjectParameter("KortelesNr", typeof(string));
-    
-        //    var kasininkasParameter = kasininkas.HasValue ?
-        //        new ObjectParameter("Kasininkas", kasininkas) :
-        //        new ObjectParameter("Kasininkas", typeof(int));
-    
-        //    var znrParameter = znr.HasValue ?
-        //        new ObjectParameter("Znr", znr) :
-        //        new ObjectParameter("Znr", typeof(int));
-    
-        //    var kvitoNr2Parameter = kvitoNr2 != null ?
-        //        new ObjectParameter("KvitoNr2", kvitoNr2) :
-        //        new ObjectParameter("KvitoNr2", typeof(string));
-    
-        //    var nlKortParameter = nlKort != null ?
-        //        new ObjectParameter("NlKort", nlKort) :
-        //        new ObjectParameter("NlKort", typeof(string));
-    
-        //    var sumaGryniParameter = sumaGryni.HasValue ?
-        //        new ObjectParameter("SumaGryni", sumaGryni) :
-        //        new ObjectParameter("SumaGryni", typeof(double));
-    
-        //    var secondsParameter = seconds.HasValue ?
-        //        new ObjectParameter("Seconds", seconds) :
-        //        new ObjectParameter("Seconds", typeof(byte));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var durationToPushTotalParameter = durationToPushTotal.HasValue ?
-        //        new ObjectParameter("DurationToPushTotal", durationToPushTotal) :
-        //        new ObjectParameter("DurationToPushTotal", typeof(double));
-    
-        //    var flagsParameter = flags.HasValue ?
-        //        new ObjectParameter("Flags", flags) :
-        //        new ObjectParameter("Flags", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoGalvaEx2", aparatoIDParameter, kvitoNrParameter, yearParameter, monthParameter, dayParameter, hourParameter, minuteParameter, apmokejimoRusisParameter, sumaParameter, nuolaidaParameter, antkainisParameter, mokesciaiParameter, kortelesNrParameter, kasininkasParameter, znrParameter, kvitoNr2Parameter, nlKortParameter, sumaGryniParameter, secondsParameter, durationParameter, durationToPushTotalParameter, flagsParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreKvitoGalvaEx3(int? aparatoID, int? kvitoNr, short? year, byte? month, byte? day, byte? hour, byte? minute, byte? apmokejimoRusis, double? suma, double? nuolaida, double? antkainis, double? mokesciai, string kortelesNr, int? kasininkas, int? znr, string kvitoNr2, string nlKort, double? sumaGryni, byte? seconds, double? duration, double? durationToPushTotal, int? flags, string invNr, ObjectParameter iD)
-        //{
-        //    var aparatoIDParameter = aparatoID.HasValue ?
-        //        new ObjectParameter("AparatoID", aparatoID) :
-        //        new ObjectParameter("AparatoID", typeof(int));
-    
-        //    var kvitoNrParameter = kvitoNr.HasValue ?
-        //        new ObjectParameter("KvitoNr", kvitoNr) :
-        //        new ObjectParameter("KvitoNr", typeof(int));
-    
-        //    var yearParameter = year.HasValue ?
-        //        new ObjectParameter("Year", year) :
-        //        new ObjectParameter("Year", typeof(short));
-    
-        //    var monthParameter = month.HasValue ?
-        //        new ObjectParameter("Month", month) :
-        //        new ObjectParameter("Month", typeof(byte));
-    
-        //    var dayParameter = day.HasValue ?
-        //        new ObjectParameter("Day", day) :
-        //        new ObjectParameter("Day", typeof(byte));
-    
-        //    var hourParameter = hour.HasValue ?
-        //        new ObjectParameter("Hour", hour) :
-        //        new ObjectParameter("Hour", typeof(byte));
-    
-        //    var minuteParameter = minute.HasValue ?
-        //        new ObjectParameter("Minute", minute) :
-        //        new ObjectParameter("Minute", typeof(byte));
-    
-        //    var apmokejimoRusisParameter = apmokejimoRusis.HasValue ?
-        //        new ObjectParameter("ApmokejimoRusis", apmokejimoRusis) :
-        //        new ObjectParameter("ApmokejimoRusis", typeof(byte));
-    
-        //    var sumaParameter = suma.HasValue ?
-        //        new ObjectParameter("Suma", suma) :
-        //        new ObjectParameter("Suma", typeof(double));
-    
-        //    var nuolaidaParameter = nuolaida.HasValue ?
-        //        new ObjectParameter("Nuolaida", nuolaida) :
-        //        new ObjectParameter("Nuolaida", typeof(double));
-    
-        //    var antkainisParameter = antkainis.HasValue ?
-        //        new ObjectParameter("Antkainis", antkainis) :
-        //        new ObjectParameter("Antkainis", typeof(double));
-    
-        //    var mokesciaiParameter = mokesciai.HasValue ?
-        //        new ObjectParameter("Mokesciai", mokesciai) :
-        //        new ObjectParameter("Mokesciai", typeof(double));
-    
-        //    var kortelesNrParameter = kortelesNr != null ?
-        //        new ObjectParameter("KortelesNr", kortelesNr) :
-        //        new ObjectParameter("KortelesNr", typeof(string));
-    
-        //    var kasininkasParameter = kasininkas.HasValue ?
-        //        new ObjectParameter("Kasininkas", kasininkas) :
-        //        new ObjectParameter("Kasininkas", typeof(int));
-    
-        //    var znrParameter = znr.HasValue ?
-        //        new ObjectParameter("Znr", znr) :
-        //        new ObjectParameter("Znr", typeof(int));
-    
-        //    var kvitoNr2Parameter = kvitoNr2 != null ?
-        //        new ObjectParameter("KvitoNr2", kvitoNr2) :
-        //        new ObjectParameter("KvitoNr2", typeof(string));
-    
-        //    var nlKortParameter = nlKort != null ?
-        //        new ObjectParameter("NlKort", nlKort) :
-        //        new ObjectParameter("NlKort", typeof(string));
-    
-        //    var sumaGryniParameter = sumaGryni.HasValue ?
-        //        new ObjectParameter("SumaGryni", sumaGryni) :
-        //        new ObjectParameter("SumaGryni", typeof(double));
-    
-        //    var secondsParameter = seconds.HasValue ?
-        //        new ObjectParameter("Seconds", seconds) :
-        //        new ObjectParameter("Seconds", typeof(byte));
-    
-        //    var durationParameter = duration.HasValue ?
-        //        new ObjectParameter("Duration", duration) :
-        //        new ObjectParameter("Duration", typeof(double));
-    
-        //    var durationToPushTotalParameter = durationToPushTotal.HasValue ?
-        //        new ObjectParameter("DurationToPushTotal", durationToPushTotal) :
-        //        new ObjectParameter("DurationToPushTotal", typeof(double));
-    
-        //    var flagsParameter = flags.HasValue ?
-        //        new ObjectParameter("Flags", flags) :
-        //        new ObjectParameter("Flags", typeof(int));
-    
-        //    var invNrParameter = invNr != null ?
-        //        new ObjectParameter("InvNr", invNr) :
-        //        new ObjectParameter("InvNr", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreKvitoGalvaEx3", aparatoIDParameter, kvitoNrParameter, yearParameter, monthParameter, dayParameter, hourParameter, minuteParameter, apmokejimoRusisParameter, sumaParameter, nuolaidaParameter, antkainisParameter, mokesciaiParameter, kortelesNrParameter, kasininkasParameter, znrParameter, kvitoNr2Parameter, nlKortParameter, sumaGryniParameter, secondsParameter, durationParameter, durationToPushTotalParameter, flagsParameter, invNrParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePayment(int? galvosId, int? type, double? amount, string cardNo, string authCode, int? authModule, double? currencyRate, double? currencyAmount, ObjectParameter iD)
-        //{
-        //    var galvosIdParameter = galvosId.HasValue ?
-        //        new ObjectParameter("GalvosId", galvosId) :
-        //        new ObjectParameter("GalvosId", typeof(int));
-    
-        //    var typeParameter = type.HasValue ?
-        //        new ObjectParameter("Type", type) :
-        //        new ObjectParameter("Type", typeof(int));
-    
-        //    var amountParameter = amount.HasValue ?
-        //        new ObjectParameter("Amount", amount) :
-        //        new ObjectParameter("Amount", typeof(double));
-    
-        //    var cardNoParameter = cardNo != null ?
-        //        new ObjectParameter("CardNo", cardNo) :
-        //        new ObjectParameter("CardNo", typeof(string));
-    
-        //    var authCodeParameter = authCode != null ?
-        //        new ObjectParameter("AuthCode", authCode) :
-        //        new ObjectParameter("AuthCode", typeof(string));
-    
-        //    var authModuleParameter = authModule.HasValue ?
-        //        new ObjectParameter("AuthModule", authModule) :
-        //        new ObjectParameter("AuthModule", typeof(int));
-    
-        //    var currencyRateParameter = currencyRate.HasValue ?
-        //        new ObjectParameter("CurrencyRate", currencyRate) :
-        //        new ObjectParameter("CurrencyRate", typeof(double));
-    
-        //    var currencyAmountParameter = currencyAmount.HasValue ?
-        //        new ObjectParameter("CurrencyAmount", currencyAmount) :
-        //        new ObjectParameter("CurrencyAmount", typeof(double));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePayment", galvosIdParameter, typeParameter, amountParameter, cardNoParameter, authCodeParameter, authModuleParameter, currencyRateParameter, currencyAmountParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePaymentBank(int? paymentId, short? bankId, short? bankOwnerId, bool? isCobrand, bool? isOnline, ObjectParameter iD)
-        //{
-        //    var paymentIdParameter = paymentId.HasValue ?
-        //        new ObjectParameter("PaymentId", paymentId) :
-        //        new ObjectParameter("PaymentId", typeof(int));
-    
-        //    var bankIdParameter = bankId.HasValue ?
-        //        new ObjectParameter("BankId", bankId) :
-        //        new ObjectParameter("BankId", typeof(short));
-    
-        //    var bankOwnerIdParameter = bankOwnerId.HasValue ?
-        //        new ObjectParameter("BankOwnerId", bankOwnerId) :
-        //        new ObjectParameter("BankOwnerId", typeof(short));
-    
-        //    var isCobrandParameter = isCobrand.HasValue ?
-        //        new ObjectParameter("IsCobrand", isCobrand) :
-        //        new ObjectParameter("IsCobrand", typeof(bool));
-    
-        //    var isOnlineParameter = isOnline.HasValue ?
-        //        new ObjectParameter("IsOnline", isOnline) :
-        //        new ObjectParameter("IsOnline", typeof(bool));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePaymentBank", paymentIdParameter, bankIdParameter, bankOwnerIdParameter, isCobrandParameter, isOnlineParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePaymentBank2(int? paymentId, short? bankId, short? bankOwnerId, bool? isCobrand, bool? isOnline, string authId, string ci, ObjectParameter iD)
-        //{
-        //    var paymentIdParameter = paymentId.HasValue ?
-        //        new ObjectParameter("PaymentId", paymentId) :
-        //        new ObjectParameter("PaymentId", typeof(int));
-    
-        //    var bankIdParameter = bankId.HasValue ?
-        //        new ObjectParameter("BankId", bankId) :
-        //        new ObjectParameter("BankId", typeof(short));
-    
-        //    var bankOwnerIdParameter = bankOwnerId.HasValue ?
-        //        new ObjectParameter("BankOwnerId", bankOwnerId) :
-        //        new ObjectParameter("BankOwnerId", typeof(short));
-    
-        //    var isCobrandParameter = isCobrand.HasValue ?
-        //        new ObjectParameter("IsCobrand", isCobrand) :
-        //        new ObjectParameter("IsCobrand", typeof(bool));
-    
-        //    var isOnlineParameter = isOnline.HasValue ?
-        //        new ObjectParameter("IsOnline", isOnline) :
-        //        new ObjectParameter("IsOnline", typeof(bool));
-    
-        //    var authIdParameter = authId != null ?
-        //        new ObjectParameter("AuthId", authId) :
-        //        new ObjectParameter("AuthId", typeof(string));
-    
-        //    var ciParameter = ci != null ?
-        //        new ObjectParameter("Ci", ci) :
-        //        new ObjectParameter("Ci", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePaymentBank2", paymentIdParameter, bankIdParameter, bankOwnerIdParameter, isCobrandParameter, isOnlineParameter, authIdParameter, ciParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePoints_Headers(int? galvosId, double? points, double? centerPoints, int? discountIdentificator, ObjectParameter iD)
-        //{
-        //    var galvosIdParameter = galvosId.HasValue ?
-        //        new ObjectParameter("GalvosId", galvosId) :
-        //        new ObjectParameter("GalvosId", typeof(int));
-    
-        //    var pointsParameter = points.HasValue ?
-        //        new ObjectParameter("Points", points) :
-        //        new ObjectParameter("Points", typeof(double));
-    
-        //    var centerPointsParameter = centerPoints.HasValue ?
-        //        new ObjectParameter("CenterPoints", centerPoints) :
-        //        new ObjectParameter("CenterPoints", typeof(double));
-    
-        //    var discountIdentificatorParameter = discountIdentificator.HasValue ?
-        //        new ObjectParameter("DiscountIdentificator", discountIdentificator) :
-        //        new ObjectParameter("DiscountIdentificator", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePoints_Headers", galvosIdParameter, pointsParameter, centerPointsParameter, discountIdentificatorParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePoints_Items(int? kvitoEiluteId, double? points, int? discountIdentificator, ObjectParameter iD)
-        //{
-        //    var kvitoEiluteIdParameter = kvitoEiluteId.HasValue ?
-        //        new ObjectParameter("KvitoEiluteId", kvitoEiluteId) :
-        //        new ObjectParameter("KvitoEiluteId", typeof(int));
-    
-        //    var pointsParameter = points.HasValue ?
-        //        new ObjectParameter("Points", points) :
-        //        new ObjectParameter("Points", typeof(double));
-    
-        //    var discountIdentificatorParameter = discountIdentificator.HasValue ?
-        //        new ObjectParameter("DiscountIdentificator", discountIdentificator) :
-        //        new ObjectParameter("DiscountIdentificator", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePoints_Items", kvitoEiluteIdParameter, pointsParameter, discountIdentificatorParameter, iD);
-        //}
-    
-        //public virtual int rq_StorePrice_Discounts_Items(int? kvitoEiluteId, double? discount, int? discountScenarioType, int? discountIdentificator, int? sellDiscountId, ObjectParameter iD)
-        //{
-        //    var kvitoEiluteIdParameter = kvitoEiluteId.HasValue ?
-        //        new ObjectParameter("KvitoEiluteId", kvitoEiluteId) :
-        //        new ObjectParameter("KvitoEiluteId", typeof(int));
-    
-        //    var discountParameter = discount.HasValue ?
-        //        new ObjectParameter("Discount", discount) :
-        //        new ObjectParameter("Discount", typeof(double));
-    
-        //    var discountScenarioTypeParameter = discountScenarioType.HasValue ?
-        //        new ObjectParameter("DiscountScenarioType", discountScenarioType) :
-        //        new ObjectParameter("DiscountScenarioType", typeof(int));
-    
-        //    var discountIdentificatorParameter = discountIdentificator.HasValue ?
-        //        new ObjectParameter("DiscountIdentificator", discountIdentificator) :
-        //        new ObjectParameter("DiscountIdentificator", typeof(int));
-    
-        //    var sellDiscountIdParameter = sellDiscountId.HasValue ?
-        //        new ObjectParameter("SellDiscountId", sellDiscountId) :
-        //        new ObjectParameter("SellDiscountId", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StorePrice_Discounts_Items", kvitoEiluteIdParameter, discountParameter, discountScenarioTypeParameter, discountIdentificatorParameter, sellDiscountIdParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreReward(int? galvosId, int? discountIdentificator, string rewardIdentificator, string couponBarcode, bool? isGsm, short? quantity, ObjectParameter iD)
-        //{
-        //    var galvosIdParameter = galvosId.HasValue ?
-        //        new ObjectParameter("GalvosId", galvosId) :
-        //        new ObjectParameter("GalvosId", typeof(int));
-    
-        //    var discountIdentificatorParameter = discountIdentificator.HasValue ?
-        //        new ObjectParameter("DiscountIdentificator", discountIdentificator) :
-        //        new ObjectParameter("DiscountIdentificator", typeof(int));
-    
-        //    var rewardIdentificatorParameter = rewardIdentificator != null ?
-        //        new ObjectParameter("RewardIdentificator", rewardIdentificator) :
-        //        new ObjectParameter("RewardIdentificator", typeof(string));
-    
-        //    var couponBarcodeParameter = couponBarcode != null ?
-        //        new ObjectParameter("CouponBarcode", couponBarcode) :
-        //        new ObjectParameter("CouponBarcode", typeof(string));
-    
-        //    var isGsmParameter = isGsm.HasValue ?
-        //        new ObjectParameter("IsGsm", isGsm) :
-        //        new ObjectParameter("IsGsm", typeof(bool));
-    
-        //    var quantityParameter = quantity.HasValue ?
-        //        new ObjectParameter("Quantity", quantity) :
-        //        new ObjectParameter("Quantity", typeof(short));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreReward", galvosIdParameter, discountIdentificatorParameter, rewardIdentificatorParameter, couponBarcodeParameter, isGsmParameter, quantityParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreSellDiscount(int? galvosId, int? type, int? subType, int? custNo, double? percent, double? amount, string cardNo, string discountTitle, ObjectParameter iD)
-        //{
-        //    var galvosIdParameter = galvosId.HasValue ?
-        //        new ObjectParameter("GalvosId", galvosId) :
-        //        new ObjectParameter("GalvosId", typeof(int));
-    
-        //    var typeParameter = type.HasValue ?
-        //        new ObjectParameter("Type", type) :
-        //        new ObjectParameter("Type", typeof(int));
-    
-        //    var subTypeParameter = subType.HasValue ?
-        //        new ObjectParameter("SubType", subType) :
-        //        new ObjectParameter("SubType", typeof(int));
-    
-        //    var custNoParameter = custNo.HasValue ?
-        //        new ObjectParameter("CustNo", custNo) :
-        //        new ObjectParameter("CustNo", typeof(int));
-    
-        //    var percentParameter = percent.HasValue ?
-        //        new ObjectParameter("Percent", percent) :
-        //        new ObjectParameter("Percent", typeof(double));
-    
-        //    var amountParameter = amount.HasValue ?
-        //        new ObjectParameter("Amount", amount) :
-        //        new ObjectParameter("Amount", typeof(double));
-    
-        //    var cardNoParameter = cardNo != null ?
-        //        new ObjectParameter("CardNo", cardNo) :
-        //        new ObjectParameter("CardNo", typeof(string));
-    
-        //    var discountTitleParameter = discountTitle != null ?
-        //        new ObjectParameter("DiscountTitle", discountTitle) :
-        //        new ObjectParameter("DiscountTitle", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreSellDiscount", galvosIdParameter, typeParameter, subTypeParameter, custNoParameter, percentParameter, amountParameter, cardNoParameter, discountTitleParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreSellEntry(int? galvosId, int? sellLine, int? entryCode, string entry, ObjectParameter iD)
-        //{
-        //    var galvosIdParameter = galvosId.HasValue ?
-        //        new ObjectParameter("GalvosId", galvosId) :
-        //        new ObjectParameter("GalvosId", typeof(int));
-    
-        //    var sellLineParameter = sellLine.HasValue ?
-        //        new ObjectParameter("SellLine", sellLine) :
-        //        new ObjectParameter("SellLine", typeof(int));
-    
-        //    var entryCodeParameter = entryCode.HasValue ?
-        //        new ObjectParameter("EntryCode", entryCode) :
-        //        new ObjectParameter("EntryCode", typeof(int));
-    
-        //    var entryParameter = entry != null ?
-        //        new ObjectParameter("Entry", entry) :
-        //        new ObjectParameter("Entry", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreSellEntry", galvosIdParameter, sellLineParameter, entryCodeParameter, entryParameter, iD);
-        //}
-    
-        //public virtual int rq_StoreStartParam(int? apID, int? zNR, int? kVNR)
-        //{
-        //    var apIDParameter = apID.HasValue ?
-        //        new ObjectParameter("apID", apID) :
-        //        new ObjectParameter("apID", typeof(int));
-    
-        //    var zNRParameter = zNR.HasValue ?
-        //        new ObjectParameter("ZNR", zNR) :
-        //        new ObjectParameter("ZNR", typeof(int));
-    
-        //    var kVNRParameter = kVNR.HasValue ?
-        //        new ObjectParameter("KVNR", kVNR) :
-        //        new ObjectParameter("KVNR", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_StoreStartParam", apIDParameter, zNRParameter, kVNRParameter);
-        //}
-    
-        //public virtual int rq_SwapBits(int? bitonr, ObjectParameter data1, ObjectParameter data2)
-        //{
-        //    var bitonrParameter = bitonr.HasValue ?
-        //        new ObjectParameter("bitonr", bitonr) :
-        //        new ObjectParameter("bitonr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("rq_SwapBits", bitonrParameter, data1, data2);
-        //}
-    
-        //public virtual ObjectResult<ScanMataiAll_Result> ScanMataiAll()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ScanMataiAll_Result>("ScanMataiAll");
-        //}
-    
-        //public virtual int sco_ClearBit(int? bitonr, ObjectParameter data1)
-        //{
-        //    var bitonrParameter = bitonr.HasValue ?
-        //        new ObjectParameter("bitonr", bitonr) :
-        //        new ObjectParameter("bitonr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sco_ClearBit", bitonrParameter, data1);
-        //}
-    
-        //public virtual int sco_ClearBits(int? bitoNr, string ids, string tableName, string fieldName, string iDfieldName)
-        //{
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    var idsParameter = ids != null ?
-        //        new ObjectParameter("ids", ids) :
-        //        new ObjectParameter("ids", typeof(string));
-    
-        //    var tableNameParameter = tableName != null ?
-        //        new ObjectParameter("tableName", tableName) :
-        //        new ObjectParameter("tableName", typeof(string));
-    
-        //    var fieldNameParameter = fieldName != null ?
-        //        new ObjectParameter("fieldName", fieldName) :
-        //        new ObjectParameter("fieldName", typeof(string));
-    
-        //    var iDfieldNameParameter = iDfieldName != null ?
-        //        new ObjectParameter("IDfieldName", iDfieldName) :
-        //        new ObjectParameter("IDfieldName", typeof(string));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sco_ClearBits", bitoNrParameter, idsParameter, tableNameParameter, fieldNameParameter, iDfieldNameParameter);
-        //}
-    
-        //public virtual int sco_PrekesTransferBit(int? prekesID, int? bitonr, int? deleteoperation)
-        //{
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var bitonrParameter = bitonr.HasValue ?
-        //        new ObjectParameter("bitonr", bitonr) :
-        //        new ObjectParameter("bitonr", typeof(int));
-    
-        //    var deleteoperationParameter = deleteoperation.HasValue ?
-        //        new ObjectParameter("deleteoperation", deleteoperation) :
-        //        new ObjectParameter("deleteoperation", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sco_PrekesTransferBit", prekesIDParameter, bitonrParameter, deleteoperationParameter);
-        //}
-    
-        //public virtual ObjectResult<sco_ReadCashier_Result> sco_ReadCashier(int? cashierID, int? bitoNr)
-        //{
-        //    var cashierIDParameter = cashierID.HasValue ?
-        //        new ObjectParameter("CashierID", cashierID) :
-        //        new ObjectParameter("CashierID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sco_ReadCashier_Result>("sco_ReadCashier", cashierIDParameter, bitoNrParameter);
-        //}
-    
-        //public virtual int sco_ReadCatPict(int? catPictID, int? bitoNr)
-        //{
-        //    var catPictIDParameter = catPictID.HasValue ?
-        //        new ObjectParameter("CatPictID", catPictID) :
-        //        new ObjectParameter("CatPictID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sco_ReadCatPict", catPictIDParameter, bitoNrParameter);
-        //}
-    
-        //public virtual ObjectResult<sco_ReadLoyCard_Result> sco_ReadLoyCard(int? loyCardID, int? bitoNr)
-        //{
-        //    var loyCardIDParameter = loyCardID.HasValue ?
-        //        new ObjectParameter("LoyCardID", loyCardID) :
-        //        new ObjectParameter("LoyCardID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sco_ReadLoyCard_Result>("sco_ReadLoyCard", loyCardIDParameter, bitoNrParameter);
-        //}
-    
-        //public virtual int sco_ReadPLUPict(int? pLUPictID, int? bitoNr)
-        //{
-        //    var pLUPictIDParameter = pLUPictID.HasValue ?
-        //        new ObjectParameter("PLUPictID", pLUPictID) :
-        //        new ObjectParameter("PLUPictID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sco_ReadPLUPict", pLUPictIDParameter, bitoNrParameter);
-        //}
-    
-        //public virtual ObjectResult<sco_ReadPreke_Result> sco_ReadPreke(int? prekesID, int? bitoNr, int? dep)
-        //{
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    var depParameter = dep.HasValue ?
-        //        new ObjectParameter("dep", dep) :
-        //        new ObjectParameter("dep", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sco_ReadPreke_Result>("sco_ReadPreke", prekesIDParameter, bitoNrParameter, depParameter);
-        //}
-    
-        //public virtual ObjectResult<sco_ReadPrekeDelete_Result> sco_ReadPrekeDelete(int? prekesID, int? bitoNr, int? dep)
-        //{
-        //    var prekesIDParameter = prekesID.HasValue ?
-        //        new ObjectParameter("PrekesID", prekesID) :
-        //        new ObjectParameter("PrekesID", typeof(int));
-    
-        //    var bitoNrParameter = bitoNr.HasValue ?
-        //        new ObjectParameter("BitoNr", bitoNr) :
-        //        new ObjectParameter("BitoNr", typeof(int));
-    
-        //    var depParameter = dep.HasValue ?
-        //        new ObjectParameter("dep", dep) :
-        //        new ObjectParameter("dep", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sco_ReadPrekeDelete_Result>("sco_ReadPrekeDelete", prekesIDParameter, bitoNrParameter, depParameter);
-        //}
-    
-        //public virtual int StorePLUSetPaid(string bC, int? kGID)
-        //{
-        //    var bCParameter = bC != null ?
-        //        new ObjectParameter("BC", bC) :
-        //        new ObjectParameter("BC", typeof(string));
-    
-        //    var kGIDParameter = kGID.HasValue ?
-        //        new ObjectParameter("KGID", kGID) :
-        //        new ObjectParameter("KGID", typeof(int));
-    
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("StorePLUSetPaid", bCParameter, kGIDParameter);
-        //}
-    
-        //public virtual int UpdateBCDep()
-        //{
-        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateBCDep");
-        //}
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.AgeVerification)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_AgeVerification_KvitoGalva");
+            });
+
+            modelBuilder.Entity<AnnulHead>(entity =>
+            {
+                entity.HasIndex(e => new { e.Posid, e.IdOnPos })
+                    .HasName("IX_AnnulHead")
+                    .IsUnique();
+
+                entity.Property(e => e.AnnulTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Posid).HasColumnName("POSId");
+
+                entity.Property(e => e.Znr).HasColumnName("ZNr");
+            });
+
+            modelBuilder.Entity<AnnulLine>(entity =>
+            {
+                entity.Property(e => e.BarCode)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Head)
+                    .WithMany(p => p.AnnulLine)
+                    .HasForeignKey(d => d.HeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AnnulLine_AnnulHead");
+            });
+
+            modelBuilder.Entity<Aparatai>(entity =>
+            {
+                entity.HasKey(e => e.AparatoId);
+
+                entity.HasIndex(e => e.AparatoNr)
+                    .HasName("AparatoNr")
+                    .IsUnique();
+
+                entity.Property(e => e.AparatoId)
+                    .HasColumnName("AparatoID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.AparatoNr).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.AparatoPavadinimas).HasMaxLength(50);
+
+                entity.Property(e => e.Cpufreq).HasColumnName("CPUFreq");
+
+                entity.Property(e => e.Cpuname)
+                    .HasColumnName("CPUName")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Dep).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Fbversion)
+                    .HasColumnName("FBVersion")
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Fnumber)
+                    .HasColumnName("FNumber")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.HardDriveModel).HasMaxLength(255);
+
+                entity.Property(e => e.HardDriveSerial).HasMaxLength(255);
+
+                entity.Property(e => e.HardDriveSizeMb).HasColumnName("HardDriveSize_Mb");
+
+                entity.Property(e => e.Ipadress)
+                    .HasColumnName("IPAdress")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.MyId).HasColumnName("MyID");
+
+                entity.Property(e => e.NodeId).HasColumnName("NodeID");
+
+                entity.Property(e => e.NonUvsnumber).HasColumnName("NonUVSNumber");
+
+                entity.Property(e => e.Posnr).HasColumnName("POSNr");
+
+                entity.Property(e => e.RamMb).HasColumnName("RAM_Mb");
+
+                entity.Property(e => e.Version).HasMaxLength(50);
+
+                entity.Property(e => e.VideoName).HasMaxLength(255);
+
+                entity.Property(e => e.VideoRamKb).HasColumnName("VideoRAM_Kb");
+            });
+
+            modelBuilder.Entity<AparatoGrupes>(entity =>
+            {
+                entity.HasIndex(e => new { e.AparatoId, e.GrupesId })
+                    .HasName("IX_AparatoGrupes");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.GrupesId).HasColumnName("GrupesID");
+            });
+
+            modelBuilder.Entity<Ataskaitos>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Iki).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Nuo).HasColumnType("smalldatetime");
+            });
+
+            modelBuilder.Entity<Attributes>(entity =>
+            {
+                entity.Property(e => e.Id).HasMaxLength(25);
+
+                entity.Property(e => e.PossibleValues).HasColumnType("xml");
+
+                entity.Property(e => e.Timestamp)
+                    .IsRequired()
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<AurimasNk>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("Aurimas_NK");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.Barkodas)
+                    .HasMaxLength(14)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.KortelesNr)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<BarKodai>(entity =>
+            {
+                entity.HasIndex(e => new { e.Dep, e.BarCode })
+                    .HasName("IX_BarKodai_1");
+
+                entity.HasIndex(e => new { e.Dep, e.PrekesKodas, e.BarCode })
+                    .HasName("IX_BarKodai")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BarCode).HasMaxLength(20);
+
+                entity.Property(e => e.Dep).HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<CashierLogs>(entity =>
+            {
+                entity.HasIndex(e => new { e.AparatoId, e.IdOnPos })
+                    .HasName("IX_CashierLogsApIDidOnPos");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.LogOffTime).HasColumnType("datetime");
+
+                entity.Property(e => e.LogOnTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Aparato)
+                    .WithMany(p => p.CashierLogs)
+                    .HasForeignKey(d => d.AparatoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AparatoId");
+            });
+
+            modelBuilder.Entity<CatPictures>(entity =>
+            {
+                entity.HasKey(e => e.CategoryId);
+
+                entity.Property(e => e.CategoryId)
+                    .HasColumnName("category_id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.CategoryName)
+                    .IsRequired()
+                    .HasColumnName("category_name")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.DocId).HasColumnName("doc_id");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.OpNr).HasColumnName("op_nr");
+
+                entity.Property(e => e.PictureId).HasColumnName("picture_id");
+
+                entity.Property(e => e.ShortCategoryName)
+                    .IsRequired()
+                    .HasColumnName("short_category_name")
+                    .HasMaxLength(24);
+
+                entity.Property(e => e.Timestamp)
+                    .HasColumnName("timestamp")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Tstamp)
+                    .IsRequired()
+                    .HasColumnName("tstamp")
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
+            modelBuilder.Entity<ClientInfo>(entity =>
+            {
+                entity.Property(e => e.Address).HasMaxLength(300);
+
+                entity.Property(e => e.Code).HasMaxLength(20);
+
+                entity.Property(e => e.HeadId).HasColumnName("HeadID");
+
+                entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Template).HasMaxLength(500);
+
+                entity.Property(e => e.Vatcode)
+                    .HasColumnName("VATCode")
+                    .HasMaxLength(20);
+
+                entity.HasOne(d => d.Head)
+                    .WithMany(p => p.ClientInfo)
+                    .HasForeignKey(d => d.HeadId)
+                    .HasConstraintName("FK_ClientInfo_KvitoGalva");
+            });
+
+            modelBuilder.Entity<CompPlu>(entity =>
+            {
+                entity.ToTable("CompPLU");
+
+                entity.HasIndex(e => new { e.MainCode, e.Dep })
+                    .HasName("IX_MainCode");
+
+                entity.HasIndex(e => new { e.SupCode, e.Dep })
+                    .HasName("IX_SupCode");
+
+                entity.HasIndex(e => new { e.Dep, e.MainCode, e.SupCode })
+                    .HasName("IX_DepMainSup")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Coef).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Dep).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.SupCode)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CouponActivate>(entity =>
+            {
+                entity.Property(e => e.Balance).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.CouponNumber)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.IdOnPos).HasColumnName("idOnPos");
+
+                entity.Property(e => e.Posid).HasColumnName("POSId");
+            });
+
+            modelBuilder.Entity<EuroStages>(entity =>
+            {
+                entity.Property(e => e.When).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<GetBarcodeByPrekesId>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetBarcodeByPrekesID");
+
+                entity.Property(e => e.BarCode).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<GetGrupeById>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetGrupeByID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.GrupesId)
+                    .HasColumnName("GrupesID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.GrupesPav)
+                    .IsRequired()
+                    .HasMaxLength(30);
+            });
+
+            modelBuilder.Entity<GetKasininkasById>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetKasininkasByID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Kodas)
+                    .IsRequired()
+                    .HasMaxLength(9);
+
+                entity.Property(e => e.Pavarde)
+                    .IsRequired()
+                    .HasMaxLength(40);
+            });
+
+            modelBuilder.Entity<GetKorteleById>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetKorteleByID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.IdNumber)
+                    .IsRequired()
+                    .HasColumnName("Id number")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Key1B).HasMaxLength(32);
+
+                entity.Property(e => e.PusePin)
+                    .HasColumnName("PusePIN")
+                    .HasMaxLength(16);
+            });
+
+            modelBuilder.Entity<GetLastKvitoNr>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetLastKvitoNr");
+            });
+
+            modelBuilder.Entity<GetMatasById>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetMatasByID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Komentaras).HasMaxLength(50);
+
+                entity.Property(e => e.MatoId)
+                    .HasColumnName("MatoID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.MatoPavad).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<GetPrekeById>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetPrekeByID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL).HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL1)
+                    .HasColumnName("_AparataiL")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.GlobalId).HasColumnName("GlobalID");
+
+                entity.Property(e => e.GrupesId).HasColumnName("GrupesID");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Laikas).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.N1Kiek).HasColumnName("N_1_Kiek");
+
+                entity.Property(e => e.N1Nuo).HasColumnName("N_1_Nuo");
+
+                entity.Property(e => e.N2Kiek).HasColumnName("N_2_Kiek");
+
+                entity.Property(e => e.N2Nuo).HasColumnName("N_2_Nuo");
+
+                entity.Property(e => e.NType).HasColumnName("N_Type");
+
+                entity.Property(e => e.PrekesKomentaras).HasMaxLength(120);
+
+                entity.Property(e => e.PrekesPavadinimas)
+                    .IsRequired()
+                    .HasMaxLength(90);
+
+                entity.Property(e => e.TiekejoId).HasColumnName("TiekejoID");
+            });
+
+            modelBuilder.Entity<GetPrekesIdbyLaikas1>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetPrekesIDByLaikas1");
+
+                entity.Property(e => e.MaxId).HasColumnName("maxID");
+            });
+
+            modelBuilder.Entity<GetPrekesIdbyLaikas2>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetPrekesIDByLaikas2");
+
+                entity.Property(e => e.MinId).HasColumnName("minID");
+            });
+
+            modelBuilder.Entity<GetStartParamByApId>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GetStartParamByApID");
+
+                entity.Property(e => e.ApId).HasColumnName("ApID");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Znr).HasColumnName("ZNr");
+            });
+
+            modelBuilder.Entity<GroupsDeps>(entity =>
+            {
+                entity.HasIndex(e => e.Dep)
+                    .HasName("Dep");
+
+                entity.HasIndex(e => e.Plugroup)
+                    .HasName("PLUGroup");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Dep).HasMaxLength(50);
+
+                entity.Property(e => e.Pav).HasMaxLength(100);
+
+                entity.Property(e => e.Plugroup)
+                    .HasColumnName("PLUGroup")
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Grupes>(entity =>
+            {
+                entity.Property(e => e.GrupesId).HasColumnName("GrupesID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.GrupesPav)
+                    .IsRequired()
+                    .HasMaxLength(30);
+            });
+
+            modelBuilder.Entity<GrupesScan>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("GrupesScan");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.GrupesId).HasColumnName("GrupesID");
+            });
+
+            modelBuilder.Entity<InactivityTime>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.KvitoEilute)
+                    .WithMany(p => p.InactivityTime)
+                    .HasForeignKey(d => d.KvitoEiluteId)
+                    .HasConstraintName("FK_KvitoEiluteIdIT");
+            });
+
+            modelBuilder.Entity<Inkasac>(entity =>
+            {
+                entity.HasIndex(e => new { e.Posid, e.IdOnPos })
+                    .HasName("IX_Inkasac")
+                    .IsUnique();
+
+                entity.Property(e => e.Amount).HasColumnName("amount");
+
+                entity.Property(e => e.ObjId)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ObjName).HasMaxLength(36);
+
+                entity.Property(e => e.OpName).HasMaxLength(36);
+
+                entity.Property(e => e.OpTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Posid).HasColumnName("POSId");
+
+                entity.Property(e => e.Znr).HasColumnName("ZNr");
+            });
+
+            modelBuilder.Entity<Kasininkai>(entity =>
+            {
+                entity.HasIndex(e => new { e.Dep, e.VidinisNr, e.Id })
+                    .HasName("IX_Kasininkai");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aktyvi).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.CardNo).HasMaxLength(100);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Kodas)
+                    .IsRequired()
+                    .HasMaxLength(9);
+
+                entity.Property(e => e.Pavarde)
+                    .IsRequired()
+                    .HasMaxLength(40);
+            });
+
+            modelBuilder.Entity<KasininkaiScan>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("KasininkaiScan");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<Korteles>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.BendrasLimitas).HasColumnName("Bendras limitas");
+
+                entity.Property(e => e.Benzinas).HasMaxLength(8);
+
+                entity.Property(e => e.GroupId).HasMaxLength(20);
+
+                entity.Property(e => e.IdNumber)
+                    .IsRequired()
+                    .HasColumnName("Id number")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Key1B).HasMaxLength(32);
+
+                entity.Property(e => e.LimitasDienai).HasColumnName("Limitas dienai");
+
+                entity.Property(e => e.LimitasMenesiui).HasColumnName("Limitas menesiui");
+
+                entity.Property(e => e.MkJudintaDabar).HasColumnName("MK_JudintaDabar");
+
+                entity.Property(e => e.MkMagneticCard).HasColumnName("MK_MagneticCard");
+
+                entity.Property(e => e.PasiustaIcardlista).HasColumnName("PasiustaICardlista");
+
+                entity.Property(e => e.PusePin)
+                    .HasColumnName("PusePIN")
+                    .HasMaxLength(16);
+
+                entity.Property(e => e.Redaguota).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Updated).HasColumnType("smalldatetime");
+            });
+
+            modelBuilder.Entity<KupList>(entity =>
+            {
+                entity.HasIndex(e => new { e.AparatoId, e.KvitoNr, e.Kuponas })
+                    .HasName("IX_KupList")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.Kuponas)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Laikas).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<KvitaiJoin>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("KvitaiJoin");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.KortelesNr)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KvEid).HasColumnName("KvEID");
+
+                entity.Property(e => e.KvGid).HasColumnName("KvGID");
+            });
+
+            modelBuilder.Entity<KvitoEilute>(entity =>
+            {
+                entity.HasIndex(e => e.GalvosId)
+                    .HasName("IX_KvitoEilute");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Barkodas)
+                    .HasMaxLength(14)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GalvosId).HasColumnName("GalvosID");
+
+                entity.Property(e => e.MpvalueGranted).HasColumnName("MPValueGranted");
+
+                entity.Property(e => e.MpvaluePaid).HasColumnName("MPValuePaid");
+
+                entity.Property(e => e.PackerId)
+                    .HasColumnName("PackerID")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PrekesId).HasColumnName("PrekesID");
+
+                entity.Property(e => e.PriceOriginType)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StrCode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Vat).HasColumnName("VAT");
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.KvitoEilute)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_KvitoEilute_KvitoGalva");
+            });
+
+            modelBuilder.Entity<KvitoGalva>(entity =>
+            {
+                entity.HasIndex(e => e.InvNr);
+
+                entity.HasIndex(e => e.InvNrParent);
+
+                entity.HasIndex(e => new { e.AparatoId, e.KvitoNr })
+                    .HasName("IX_KvitoGalva")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.GalvosId).HasColumnName("GalvosID");
+
+                entity.Property(e => e.InvNr)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.InvNrParent)
+                    .HasColumnName("InvNr_Parent")
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KortelesNr)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.KvitoNr2)
+                    .HasMaxLength(11)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.NlKort)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PosOrGroupIdParent).HasColumnName("PosOrGroupId_Parent");
+            });
+
+            modelBuilder.Entity<LastChecks>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("LastChecks");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.AparatoPavadinimas).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<LastVnr>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("LastVnr");
+
+                entity.Property(e => e.LastVnr1).HasColumnName("LastVnr");
+            });
+
+            modelBuilder.Entity<LastZnr>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("LastZnr");
+
+                entity.Property(e => e.LastZnr1).HasColumnName("LastZnr");
+            });
+
+            modelBuilder.Entity<LogAs>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Log'as");
+
+                entity.Property(e => e.Data)
+                    .HasColumnName("data")
+                    .HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Ivykis).HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<MataiScan>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("MataiScan");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.MatoId).HasColumnName("MatoID");
+            });
+
+            modelBuilder.Entity<MatavimoVienetai>(entity =>
+            {
+                entity.HasKey(e => e.MatoId)
+                    .IsClustered(false);
+
+                entity.HasIndex(e => e.MatoKodas)
+                    .HasName("IX_MatavimoVienetai")
+                    .IsUnique();
+
+                entity.Property(e => e.MatoId).HasColumnName("MatoID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Komentaras).HasMaxLength(50);
+
+                entity.Property(e => e.MatoPavad).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<MaxKvitai>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("MaxKvitai");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.AparatoPavadinimas).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Mokesciai>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.MokescioPavadinimas)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<NaujienosSvarstyklems>(entity =>
+            {
+                entity.HasIndex(e => new { e.PrekK, e.Barcode, e.PrekesEilNr, e.ScGroup })
+                    .HasName("IX_NaujienosSvarstyklems")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aprasas2).HasMaxLength(255);
+
+                entity.Property(e => e.Barcode)
+                    .HasMaxLength(13)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Comment).HasMaxLength(255);
+
+                entity.Property(e => e.EnergetineVerte).HasMaxLength(255);
+
+                entity.Property(e => e.Gamintojas).HasMaxLength(255);
+
+                entity.Property(e => e.Laikas).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.LaikymoSalygos).HasMaxLength(255);
+
+                entity.Property(e => e.Plugroup)
+                    .HasColumnName("PLUGroup")
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PrekesPav).HasMaxLength(255);
+
+                entity.Property(e => e.Sudetis).HasMaxLength(1000);
+
+                entity.Property(e => e.Sudetis2).HasMaxLength(255);
+
+                entity.Property(e => e.TechSalygos).HasMaxLength(255);
+
+                entity.Property(e => e.Ypatybes).HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Option>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.AllowNonZeroQdeletions).HasColumnName("AllowNonZeroQDeletions");
+
+                entity.Property(e => e.AutoVaztTiekejoId)
+                    .HasColumnName("AutoVaztTiekejoID")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DegalinesId).HasColumnName("DegalinesID");
+
+                entity.Property(e => e.ExportNewCardsPath).HasMaxLength(255);
+
+                entity.Property(e => e.ExternalDb)
+                    .HasColumnName("ExternalDB")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.FakturaFooter).HasColumnType("ntext");
+
+                entity.Property(e => e.FakturaHeader).HasColumnType("ntext");
+
+                entity.Property(e => e.FirmosPavadinimas).HasMaxLength(255);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.LastEcrcounter).HasColumnName("LastECRCounter");
+
+                entity.Property(e => e.LastKavcounter).HasColumnName("LastKAVCounter");
+
+                entity.Property(e => e.LastKvitoIdforSavikaina).HasColumnName("LastKvitoIDForSavikaina");
+
+                entity.Property(e => e.LastLogExportDate).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.LastVaztExpId).HasColumnName("LastVaztExpID");
+
+                entity.Property(e => e.OrganizacijosId).HasColumnName("OrganizacijosID");
+
+                entity.Property(e => e.Pvm).HasColumnName("PVM");
+
+                entity.Property(e => e.VaztExportDir).HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.HasIndex(e => e.GalvosId)
+                    .HasName("IX_Payment");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.AuthCode)
+                    .HasMaxLength(24)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CardNo)
+                    .HasMaxLength(21)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.Payment)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_Payment_KvitoGalva");
+            });
+
+            modelBuilder.Entity<PaymentBank>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.AuthId)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Ci)
+                    .HasMaxLength(8)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.PaymentBank)
+                    .HasForeignKey(d => d.PaymentId)
+                    .HasConstraintName("FK_PaymentId");
+            });
+
+            modelBuilder.Entity<PluAttributeAssigments>(entity =>
+            {
+                entity.HasKey(e => new { e.PluCode, e.AttributeId });
+
+                entity.Property(e => e.AttributeId).HasMaxLength(25);
+
+                entity.Property(e => e.Timestamp)
+                    .IsRequired()
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
+            modelBuilder.Entity<Plupictures>(entity =>
+            {
+                entity.ToTable("PLUPictures");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.CategoryId).HasColumnName("category_id");
+
+                entity.Property(e => e.CategoryTitle).HasColumnName("category_title");
+
+                entity.Property(e => e.Dep).HasColumnName("dep");
+
+                entity.Property(e => e.PictureId).HasColumnName("picture_id");
+
+                entity.Property(e => e.PictureSourceId).HasColumnName("picture_source_id");
+
+                entity.Property(e => e.Plu).HasColumnName("plu");
+
+                entity.Property(e => e.Title).HasColumnName("title");
+
+                entity.Property(e => e.Updated)
+                    .HasColumnName("updated")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Pluset>(entity =>
+            {
+                entity.ToTable("PLUSet");
+
+                entity.HasIndex(e => e.Barcode)
+                    .HasName("IX_PLUSet_1")
+                    .IsUnique();
+
+                entity.HasIndex(e => new { e.Dep, e.SetNo })
+                    .HasName("IX_PLUSet")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Barcode)
+                    .IsRequired()
+                    .HasColumnName("barcode")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Createdate)
+                    .HasColumnName("createdate")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Customer)
+                    .IsRequired()
+                    .HasColumnName("customer")
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Dep).HasColumnName("dep");
+
+                entity.Property(e => e.Kgid).HasColumnName("KGID");
+
+                entity.Property(e => e.Paytype)
+                    .IsRequired()
+                    .HasColumnName("paytype")
+                    .HasMaxLength(1)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Pickuplace).HasColumnName("pickuplace");
+
+                entity.Property(e => e.Pricemode).HasColumnName("pricemode");
+
+                entity.Property(e => e.Reservation).HasColumnName("reservation");
+
+                entity.Property(e => e.SetNo).HasColumnName("setNo");
+            });
+
+            modelBuilder.Entity<PlusetAttribute>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("PLUSetAttributes");
+
+                entity.Property(e => e.AttributeId)
+                    .IsRequired()
+                    .HasMaxLength(25);
+
+                entity.Property(e => e.PlusetId).HasColumnName("PLUSetId");
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<PlusetLineAttributes>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("PLUSetLineAttributes");
+
+                entity.Property(e => e.AttributeId)
+                    .IsRequired()
+                    .HasMaxLength(25);
+
+                entity.Property(e => e.PlusetLineId).HasColumnName("PLUSetLineId");
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<PlusetLine>(entity =>
+            {
+                entity.ToTable("PLUSetLines");
+
+                entity.HasIndex(e => e.Barcode)
+                    .HasName("IX_PLUSetLines_1");
+
+                entity.HasIndex(e => new { e.Dep, e.Setno, e.Barcode })
+                    .HasName("IX_PLUSetLines");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Barcode)
+                    .IsRequired()
+                    .HasColumnName("BARCODE")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Dep).HasColumnName("dep");
+
+                entity.Property(e => e.Packcount).HasColumnName("packcount");
+
+                entity.Property(e => e.Price)
+                    .HasColumnName("price")
+                    .HasDefaultValueSql("((0.00))");
+
+                entity.Property(e => e.Qty).HasColumnName("qty");
+
+                entity.Property(e => e.Setno).HasColumnName("setno");
+
+                entity.Property(e => e.Tax).HasColumnName("tax");
+            });
+
+            modelBuilder.Entity<PointsHeaders>(entity =>
+            {
+                entity.ToTable("Points_Headers");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.PointsHeaders)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_GalvosIdPH");
+            });
+
+            modelBuilder.Entity<PointsItems>(entity =>
+            {
+                entity.ToTable("Points_Items");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.KvitoEilute)
+                    .WithMany(p => p.PointsItems)
+                    .HasForeignKey(d => d.KvitoEiluteId)
+                    .HasConstraintName("FK_KvitoEiluteIdPI");
+            });
+
+            modelBuilder.Entity<Preke>(entity =>
+            {
+                entity.HasIndex(e => new { e.PrekesKodas, e.Laikas })
+                    .HasName("IX_Prekes_Kodas_Laikas");
+
+                entity.HasIndex(e => new { e.Dep, e.PrekesKodas, e.Id })
+                    .HasName("IX_Prekes_Dep_Kodas_Akt");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL).HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL1)
+                    .HasColumnName("_AparataiL")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Dep).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GlobalId).HasColumnName("GlobalID");
+
+                entity.Property(e => e.GrupesId).HasColumnName("GrupesID");
+
+                entity.Property(e => e.Laikas).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.N1Kiek).HasColumnName("N_1_Kiek");
+
+                entity.Property(e => e.N1Nuo).HasColumnName("N_1_Nuo");
+
+                entity.Property(e => e.N2Kiek).HasColumnName("N_2_Kiek");
+
+                entity.Property(e => e.N2Nuo).HasColumnName("N_2_Nuo");
+
+                entity.Property(e => e.NType)
+                    .HasColumnName("N_Type")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.PrekesKomentaras).HasMaxLength(120);
+
+                entity.Property(e => e.PrekesPavadinimas)
+                    .IsRequired()
+                    .HasMaxLength(90);
+
+                entity.Property(e => e.PriceType).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.TiekejoId).HasColumnName("TiekejoID");
+
+                entity.Property(e => e.Updating).HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<Prekes2>(entity =>
+            {
+                entity.HasIndex(e => e.PrekesId)
+                    .HasName("IX_Prekes2PrekesId")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.BrandId).HasMaxLength(20);
+
+                entity.Property(e => e.ItemGroupId).HasMaxLength(20);
+
+                entity.Property(e => e.ManufacId).HasMaxLength(20);
+
+                entity.Property(e => e.PriceOriginType)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PrekesIstorija>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Laikas).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.NewValue).HasMaxLength(255);
+
+                entity.Property(e => e.OldValue).HasMaxLength(255);
+
+                entity.Property(e => e.PrekesId).HasColumnName("PrekesID");
+            });
+
+            modelBuilder.Entity<PrekesIstorijosOperacijos>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Operacija).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<PrekesScan>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("PrekesScan");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL).HasMaxLength(30);
+
+                entity.Property(e => e.AparataiL1)
+                    .HasColumnName("_AparataiL")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+            });
+
+            modelBuilder.Entity<PriceDiscountsItem>(entity =>
+            {
+                entity.ToTable("Price_Discounts_Items");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasOne(d => d.KvitoEilute)
+                    .WithMany(p => p.PriceDiscountsItems)
+                    .HasForeignKey(d => d.KvitoEiluteId)
+                    .HasConstraintName("FK_KvitoEiluteId");
+
+                entity.HasOne(d => d.SellDiscount)
+                    .WithMany(p => p.PriceDiscountsItems)
+                    .HasForeignKey(d => d.SellDiscountId)
+                    .HasConstraintName("FK_SellDiscountId");
+            });
+
+            modelBuilder.Entity<Prices>(entity =>
+            {
+                entity.Property(e => e.FromTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Plucode).HasColumnName("PLUcode");
+
+                entity.Property(e => e.ToTime).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ReceiptHeadAttributeAssignments>(entity =>
+            {
+                entity.HasKey(e => e.AttributeId)
+                    .HasName("PK__ReceiptH__C18929EA5EAA0504");
+
+                entity.Property(e => e.AttributeId).HasMaxLength(25);
+
+                entity.Property(e => e.Timestamp)
+                    .IsRequired()
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
+            modelBuilder.Entity<ReceiptHeadAttributes>(entity =>
+            {
+                entity.HasIndex(e => e.ReceiptHeadId)
+                    .HasName("IX_ReceiptHeadAttributes_RHid");
+
+                entity.Property(e => e.AttributeId)
+                    .IsRequired()
+                    .HasMaxLength(25);
+
+                entity.Property(e => e.Value).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<ReceiptLineAttributes>(entity =>
+            {
+                entity.HasIndex(e => e.ReceiptLineId)
+                    .HasName("IX_ReceiptLineAttributes_RLid");
+
+                entity.Property(e => e.AttributeId)
+                    .IsRequired()
+                    .HasMaxLength(25);
+
+                entity.Property(e => e.Value).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<Reward>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CouponBarcode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RewardIdentificator)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.Reward)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_GalvosId");
+            });
+
+            modelBuilder.Entity<SellDiscount>(entity =>
+            {
+                entity.HasIndex(e => e.GalvosId)
+                    .HasName("IX_SellDiscount");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CardNo)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DiscountTitle).HasMaxLength(100);
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.SellDiscount)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_SellDiscount_KvitoGalva");
+            });
+
+            modelBuilder.Entity<SellEntry>(entity =>
+            {
+                entity.HasIndex(e => e.GalvosId)
+                    .HasName("IX_SellEntry");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Entry).HasMaxLength(50);
+
+                entity.HasOne(d => d.Galvos)
+                    .WithMany(p => p.SellEntry)
+                    .HasForeignKey(d => d.GalvosId)
+                    .HasConstraintName("FK_SellEntry_KvitoGalva");
+            });
+
+            modelBuilder.Entity<Skaitliukai>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.Idz).HasColumnName("IDZ");
+
+                entity.Property(e => e.Pistoletas)
+                    .IsRequired()
+                    .HasMaxLength(4);
+            });
+
+            modelBuilder.Entity<StartLikuciai>(entity =>
+            {
+                entity.HasIndex(e => new { e.ApId, e.PrKodas })
+                    .HasName("IX_StartLikuciai")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ApId).HasColumnName("ApID");
+            });
+
+            modelBuilder.Entity<StartParam>(entity =>
+            {
+                entity.HasKey(e => e.ApId)
+                    .IsClustered(false);
+
+                entity.HasIndex(e => e.ApId)
+                    .HasName("IX_StartParam")
+                    .IsUnique();
+
+                entity.Property(e => e.ApId)
+                    .HasColumnName("ApID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Continue)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Valid)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Znr).HasColumnName("ZNr");
+            });
+
+            modelBuilder.Entity<Talpos>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.MatavimoLaikas).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.PrekyvId).HasColumnName("PrekyvID");
+            });
+
+            modelBuilder.Entity<TalposCfg>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<Terminals>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.AuthCenter).HasMaxLength(32);
+
+                entity.Property(e => e.Merchant).HasMaxLength(32);
+
+                entity.Property(e => e.Terminal).HasMaxLength(32);
+            });
+
+            modelBuilder.Entity<Tiekejai>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.Adresas).HasMaxLength(50);
+
+                entity.Property(e => e.BankoKodas).HasMaxLength(50);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ImKodas).HasMaxLength(14);
+
+                entity.Property(e => e.Pavadinimas).HasMaxLength(50);
+
+                entity.Property(e => e.Pvmkodas)
+                    .HasColumnName("PVMKodas")
+                    .HasMaxLength(16);
+
+                entity.Property(e => e.Telefonai).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<TimeStamp>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ApId).HasColumnName("ApID");
+
+                entity.Property(e => e.Module)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Updated)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(8)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<TomraAllowedDeps>(entity =>
+            {
+                entity.HasKey(e => e.Dep);
+
+                entity.ToTable("Tomra_AllowedDeps");
+
+                entity.Property(e => e.Dep).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<TomraBarcode>(entity =>
+            {
+                entity.ToTable("Tomra_Barcodes");
+
+                entity.Property(e => e.Barcode)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ReceiptNr)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Stan).HasColumnName("STAN");
+
+                entity.Property(e => e.Status).HasColumnName("status");
+
+                entity.Property(e => e.TerminalId)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TomraReceiptId)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TomraLog>(entity =>
+            {
+                entity.ToTable("Tomra_Log");
+
+                entity.Property(e => e.Barcode)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Operation)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Stan).HasColumnName("STAN");
+
+                entity.Property(e => e.TerminalId)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.When).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<UpdateFh>(entity =>
+            {
+                entity.ToTable("UpdateFH");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Text).HasMaxLength(40);
+
+                entity.Property(e => e.ValidFrom).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<UpdatePlu>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .IsClustered(false);
+
+                entity.ToTable("UpdatePLU");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BarCode)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Comment)
+                    .HasMaxLength(120)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Discount1amount).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Discount1qty).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Discount2amount).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Discount2qty).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.DiscountType).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupCat).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.GroupDiscount1amount).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupDiscount1qty).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupDiscount2amount).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupDiscount2qty).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GroupName)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Kuras')");
+
+                entity.Property(e => e.GroupTax).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Price1).HasColumnType("money");
+
+                entity.Property(e => e.Price2)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Price3)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Price4)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Tax1).HasDefaultValueSql("((18))");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(90);
+
+                entity.Property(e => e.ToScales).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UnitCode).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UnitName)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('vnt')");
+
+                entity.Property(e => e.UnitScale).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Updated).HasColumnType("datetime");
+
+                entity.Property(e => e.ValidFrom).HasColumnType("datetime");
+
+                entity.Property(e => e.Veiksmas).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Weighting).HasDefaultValueSql("((0))");
+            });
+
+            modelBuilder.Entity<UpdateTax>(entity =>
+            {
+                entity.HasIndex(e => e.Mask)
+                    .HasName("IX_UpdateTax")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Aparatai).HasMaxLength(30);
+
+                entity.Property(e => e.Aparatai1)
+                    .HasColumnName("_Aparatai")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Delete).HasMaxLength(30);
+
+                entity.Property(e => e.Delete1)
+                    .HasColumnName("_Delete")
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.Title).HasMaxLength(19);
+
+                entity.Property(e => e.ValidFrom).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Utility>(entity =>
+            {
+                entity.HasIndex(e => new { e.GalvosId, e.ServiceBarcode, e.GoodsBarcode, e.EilNr })
+                    .HasName("IX_Utility")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.GalvosId).HasColumnName("GalvosID");
+
+                entity.Property(e => e.GoodsBarcode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Laikas).HasColumnType("datetime");
+
+                entity.Property(e => e.ServiceBarcode)
+                    .HasMaxLength(60)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Vaztarasciai>(entity =>
+            {
+                entity.HasIndex(e => new { e.AparatoId, e.Vnr })
+                    .HasName("IX_Vaztarasciai");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AparatoId).HasColumnName("AparatoID");
+
+                entity.Property(e => e.Data).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.GavimoPvm).HasColumnName("GavimoPVM");
+
+                entity.Property(e => e.Komentaras).HasMaxLength(255);
+
+                entity.Property(e => e.Numeris).HasMaxLength(50);
+
+                entity.Property(e => e.RegistracijosData).HasColumnType("smalldatetime");
+            });
+
+            modelBuilder.Entity<VaztarascioEilute>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.PrekesId).HasColumnName("PrekesID");
+
+                entity.Property(e => e.VaztarascioId).HasColumnName("VaztarascioID");
+            });
+
+            modelBuilder.Entity<View1>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View1");
+
+                entity.Property(e => e.Expr1)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Expr2)
+                    .HasMaxLength(30)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<Zetai>(entity =>
+            {
+                entity.HasKey(e => e.Count);
+
+                entity.ToTable("zetai");
+
+                entity.HasIndex(e => new { e.Id, e.Zetas })
+                    .HasName("IX_zetai")
+                    .IsUnique();
+
+                entity.Property(e => e.Count).HasColumnName("COUNT");
+
+                entity.Property(e => e.Bsapyvarta).HasColumnName("BSapyvarta");
+
+                entity.Property(e => e.Bsgrazinimai).HasColumnName("BSgrazinimai");
+
+                entity.Property(e => e.Bsrealizacija).HasColumnName("BSrealizacija");
+
+                entity.Property(e => e.GrazintaPrekiuGryni).HasColumnName("Grazinta prekiu gryni");
+
+                entity.Property(e => e.GrazintaPrekiuKorteles).HasColumnName("Grazinta prekiu korteles");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Iki)
+                    .HasColumnName("IKI")
+                    .HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Kada)
+                    .HasColumnName("KADA")
+                    .HasColumnType("smalldatetime");
+
+                entity.Property(e => e.KasaPamainosPabaigoje).HasColumnName("Kasa pamainos pabaigoje");
+
+                entity.Property(e => e.KasaPamainosPradzioje).HasColumnName("Kasa pamainos pradzioje");
+
+                entity.Property(e => e.KitaGryni).HasColumnName("Kita gryni");
+
+                entity.Property(e => e.KitaKort).HasColumnName("Kita kort");
+
+                entity.Property(e => e.Nuo)
+                    .HasColumnName("NUO")
+                    .HasColumnType("smalldatetime");
+
+                entity.Property(e => e.PamainaPerdave)
+                    .HasColumnName("Pamaina perdave")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.PamainaPrieme)
+                    .HasColumnName("Pamaina prieme")
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.RealizacijosSumaGryni).HasColumnName("Realizacijos suma gryni");
+
+                entity.Property(e => e.RealizacijosSumaKorteles).HasColumnName("Realizacijos suma korteles");
+
+                entity.Property(e => e.Sgapyvarta).HasColumnName("SGapyvarta");
+
+                entity.Property(e => e.Sggrazinimai).HasColumnName("SGgrazinimai");
+
+                entity.Property(e => e.Sgrealizacija).HasColumnName("SGrealizacija");
+
+                entity.Property(e => e.Skapyvarta).HasColumnName("SKapyvarta");
+
+                entity.Property(e => e.Skgrazinimai).HasColumnName("SKgrazinimai");
+
+                entity.Property(e => e.Skrealizacija).HasColumnName("SKrealizacija");
+
+                entity.Property(e => e.SuteiktaNuolaidaGryni).HasColumnName("Suteikta nuolaida gryni");
+
+                entity.Property(e => e.SuteiktaNuolaidaKorteles).HasColumnName("Suteikta nuolaida korteles");
+            });
+
+            modelBuilder.Entity<Zetai4>(entity =>
+            {
+                entity.HasIndex(e => new { e.ApId, e.Znr })
+                    .HasName("IX_Zetai4")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ApId).HasColumnName("ApID");
+
+                entity.Property(e => e.EndTime).HasColumnType("smalldatetime");
+
+                entity.Property(e => e.StartTime).HasColumnType("smalldatetime");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

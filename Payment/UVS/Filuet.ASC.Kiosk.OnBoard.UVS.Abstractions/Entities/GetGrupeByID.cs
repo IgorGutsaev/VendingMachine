@@ -1,6 +1,9 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{    
-    public partial class GetGrupeByID
+{
+    public partial class GetGrupeById
     {
         public int GrupesKodas { get; set; }
         public string GrupesPav { get; set; }
@@ -11,10 +14,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public double? Nuolaida2Proc { get; set; }
         public byte[] Aparatai { get; set; }
         public int? GrupesKateg { get; set; }
-        public byte[] C_Aparatai { get; set; }
+        public byte[] Aparatai1 { get; set; }
         public bool? Aktyvi { get; set; }
-        public int GrupesID { get; set; }
+        public int GrupesId { get; set; }
         public byte[] Delete { get; set; }
-        public byte[] C_Delete { get; set; }
+        public byte[] Delete1 { get; set; }
     }
 }

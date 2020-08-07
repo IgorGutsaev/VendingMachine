@@ -1,40 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
-    using System;
-    public partial class zetai
+    public partial class Zetai
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int Zetas { get; set; }
-        public DateTime? NUO { get; set; }
-        public DateTime? IKI { get; set; }
-        public DateTime? KADA { get; set; }
-        public double? Realizacijos_suma_gryni { get; set; }
-        public double? Grazinta_prekiu_gryni { get; set; }
-        public double? Suteikta_nuolaida_gryni { get; set; }
-        public double? Realizacijos_suma_korteles { get; set; }
-        public double? Grazinta_prekiu_korteles { get; set; }
-        public double? Suteikta_nuolaida_korteles { get; set; }
-        public double? BSapyvarta { get; set; }
-        public double? BSgrazinimai { get; set; }
-        public double? BSrealizacija { get; set; }
-        public double? SGapyvarta { get; set; }
-        public double? SGgrazinimai { get; set; }
-        public double? SGrealizacija { get; set; }
-        public double? SKapyvarta { get; set; }
-        public double? SKgrazinimai { get; set; }
-        public double? SKrealizacija { get; set; }
+        public DateTime? Nuo { get; set; }
+        public DateTime? Iki { get; set; }
+        public DateTime? Kada { get; set; }
+        public double? RealizacijosSumaGryni { get; set; }
+        public double? GrazintaPrekiuGryni { get; set; }
+        public double? SuteiktaNuolaidaGryni { get; set; }
+        public double? RealizacijosSumaKorteles { get; set; }
+        public double? GrazintaPrekiuKorteles { get; set; }
+        public double? SuteiktaNuolaidaKorteles { get; set; }
+        public double? Bsapyvarta { get; set; }
+        public double? Bsgrazinimai { get; set; }
+        public double? Bsrealizacija { get; set; }
+        public double? Sgapyvarta { get; set; }
+        public double? Sggrazinimai { get; set; }
+        public double? Sgrealizacija { get; set; }
+        public double? Skapyvarta { get; set; }
+        public double? Skgrazinimai { get; set; }
+        public double? Skrealizacija { get; set; }
         public int? KvitaiNuo { get; set; }
         public int? KvitaiIki { get; set; }
-        public double? Kasa_pamainos_pradzioje { get; set; }
+        public double? KasaPamainosPradzioje { get; set; }
         public double? Realizacija { get; set; }
         public double? Inkasacija { get; set; }
-        public double? Kasa_pamainos_pabaigoje { get; set; }
-        public string Pamaina_perdave { get; set; }
-        public string Pamaina_prieme { get; set; }
-        public double? Kita_kort { get; set; }
-        public double? Kita_gryni { get; set; }
+        public double? KasaPamainosPabaigoje { get; set; }
+        public string PamainaPerdave { get; set; }
+        public string PamainaPrieme { get; set; }
+        public double? KitaKort { get; set; }
+        public double? KitaGryni { get; set; }
         public double? Viso { get; set; }
-        public int COUNT { get; set; }
+        public int Count { get; set; }
         public double? Neapmokestinta { get; set; }
         public double? MokSuma1 { get; set; }
         public double? Mok1 { get; set; }

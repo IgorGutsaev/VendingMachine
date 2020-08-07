@@ -1,15 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{   
-    public partial class PLUSetLine
+{
+    public partial class PlusetLine
     {
-        public int ID { get; set; }
-        public int dep { get; set; }
-        public int setno { get; set; }
-        public string BARCODE { get; set; }
-        public double qty { get; set; }
-        public double price { get; set; }
-        public double tax { get; set; }
-        public double packcount { get; set; }
+        public int Id { get; set; }
+        public int Dep { get; set; }
+        public int Setno { get; set; }
+        public string Barcode { get; set; }
+        public double Qty { get; set; }
+        public double Price { get; set; }
+        public double Tax { get; set; }
+        public double Packcount { get; set; }
         public byte? PriceMode { get; set; }
     }
 }

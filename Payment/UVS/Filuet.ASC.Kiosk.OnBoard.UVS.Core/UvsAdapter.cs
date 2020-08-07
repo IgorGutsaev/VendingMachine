@@ -57,12 +57,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
         //    }
         //}
 
-        private PLUSet AddPluSet(DbSet<PLUSet> pluSets, DbSet<PLUSetLine> pluSetLines, string orderNumber, string dsId)
+        private Pluset AddPluSet(DbSet<Pluset> pluSets, DbSet<PlusetLine> pluSetLines, string orderNumber, string dsId)
         {
-            var pluSet = pluSets.SingleOrDefault(plu => string.Equals(plu.barcode, orderNumber));
-            if (pluSet != null && pluSet.KGID <= 0)
+            var pluSet = pluSets.SingleOrDefault(plu => string.Equals(plu.Barcode, orderNumber));
+            if (pluSet != null && pluSet.Kgid <= 0)
             {
-                foreach (var lineToRemove in pluSetLines.Where(l => l.setno == pluSet.setNo))
+                foreach (var lineToRemove in pluSetLines.Where(l => l.Setno == pluSet.SetNo))
                     pluSetLines.Remove(lineToRemove);
                 pluSets.Remove(pluSet);
 
@@ -82,18 +82,18 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             const int pickuplace = 0;
             const int kgid = 0;
 
-            var pluSetOut = new PLUSet
+            var pluSetOut = new Pluset
             {
-                createdate = createdate,
-                setNo = setNo,
-                barcode = barcode,
-                dep = (int)UvsDepMode,
-                pricemode = pricemode,
-                paytype = paytype,
-                reservation = reservation,
-                pickuplace = pickuplace,
-                KGID = kgid,
-                customer = ""//dsId
+                Createdate = createdate,
+                SetNo = setNo,
+                Barcode = barcode,
+                Dep = (int)UvsDepMode,
+                Pricemode = pricemode,
+                Paytype = paytype,
+                Reservation = reservation,
+                Pickuplace = pickuplace,
+                Kgid = kgid,
+                Customer = ""//dsId
             };
 
             return pluSets.Add(pluSetOut).Entity;
@@ -149,14 +149,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
                     PrekesMatas = matas,
                     PrekesKiekis = kiekis,
                     PrekesKodas = kodas,
-                    GrupesID = grupesId,
+                    GrupesId = grupesId,
                     Aktyvi = aktyvi,
                     Aparatai = aparatai,
                     Dep = (int)UvsDepMode,
                     PriceType = priceType,
                     BlockType = blockType,
                     Updating = false,
-                    N_Type = 0
+                    NType = 0
                 }).Entity;
             };
 
@@ -179,22 +179,22 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             return null;
         }
 
-        private PLUSetLine AddPluSetLine(DbSet<PLUSetLine> pluSetLines, string orderNumber, string sku, int qty, double price)
+        private PlusetLine AddPluSetLine(DbSet<PlusetLine> pluSetLines, string orderNumber, string sku, int qty, double price)
         {
             var setno = ConvertOrderNumberToNumberValue(orderNumber);
             const int tax = 0;
             const int packcount = 0;
             const byte priceMode = 128;
 
-            var pluSetLine = new PLUSetLine()
+            var pluSetLine = new PlusetLine()
             {
-                dep = (int)UvsDepMode,
-                setno = setno,
-                BARCODE = sku,
-                qty = qty,
-                price = price,
-                tax = tax,
-                packcount = packcount,
+                Dep = (int)UvsDepMode,
+                Setno = setno,
+                Barcode = sku,
+                Qty = qty,
+                Price = price,
+                Tax = tax,
+                Packcount = packcount,
                 PriceMode = priceMode
             };
 
@@ -235,7 +235,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
         {
             using (var db = new UvsDataEntities())
             {
-                var pluSet = AddPluSet(db.PLUSets, db.PLUSetLines, orderNumber, dsId);
+                var pluSet = AddPluSet(db.Plusets, db.PlusetLines, orderNumber, dsId);
 
                 var resultLines = Shake(orderLines, totaldue);
 
@@ -253,21 +253,21 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
                     {
                         try
                         {
-                            BarKodai bk = AddBarKodai(db.BarKodais, getSkuId(line.Sku), line.Sku);
-                            if (bk.ID <= 0)
+                            BarKodai bk = AddBarKodai(db.BarKodai, getSkuId(line.Sku), line.Sku);
+                            if (bk.Id <= 0)
                                 db.SaveChanges();
                         }
                         catch { }
                         try
                         {
                             Preke pr = AddPreke(db.Prekes, line.SkuId, line.Sku, getSkuName(line.Sku), getNds(line.Sku));
-                            if (pr.ID <= 0)
+                            if (pr.Id <= 0)
                                 db.SaveChanges();
                         }
                         catch { }
                         try
                         {
-                            AddPluSetLine(db.PLUSetLines, orderNumber, line.Sku, line.Qty, Math.Round(line.Price / line.Qty, 2));
+                            AddPluSetLine(db.PlusetLines, orderNumber, line.Sku, line.Qty, Math.Round(line.Price / line.Qty, 2));
                             int id = db.SaveChanges();
                             result = id > 0;
                         }
@@ -286,7 +286,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
                 //  int id = db.SaveChanges();
 
                 if (result)
-                    AddAttributeToReceipt(db.Database, pluSet.ID, dsId, dsName);
+                    AddAttributeToReceipt(db.Database, pluSet.Id, dsId, dsName);
 
                 return result;
             }
@@ -320,7 +320,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             using (var db = new UvsDataEntities())
             {
                 int paymentId = 0;
-                var res = CheckPaymentStatus(db.SellDiscounts, db.Payments, orderNumber, ref paymentId);
+                var res = CheckPaymentStatus(db.SellDiscounts, db.Payment, orderNumber, ref paymentId);
                 if (res.GenericResultCode != GenericResultCodes.Unknown)
                 {
                     string paymentMethod = string.Empty;
@@ -363,14 +363,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             {
                 if (payment.Type == 0)
                 {
-                    paymentId = payment.id;
+                    paymentId = payment.Id;
                     GenericResult result = new GenericResult(GenericResultCodes.SUCCESS, 0, @"Payment conducted by cash");
                     result.SubResults.Add(new GenericResult(GenericResultCodes.SUCCESS, 0, payment.Amount.ToString()));
                     return result;
                 }
                 if (payment.Type == 6 || payment.Type == 4 /*UVS test*/)
                 {
-                    paymentId = payment.id;
+                    paymentId = payment.Id;
                     GenericResult result = new GenericResult(GenericResultCodes.SUCCESS, 6, @"Payment conducted by card");
                     result.SubResults.Add(new GenericResult(GenericResultCodes.SUCCESS, 6, payment.Amount.ToString()));
                     return result;
@@ -385,16 +385,16 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             using (var db = new UvsDataEntities())
             {
                 orderNumber = orderNumber.Trim();
-                PLUSet set = db.PLUSets.FirstOrDefault(plu => plu.barcode == orderNumber.Trim());
+                Pluset set = db.Plusets.FirstOrDefault(plu => plu.Barcode == orderNumber.Trim());
 
-                if (set != null && set.KGID == 0)
+                if (set != null && set.Kgid == 0)
                 {
-                    set.KGID = -1;
+                    set.Kgid = -1;
                     db.SaveChanges();
 
                     return new GenericResult(GenericResultCodes.SUCCESS, 0, $"Order '{orderNumber}' was canceled");
                 }
-                else return new GenericResult(GenericResultCodes.FAILURE, 0, $"Unable to cancel order '{orderNumber}'!{(set == null ? " Order not found!" : string.Empty)}{(set != null && set.KGID > 0 ? $" Order payed. KGID={set.KGID}" : "")}");
+                else return new GenericResult(GenericResultCodes.FAILURE, 0, $"Unable to cancel order '{orderNumber}'!{(set == null ? " Order not found!" : string.Empty)}{(set != null && set.Kgid > 0 ? $" Order payed. KGID={set.Kgid}" : "")}");
             }
         }
 
@@ -403,9 +403,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             using (var db = new UvsDataEntities())
             {
                 orderNumber = orderNumber.Trim();
-                PLUSet set = db.PLUSets.FirstOrDefault(plu => plu.barcode == orderNumber.Trim());
+                Pluset set = db.Plusets.FirstOrDefault(plu => plu.Barcode == orderNumber.Trim());
 
-                return set == null || set.KGID == -1;
+                return set == null || set.Kgid == -1;
             }
         }
 

@@ -1,24 +1,24 @@
+﻿using System;
 using System.Collections.Generic;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{       
+{
     public partial class KvitoGalva
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public KvitoGalva()
         {
-            AgeVerifications = new HashSet<AgeVerification>();
-            ClientInfoes = new HashSet<ClientInfo>();
-            KvitoEilutes = new HashSet<KvitoEilute>();
-            Rewards = new HashSet<Reward>();
-            Points_Headers = new HashSet<Points_Headers>();
-            Payments = new HashSet<Payment>();
-            SellDiscounts = new HashSet<SellDiscount>();
-            SellEntries = new HashSet<SellEntry>();
+            AgeVerification = new HashSet<AgeVerification>();
+            ClientInfo = new HashSet<ClientInfo>();
+            KvitoEilute = new HashSet<KvitoEilute>();
+            Payment = new HashSet<Payment>();
+            PointsHeaders = new HashSet<PointsHeaders>();
+            Reward = new HashSet<Reward>();
+            SellDiscount = new HashSet<SellDiscount>();
+            SellEntry = new HashSet<SellEntry>();
         }
-    
-        public int ID { get; set; }
-        public int AparatoID { get; set; }
+
+        public int Id { get; set; }
+        public int AparatoId { get; set; }
         public int KvitoNr { get; set; }
         public short? Year { get; set; }
         public byte? Month { get; set; }
@@ -33,7 +33,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public string KortelesNr { get; set; }
         public int? Kasininkas { get; set; }
         public int? Znr { get; set; }
-        public int? GalvosID { get; set; }
+        public int? GalvosId { get; set; }
         public string KvitoNr2 { get; set; }
         public string NlKort { get; set; }
         public double? SumaGryni { get; set; }
@@ -42,25 +42,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public double? DurationToPushTotal { get; set; }
         public int? Flags { get; set; }
         public string InvNr { get; set; }
-        public string InvNr_Parent { get; set; }
+        public string InvNrParent { get; set; }
         public int? ReturnReason { get; set; }
-        public int? PosOrGroupId_Parent { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AgeVerification> AgeVerifications { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClientInfo> ClientInfoes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<KvitoEilute> KvitoEilutes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Reward> Rewards { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Points_Headers> Points_Headers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Payment> Payments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SellDiscount> SellDiscounts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SellEntry> SellEntries { get; set; }
+        public int? PosOrGroupIdParent { get; set; }
+
+        public virtual ICollection<AgeVerification> AgeVerification { get; set; }
+        public virtual ICollection<ClientInfo> ClientInfo { get; set; }
+        public virtual ICollection<KvitoEilute> KvitoEilute { get; set; }
+        public virtual ICollection<Payment> Payment { get; set; }
+        public virtual ICollection<PointsHeaders> PointsHeaders { get; set; }
+        public virtual ICollection<Reward> Reward { get; set; }
+        public virtual ICollection<SellDiscount> SellDiscount { get; set; }
+        public virtual ICollection<SellEntry> SellEntry { get; set; }
     }
 }

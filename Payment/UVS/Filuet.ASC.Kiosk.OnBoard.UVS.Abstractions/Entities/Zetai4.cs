@@ -1,11 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
-    using System;
-    
     public partial class Zetai4
     {
-        public int ID { get; set; }
-        public int? ApID { get; set; }
+        public int Id { get; set; }
+        public int? ApId { get; set; }
         public int? Znr { get; set; }
         public int? TaxCount { get; set; }
         public int? Payments { get; set; }

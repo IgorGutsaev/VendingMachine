@@ -1,9 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
-{  
+{
     public partial class Skaitliukai
     {
-        public int ID { get; set; }
-        public int? AparatoID { get; set; }
+        public int Id { get; set; }
+        public int? AparatoId { get; set; }
         public int? Zetas { get; set; }
         public string Pistoletas { get; set; }
         public int? Benzinas { get; set; }
@@ -12,7 +15,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public double? KiekisKort { get; set; }
         public double? KiekisTech { get; set; }
         public double? KiekisOver { get; set; }
-        public int? IDZ { get; set; }
+        public int? Idz { get; set; }
         public short? PistNr { get; set; }
         public short? TankNr { get; set; }
     }

@@ -1,11 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
 {
-    using System;
-    
     public partial class KupList
     {
-        public int ID { get; set; }
-        public int? AparatoID { get; set; }
+        public int Id { get; set; }
+        public int? AparatoId { get; set; }
         public int? Kasininkas { get; set; }
         public int? KvitoNr { get; set; }
         public DateTime? Laikas { get; set; }
