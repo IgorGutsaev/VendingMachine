@@ -292,8 +292,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             }
         }
 
-        private SellDiscount GetPluSell(IQueryable<SellDiscount> sellDiscounts, string orderNumber)
-            => sellDiscounts.FirstOrDefault(sd => sd.CardNo == orderNumber);
+        private SellDiscount GetPluSell(IQueryable<SellDiscount> sellDiscount, string orderNumber)
+            => sellDiscount.FirstOrDefault(sd => sd.CardNo == orderNumber);
 
         /// <summary>
         /// <remarks>
@@ -320,7 +320,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
             using (var db = new UvsDataEntities())
             {
                 int paymentId = 0;
-                var res = CheckPaymentStatus(db.SellDiscounts, db.Payment, orderNumber, ref paymentId);
+                var res = CheckPaymentStatus(db.SellDiscount, db.Payment, orderNumber, ref paymentId);
                 if (res.GenericResultCode != GenericResultCodes.Unknown)
                 {
                     string paymentMethod = string.Empty;

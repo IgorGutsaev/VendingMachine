@@ -84,7 +84,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Entities
         public virtual DbSet<ReceiptHeadAttributes> ReceiptHeadAttributes { get; set; }
         public virtual DbSet<ReceiptLineAttributes> ReceiptLineAttributes { get; set; }
         public virtual DbSet<Reward> Reward { get; set; }
-        public virtual DbSet<SellDiscount> SellDiscounts { get; set; }
+        public virtual DbSet<SellDiscount> SellDiscount { get; set; }
         public virtual DbSet<SellEntry> SellEntry { get; set; }
         public virtual DbSet<Skaitliukai> Skaitliukai { get; set; }
         public virtual DbSet<StartLikuciai> StartLikuciai { get; set; }
