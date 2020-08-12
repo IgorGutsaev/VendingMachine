@@ -78,9 +78,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UVS", "UVS", "{FB8927FF-889
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Core", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Core\Filuet.ASC.Kiosk.OnBoard.UVS.Core.csproj", "{F7DD14A4-18F2-4D48-8568-6171688AFD17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Tests", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Tests\Filuet.ASC.Kiosk.OnBoard.UVS.Tests.csproj", "{9C9CB737-D046-47D8-BB21-960DB78FCEFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Tests", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Tests\Filuet.ASC.Kiosk.OnBoard.UVS.Tests.csproj", "{9C9CB737-D046-47D8-BB21-960DB78FCEFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.csproj", "{78D913EA-B3FE-4E29-8DDF-94B3C512EFA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions", "Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.csproj", "{78D913EA-B3FE-4E29-8DDF-94B3C512EFA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
