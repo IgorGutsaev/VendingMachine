@@ -23,8 +23,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
                 .AddSingleton<IStoreBuilder<TMachine, TTray, TBelt>>(builder);
         }
 
-        public static IServiceCollection AddSupplyDispenser(this IServiceCollection serviceCollection)
-            => serviceCollection.AddSingleton<ISupplyDispenser>(TraceDecorator<ISupplyDispenser>.Create(new SupplyDispenser()))
+        public static IServiceCollection AddCompositeDispenser(this IServiceCollection serviceCollection, Func<IServiceProvider, ICompositeDispenser> dispenserSetup)
+            => serviceCollection.AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)))
             ; // Also add dispensing provider (jofemar)
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
@@ -8,6 +9,7 @@ using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.ASC.OnBoard.Kernel.Core;
 using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Abstractions.Platform;
+using Filuet.Utils.Common.PosSettings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,7 +35,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
-                ISupplyDispenser s1 = host.Services.GetRequiredService<ISupplyDispenser>();
+                ICompositeDispenser s1 = host.Services.GetRequiredService<ICompositeDispenser>();
                 var t = s2.Get(x => true);
 
                 s1.OnDispensing += S1_OnDispensing;
@@ -58,7 +60,14 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 {
                     HostContext appContext = new FileInfo(CONFIG_FILE).ToConfiguration();
 
-                    services.AddAttendant()
+                    services
+                        .AddSingleton((sp) => new KioskSettings {
+                            Dispenser = new DispensingSettings {  SlaveMachines = new DispensingMachine[] { 
+                                new DispensingMachine { Number = 1, Port = 9 },
+                                new DispensingMachine { Number = 1, Port = 10 }
+                            } }
+                        })
+                        .AddAttendant()
                         .AddHardware();
 
                     services.AddStorage()

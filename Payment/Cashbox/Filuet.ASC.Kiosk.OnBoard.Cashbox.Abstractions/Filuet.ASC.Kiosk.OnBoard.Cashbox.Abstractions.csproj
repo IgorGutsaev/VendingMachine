@@ -7,7 +7,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.173" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.185" />
   </ItemGroup>
 
 </Project>
