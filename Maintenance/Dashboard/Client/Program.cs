@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Filuet.ASC.OnBoard.Dashboard.Client;
+using System.Net.Http;
 
 namespace Filuet.ASC.OnBoard.Dashboard.Client
 {
@@ -15,7 +16,8 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddBaseAddressHttpClient();
+            builder.Services.//AddBaseAddressHttpClient(); // abolished since Blazor WebAssembly 3.2.0 Preview 4
+                AddSingleton(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             await builder.Build().RunAsync();
         }

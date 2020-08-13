@@ -2,9 +2,6 @@
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Tests
 {
