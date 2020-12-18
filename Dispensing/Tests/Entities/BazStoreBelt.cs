@@ -6,5 +6,8 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities
 {
-    public class BazStoreBelt : Belt { }
+    public class BazStoreBelt : Belt
+    {
+        public override string Address => $"{Tray.Number}/{Number}";
+    }
 }

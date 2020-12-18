@@ -9,10 +9,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders
         where TTray : Tray, new()
         where TBelt : Belt, new()
     {
-        private readonly ILayoutBuilder<TTray, TBelt> _layout;
+        private readonly ILayoutBuilder _layout;
         private readonly IMachine _activeMachine;
 
-        public LayoutBuilderMachine(ILayoutBuilder<TTray, TBelt> layout, IMachine activeMachine)
+        public LayoutBuilderMachine(ILayoutBuilder layout, IMachine activeMachine)
         {
             if (layout == null)
                 throw new ArgumentException("Layout is mandatory");
@@ -39,7 +39,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders
             return tray;
         }
 
-        public ILayoutBuilder<TTray, TBelt> CommitMachine()
+        public ILayoutBuilder CommitMachine()
             => _layout;
     }
 }

@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders
 {
-    internal sealed class LayoutBuilder<TTray, TBelt> : ILayoutBuilder<TTray, TBelt>
-        where TTray : Tray, new()
-        where TBelt : Belt, new()
+    public sealed class LayoutBuilder : ILayoutBuilder  
     {
         private IList<IMachine> _machines = new List<IMachine>();
 
-        public ILayoutBuilderMachine<TTray, TBelt> AddMachine<TMachine>(uint number)
+        public ILayoutBuilderMachine<TTray, TBelt> AddMachine<TMachine, TTray, TBelt>(uint number)
             where TMachine : Machine, new()
+            where TTray : Tray, new()
+            where TBelt : Belt, new()
         {
             IMachine machine = CreateMachine<TMachine>(number);
             return new LayoutBuilderMachine<TTray, TBelt>(this, machine);

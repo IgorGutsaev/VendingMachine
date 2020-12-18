@@ -8,10 +8,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests
 {
     public abstract class BaseTest
     {
-        public ILayout BuildLayout(Action<ILayoutBuilder<BarStoreTray, BazStoreBelt>> builderAction, Func<ILayout, bool> validateAction = null)
-            => new ServiceCollection().AddLayoutBuilder(builderAction)
+        public ILayout BuildLayout(Action<ILayoutBuilder> builderAction, Func<ILayout, bool> validateAction = null)
+            => new ServiceCollection().AddLayoutBuilder<BarStoreTray, BazStoreBelt>(builderAction)
                 .BuildServiceProvider()
-                .GetRequiredService<ILayoutBuilder<BarStoreTray, BazStoreBelt>>().Build(validateAction);
+                .GetRequiredService<ILayoutBuilder>().Build(validateAction);
 
         public BaseTest()
         { }

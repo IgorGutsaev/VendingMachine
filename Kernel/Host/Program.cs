@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
@@ -37,12 +39,17 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
                 ICompositeDispenser s1 = host.Services.GetRequiredService<ICompositeDispenser>();
-                var t = s2.Get(x => true);
+
+                ILayout layout = host.Services.GetRequiredService<ILayout>();
+                if (layout == null)
+                {
+                    var t = s2.Get(x => true);
+                }
 
                 s1.OnDispensing += S1_OnDispensing;
                 s1.OnDispensing -= S1_OnDispensing;
-                
-                s1.Dispense(CompositIssueAddress.Create(vendingMachineId: "1", address: "1/13/0"));
+
+                s1.Dispense(CompositIssueAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
             });
 
             host.Run();
@@ -63,11 +70,20 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     HostContext appContext = new FileInfo(CONFIG_FILE).ToConfiguration();
 
                     services
-                        .AddSingleton((sp) => new KioskSettings {
-                            Dispenser = new DispensingSettings {  SlaveMachines = new VendingMachine[] { 
-                                new VendingMachine { Number = 1, Port = 9 },
-                                new VendingMachine { Number = 2, Port = 10 }
-                            } }
+                        .AddSingleton((sp) => new KioskSettings
+                        {
+                            Dispenser = new DispensingSettings
+                            {
+                                Mode = DeviceUseCase.On,
+                                SlaveMachines = new VendingMachine[] {
+                                    new VendingMachine { Number = 1, Address = "9", Model = "VisionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP, 
+                                        IpAddress = "172.16.7.103", 
+                                        Port = 5000},
+                                    new VendingMachine { Number = 2, Address = "10", Model = "visionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
+                                        IpAddress = "172.16.7.103",
+                                        Port = 5000 }
+                                }
+                            }
                         })
                         .AddAttendant()
                         .AddHardware();

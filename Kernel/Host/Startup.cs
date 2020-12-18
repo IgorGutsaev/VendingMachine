@@ -53,11 +53,11 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapFallbackToFile("index.html");
-            });
+            ////app.UseEndpoints(endpoints =>
+            ////{
+            ////    endpoints.MapControllers();
+            ////    endpoints.MapFallbackToFile("index.html");
+            ////});
         }
     }
 }

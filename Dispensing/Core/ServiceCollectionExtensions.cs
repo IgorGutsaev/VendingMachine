@@ -11,21 +11,21 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddLayoutBuilder<TTray, TBelt>(this IServiceCollection serviceCollection
-                , Action<ILayoutBuilder<TTray, TBelt>> builderAction)
+                , Action<ILayoutBuilder> builderAction)
             where TTray : Tray, new()
             where TBelt : Belt, new()
         {
-            LayoutBuilder<TTray, TBelt> builder = new LayoutBuilder<TTray, TBelt>();
+            LayoutBuilder builder = new LayoutBuilder();
             builderAction?.Invoke(builder);
 
             return serviceCollection
-                .AddSingleton<ILayoutBuilder<TTray, TBelt>>(builder);
+                .AddSingleton<ILayoutBuilder>(builder);
         }
 
         public static IServiceCollection AddCompositeDispenser(this IServiceCollection serviceCollection, Func<IServiceProvider, ICompositeDispenser> dispenserSetup)
             => serviceCollection.AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)));
 
-        public static IServiceCollection AddMap(this IServiceCollection serviceCollection, Func<IServiceProvider, ILayout> layoutSetup)
+        public static IServiceCollection AddLayout(this IServiceCollection serviceCollection, Func<IServiceProvider, ILayout> layoutSetup)
             => serviceCollection.AddSingleton<ILayout>((sp) => TraceDecorator<ILayout>.Create(layoutSetup(sp)));
     }
 }

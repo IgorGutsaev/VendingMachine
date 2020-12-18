@@ -22,6 +22,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
             {
                 result = new TTray();
                 result.SetNumber(number);
+                (result as Tray).SetMachine(this);
                 _trays.Add(result);
             }
             else if (_trays.Any(x => x.Number == number))

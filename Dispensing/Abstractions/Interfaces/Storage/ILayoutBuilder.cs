@@ -9,7 +9,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces
     {
         ILayoutBuilderTray<TTray, TBelt> AddTray(uint number);
 
-        ILayoutBuilder<TTray, TBelt> CommitMachine();
+        ILayoutBuilder CommitMachine();
     }
 
     public interface ILayoutBuilderTray<TTray, TBelt>
@@ -26,12 +26,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces
         ILayoutBuilderMachine<TTray, TBelt> CommitTray();
     }
 
-    public interface ILayoutBuilder<TTray, TBelt>
-        where TTray : Tray, new()
-        where TBelt : Belt, new()
+    public interface ILayoutBuilder
     {
-        ILayoutBuilderMachine<TTray, TBelt> AddMachine<TMachine>(uint number)
-            where TMachine : Machine, new();
+        ILayoutBuilderMachine<TTray, TBelt> AddMachine<TMachine, TTray, TBelt>(uint number)
+            where TMachine : Machine, new()
+            where TTray : Tray, new()
+            where TBelt : Belt, new();
 
         Layout Build(Func<ILayout, bool> validate = null);
     }

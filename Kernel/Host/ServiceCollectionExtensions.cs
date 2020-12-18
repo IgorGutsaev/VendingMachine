@@ -1,6 +1,4 @@
-﻿using Filuet.ASC.Kiosk;
-using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core;
@@ -12,15 +10,15 @@ using Filuet.Utils.Abstractions.Events;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Filuet.Utils.Common.PosSettings;
 using Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Filuet.Utils.Abstractions.Communication;
 using Filuet.Utils.Communication;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -39,40 +37,74 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     return new CompositeDispenserBuilder().AddDispensers(() =>
                         kioskSettings.Dispenser.SlaveMachines.Select(x =>
                         {
-                            switch (x.Model)
+                            if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                case "VisionEsPlus":
+                                VisionEsPlusSettings settings = new VisionEsPlusSettings
+                                {
+                                    PortNumber = (ushort)x.Port,
+                                    Address = x.Address,
+                                    IpAddress = x.IpAddress
+                                };
+
+                                ICommunicationChannel channel = null;
+
+                                if (kioskSettings.Dispenser.Mode != DeviceUseCase.Off)
+                                {
+                                    switch (x.Protocol)
                                     {
-                                        VisionEsPlusSettings settings = new VisionEsPlusSettings
-                                        {
-                                            PortNumber = (ushort)x.Port,
-                                            Address = x.Address
-                                        };
-
-                                        ICommunicationChannel channel = null;
-
-                                        if (kioskSettings.Dispenser.Mode != DeviceUseCase.Off)
-                                        {
-                                            switch (x.Protocol)
-                                            {
-                                                case Utils.Common.Enum.CommunicationProtocol.Serial:
-                                                    channel = new SerialPortChannel(settings.PortNumber, settings.BaudRate, settings.Timeout, settings.CommandsSendDelay);
-                                                    break;
-                                                case Utils.Common.Enum.CommunicationProtocol.TCP:
-                                                    channel = new TcpChannel(settings.Address, settings.PortNumber);
-                                                    break;
-                                                default:
-                                                    break;
-                                            }
-                                        }
-
-                                        return new VisionEsPlusVendingMachine(x.Number.ToString(), new VisionEsPlus(channel, settings));
+                                        case Utils.Common.Enum.CommunicationProtocol.Serial:
+                                            channel = new SerialPortChannel(settings.PortNumber, settings.BaudRate, settings.Timeout, settings.CommandsSendDelay);
+                                            break;
+                                        case Utils.Common.Enum.CommunicationProtocol.TCP:
+                                            channel = new TcpChannel(settings.IpAddress, settings.PortNumber);
+                                            break;
+                                        default:
+                                            break;
                                     }
-                                default:
-                                    throw new ArgumentException("Unknown dispenser model");
+                                }
+
+                                return new VisionEsPlusVendingMachine(x.Number.ToString(), new VisionEsPlus(channel, settings));
                             }
+                            else
+                                throw new ArgumentException("Unknown dispenser model");
                         })
                     ).Build();
+                })
+                .AddLayout((sp) =>
+                {
+                    KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
+
+                    if (kioskSettings.Dispenser.Mode == DeviceUseCase.Off)
+                        return null;
+
+                    ILayoutBuilder layoutBuilder = new LayoutBuilder();
+
+                    if (kioskSettings.Dispenser.SlaveMachines.Any(x => !x.Number.HasValue || x.Number == 0))
+                        throw new ArgumentException("Machine number is mandatory");
+
+                    kioskSettings.Dispenser.SlaveMachines.ToList().ForEach(x =>
+                    {
+                        if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                    // TODO: Refactor this stub
+                    if (x.Number == 1)
+                                layoutBuilder.AddMachine<VisionEspMachine, VisionEspTray, VisionEspBelt>(x.Number.Value)
+                                    .AddTray(11)
+                                        .AddBelt(2).CommitTray()
+                                    .AddTray(18)
+                                        .AddBelt(0).AddBelt(1).AddBelt(2).AddBelt(3).AddBelt(4).AddBelt(5).CommitTray().CommitMachine();
+
+                            if (x.Number == 2)
+                                layoutBuilder.AddMachine<VisionEspMachine, VisionEspTray, VisionEspBelt>(x.Number.Value)
+                                    .AddTray(11)
+                                        .AddBelt(0).AddBelt(1).AddBelt(2).AddBelt(3).AddBelt(4).CommitTray().CommitMachine();
+                        }
+                        else
+                            throw new ArgumentException("Unknown dispenser model");
+
+                    });
+
+                    return layoutBuilder.Build();
                 })
                 .AddCashPayment()
                 .AddEventMediation((sp, broker) =>

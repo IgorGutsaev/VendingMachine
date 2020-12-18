@@ -13,12 +13,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests
         {
             // Prepare
             ILayout machine = BuildLayout(s => 
-                s.AddMachine<FooMachine>(1)
+                s.AddMachine<FooMachine, BarStoreTray, BazStoreBelt>(1)
                     .AddTray(11)
                         .AddBelt(2).CommitTray()
                     .AddTray(18)
                         .AddBelt(0).AddBelt(1).AddBelt(2).AddBelt(3).AddBelt(4).AddBelt(5).CommitTray().CommitMachine()
-                .AddMachine<QuuxMachine>(2)
+                .AddMachine<QuuxMachine, BarStoreTray, BazStoreBelt>(2)
                     .AddTray(11)
                         .AddBelt(0).AddBelt(1).AddBelt(2).AddBelt(3).AddBelt(4).CommitTray().CommitMachine().Build());
 
