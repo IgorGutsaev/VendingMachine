@@ -6,5 +6,7 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities
 {
-    public class FooStoreMachine : StoreMachine<BarStoreTray, BazStoreBelt>, IStoreMachine<BarStoreTray, BazStoreBelt> { }
+    public class FooMachine : Machine { }
+
+    public class QuuxMachine : Machine { }
 }

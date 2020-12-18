@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.185" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.218" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Communication\" />
   </ItemGroup>
 
 </Project>

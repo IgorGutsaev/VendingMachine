@@ -1,16 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IO.Ports" Version="5.0.0-preview.7.20364.11" />
+    <PackageReference Include="Filuet.Utils" Version="1.0.218" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.218" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.218" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
+    <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\..\Dispensing\Abstractions\Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj" />
   </ItemGroup>
 
 </Project>

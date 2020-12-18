@@ -9,15 +9,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
     /// <summary>
     /// Unit selling machine (dispensing locker)
     /// </summary>
-    /// <typeparam name="TTray"></typeparam>
-    /// <typeparam name="TBelt"></typeparam>
-    public abstract class StoreMachine<TTray, TBelt> : StoreUnit, IStoreMachine<TTray, TBelt>
-        where TTray : IStoreTray<TBelt>, new()
-        where TBelt : IStoreBelt, new()
+    public abstract class Machine : LayoutUnit, IMachine
     {
-        public IEnumerable<TTray> Trays { get => _trays; } 
+        public IEnumerable<ITray> Trays { get => _trays; } 
 
-        public TTray AddTray(uint number)
+        public ITray AddTray<TTray>(uint number)
+            where TTray: Tray, new()
         {
             TTray result = default;
 
@@ -28,13 +25,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
                 _trays.Add(result);
             }
             else if (_trays.Any(x => x.Number == number))
-                throw new ArgumentException($"A belt with number {number} already exists!");
+                throw new ArgumentException($"A tray with number {number} already exists!");
 
             return result;
         }
 
-        private ICollection<TTray> _trays = new List<TTray>();
+        private ICollection<ITray> _trays = new List<ITray>();
 
-        public override string ToString() => $"{Number}/{Trays.Count()} trays";
+        public override string ToString() => $"{this.GetType().Name} {Number} consists of {Trays.Count()} tray(s)";
     }
 }

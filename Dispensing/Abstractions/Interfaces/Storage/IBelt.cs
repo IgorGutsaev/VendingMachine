@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces
 {
-    public interface IStoreBelt : IStoreUnit { }
+    public interface IBelt : ILayoutUnit { }
 }

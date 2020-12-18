@@ -6,5 +6,5 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities
 {
-    public class BarStoreTray : StoreTray<BazStoreBelt>, IStoreTray<BazStoreBelt> { }
+    public class BarStoreTray : Tray { }
 }

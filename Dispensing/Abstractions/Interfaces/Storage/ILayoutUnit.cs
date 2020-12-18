@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces
 {
-    public interface IStoreUnit
+    public interface ILayoutUnit
     {
         /// <summary>
         /// Index number

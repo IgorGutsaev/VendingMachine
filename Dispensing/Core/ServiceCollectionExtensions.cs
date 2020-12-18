@@ -10,21 +10,22 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMachineBuilder<TMachine, TTray, TBelt>(this IServiceCollection serviceCollection,
-            Action<IStorePopulator<TMachine, TTray, TBelt>> builderAction)
-             where TMachine : IStoreMachine<TTray, TBelt>, new()
-             where TTray : IStoreTray<TBelt>, new()
-             where TBelt : IStoreBelt, new()
+        public static IServiceCollection AddLayoutBuilder<TTray, TBelt>(this IServiceCollection serviceCollection
+                , Action<ILayoutBuilder<TTray, TBelt>> builderAction)
+            where TTray : Tray, new()
+            where TBelt : Belt, new()
         {
-            StoreBuilder<TMachine, TTray, TBelt> builder = new StoreBuilder<TMachine, TTray, TBelt>();
+            LayoutBuilder<TTray, TBelt> builder = new LayoutBuilder<TTray, TBelt>();
             builderAction?.Invoke(builder);
 
             return serviceCollection
-                .AddSingleton<IStoreBuilder<TMachine, TTray, TBelt>>(builder);
+                .AddSingleton<ILayoutBuilder<TTray, TBelt>>(builder);
         }
 
         public static IServiceCollection AddCompositeDispenser(this IServiceCollection serviceCollection, Func<IServiceProvider, ICompositeDispenser> dispenserSetup)
-            => serviceCollection.AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)))
-            ; // Also add dispensing provider (jofemar)
+            => serviceCollection.AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)));
+
+        public static IServiceCollection AddMap(this IServiceCollection serviceCollection, Func<IServiceProvider, ILayout> layoutSetup)
+            => serviceCollection.AddSingleton<ILayout>((sp) => TraceDecorator<ILayout>.Create(layoutSetup(sp)));
     }
 }

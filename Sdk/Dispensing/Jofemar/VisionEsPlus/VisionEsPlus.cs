@@ -1,10 +1,11 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.Hardware;
 using Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus.Enums;
+using Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus.Models;
+using Filuet.Utils.Abstractions.Communication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using System.Text;
 using System.Threading;
 
 namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
@@ -15,11 +16,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
         private SerialPort _port;
         private readonly byte[] _messagePacket;
         private byte[] _lastTestResponse;
+        private ICommunicationChannel _channel;
 
-        public VisionEsPlus(VisionEsPlusSettings settings)
+        public VisionEsPlus(ICommunicationChannel channel, VisionEsPlusSettings settings)
         {
             _settings = settings;
-            _messagePacket = new byte[] { 0x02, 0x30, 0x30, (byte)(_settings.Address + 0x80), 0, 0xff, 0xff, 0, 0, 3 };
+            _messagePacket = new byte[] { 0x02, 0x30, 0x30, (byte)(Convert.ToByte(_settings.Address)  + 0x80), 0, 0xff, 0xff, 0, 0, 3 };
+            _channel = channel;
         }
 
         #region Actions
@@ -27,7 +30,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
         {
             _settings.LightSettings.LightIsOn = isOn;
             //// OnSettingsChanged.Invoke
-            Execute(ChangeLightCommand(isOn));
+            _channel.SendCommand(ChangeLightCommand(isOn));
         }
 
         internal void Blink(TimeSpan? duration = null)
@@ -37,7 +40,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
             bool lightIsOn = _settings.LightSettings.LightIsOn;
             while (sw.Elapsed < duration)
             {
-                Execute(ChangeLightCommand(!lightIsOn));
+                _channel.SendCommand(ChangeLightCommand(!lightIsOn));
                 lightIsOn = !lightIsOn;
                 Thread.Sleep(_settings.LightSettings.BlinkingPeriod);
             }
@@ -46,7 +49,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
 
         internal (DeviceStateSeverity state, string message) Status(bool retryIfFaulty = true)
         {
-            byte[] response = Execute(StatusCommand());
+            byte[] response = _channel.SendCommand(StatusCommand());
 
             if ((response == null || response.Length == 0) && _lastTestResponse != null)
                 response = _lastTestResponse;
@@ -80,15 +83,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
             }
         }
 
-        internal void DispenseProduct(int tray, int belt)
+        internal void DispenseProduct(EspBeltAddress address)
         {
-            byte[] response = Execute(VendCommand(tray, belt));
+            byte[] response = _channel.SendCommand(VendCommand(address.Tray, address.Belt));
             VisionEsPlusResponseCodes code = ParseResponse(response);
         }
 
-        internal bool IsBeltAvailable(int tray, int belt)
+        internal bool IsBeltAvailable(EspBeltAddress address)
         {
-            byte[] response = Execute(CheckChannelCommand(tray, belt));
+            byte[] response = _channel.SendCommand(CheckChannelCommand(address.Tray, address.Belt));
 
             return response.Length == 8 && response[4] == 0x43; // 0x44 means bealt is unavailable
         }
@@ -158,121 +161,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
         #endregion
 
         #region Private
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command">executable command</param>
-        /// <param name="timeout"></param>
-        /// <returns>Command result</returns>
-        private byte[] Execute(byte[] command)
-        {
-            if (_port == null)
-                _port = new SerialPort($"COM{_settings.SerialPortNumber}", _settings.BaudRate);
-
-            lock (_port)
-            {
-                var count = 0;
-                while (true)
-                {
-                    var result = Write(command);
-                    if (result != PortResultCodes.Success)
-                        return null; //throw new ExternalException($"Error in [{Port.Name}] write command [{command.ByteArrayToString()}]");
-                    Thread.Sleep(_settings.CommandsSendDelay);
-
-                    byte[] buff;
-                    var response = Read(out buff);
-                    if (response == PortResultCodes.Success)
-                        return buff;
-
-                    if (count > (_settings.Timeout.TotalMilliseconds / _settings.CommandsSendDelay.TotalMilliseconds))
-                        return null; //throw new TimeoutException($"Timeout in read answer on command [{command.ByteArrayToString()}]");
-
-                    Thread.Sleep(_settings.CommandsSendDelay);
-                    count++;
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Упаковывает и записывает в порт команду
-        /// </summary>
-        /// <param name="command">Команда</param>
-        /// <returns>Результат записи в порт</returns>
-        private PortResultCodes Write(byte[] command)
-        {
-            try
-            {
-                if (!_port.IsOpen)
-                    _port.Open();
-                if (!_port.IsOpen)
-                    return PortResultCodes.PortClosed;
-
-                _port.Write(command, 0, command.Length);
-
-                Thread.Sleep(_settings.CommandsSendDelay);
-
-                Console.WriteLine($"[{_port.PortName}] {Encoding.Default.GetString(command)}");
-                return PortResultCodes.Success;
-            }
-            catch (TimeoutException)
-            {
-                Console.WriteLine($"[{_port.PortName}] timeout");
-                return PortResultCodes.Timeout;
-            }
-            catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentOutOfRangeException || ex is ArgumentException)
-            {
-                Console.WriteLine($"[{_port.PortName}] invalid command");
-                return PortResultCodes.Failure;
-            }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine($"[{_port.PortName}] port closed");
-                return PortResultCodes.PortClosed;
-            }
-        }
-
-        /// <summary>
-        ///     Считывает из порта пакет данных
-        /// </summary>
-        /// <returns></returns>
-        private PortResultCodes Read(out byte[] buffer)
-        {
-            if (!_port.IsOpen)
-                _port.Open();
-            if (!_port.IsOpen)
-            {
-                buffer = null;
-                return PortResultCodes.PortClosed;
-            }
-
-            byte[] data = new byte[_port.BytesToRead];
-
-            try
-            {
-                _port.Read(data, 0, data.Length);
-                buffer = data;
-                Console.WriteLine($"[{_port.PortName}] {(buffer?.Length > 0 ? Encoding.Default.GetString(buffer) : string.Empty)}");
-                return PortResultCodes.Success;
-            }
-            catch (TimeoutException)
-            {
-                Console.WriteLine($"[{_port.PortName}] timeout");
-                buffer = null;
-                return PortResultCodes.Timeout;
-            }
-            catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentOutOfRangeException || ex is ArgumentException)
-            {
-                Console.WriteLine($"[{_port.PortName}] invalid command");
-                buffer = null;
-                return PortResultCodes.Failure;
-            }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine($"[{_port.PortName}] port closed");
-                buffer = null;
-                return PortResultCodes.PortClosed;
-            }
-        }
+        
 
         /// <summary>
         /// Вставляет во второй и третий с конца байты контрольную сумму в соответствии с протоколом

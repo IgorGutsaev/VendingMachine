@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
 {
-    public abstract class StoreBelt : StoreUnit, IStoreBelt
+    public abstract class Belt : LayoutUnit, IBelt
     {
-        public override string ToString() => $"{Number}";
+        public override string ToString() => $"Belt № {Number}";
     }
 }

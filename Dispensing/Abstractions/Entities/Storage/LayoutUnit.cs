@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
 {
-    public abstract class StoreUnit : IStoreUnit
+    public abstract class LayoutUnit : ILayoutUnit
     {
         public uint Number { get; private set; }
 

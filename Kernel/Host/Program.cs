@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
@@ -40,7 +41,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 s1.OnDispensing += S1_OnDispensing;
                 s1.OnDispensing -= S1_OnDispensing;
-                s1.Dispense("foo");
+                
+                s1.Dispense(CompositIssueAddress.Create(vendingMachineId: "1", address: "1/13/0"));
             });
 
             host.Run();
@@ -62,9 +64,9 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     services
                         .AddSingleton((sp) => new KioskSettings {
-                            Dispenser = new DispensingSettings {  SlaveMachines = new DispensingMachine[] { 
-                                new DispensingMachine { Number = 1, Port = 9 },
-                                new DispensingMachine { Number = 1, Port = 10 }
+                            Dispenser = new DispensingSettings {  SlaveMachines = new VendingMachine[] { 
+                                new VendingMachine { Number = 1, Port = 9 },
+                                new VendingMachine { Number = 2, Port = 10 }
                             } }
                         })
                         .AddAttendant()

@@ -18,6 +18,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Filuet.Utils.Common.PosSettings;
 using Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Filuet.Utils.Abstractions.Communication;
+using Filuet.Utils.Communication;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -30,13 +33,41 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 {
                     KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
 
+                    if (kioskSettings.Dispenser.Mode == DeviceUseCase.Off)
+                        return null;
+
                     return new CompositeDispenserBuilder().AddDispensers(() =>
                         kioskSettings.Dispenser.SlaveMachines.Select(x =>
                         {
                             switch (x.Model)
                             {
                                 case "VisionEsPlus":
-                                    return new VisionEsPlusDispenser(new VisionEsPlus(new VisionEsPlusSettings { SerialPortNumber = (ushort)x.Port }));
+                                    {
+                                        VisionEsPlusSettings settings = new VisionEsPlusSettings
+                                        {
+                                            PortNumber = (ushort)x.Port,
+                                            Address = x.Address
+                                        };
+
+                                        ICommunicationChannel channel = null;
+
+                                        if (kioskSettings.Dispenser.Mode != DeviceUseCase.Off)
+                                        {
+                                            switch (x.Protocol)
+                                            {
+                                                case Utils.Common.Enum.CommunicationProtocol.Serial:
+                                                    channel = new SerialPortChannel(settings.PortNumber, settings.BaudRate, settings.Timeout, settings.CommandsSendDelay);
+                                                    break;
+                                                case Utils.Common.Enum.CommunicationProtocol.TCP:
+                                                    channel = new TcpChannel(settings.Address, settings.PortNumber);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+
+                                        return new VisionEsPlusVendingMachine(x.Number.ToString(), new VisionEsPlus(channel, settings));
+                                    }
                                 default:
                                     throw new ArgumentException("Unknown dispenser model");
                             }

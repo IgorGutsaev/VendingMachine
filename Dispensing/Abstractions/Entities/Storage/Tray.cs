@@ -6,19 +6,17 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
 {
-    public abstract class StoreTray<T> : StoreUnit, IStoreTray<T>
-        where T : IStoreBelt, new()
+    public abstract class Tray : LayoutUnit, ITray
     {
-        public IEnumerable<T> Belts { get => _belts; }
+        public IEnumerable<IBelt> Belts { get => _belts; }
 
-        //public TMachine Machine { get; set; }
-
-        public T AddBelt(uint number)
+        public IBelt AddBelt<TBelt>(uint number)
+            where TBelt : Belt, new()
         {
-            T result = default;
+            IBelt result = default;
             if (!_belts.Any() || !_belts.Any(x => x.Number == number))
             {
-                result = new T();
+                result = new TBelt();
                 result.SetNumber(number);
                 _belts.Add(result);
             }
@@ -28,8 +26,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
             return result;
         }
 
-        private ICollection<T> _belts = new List<T>();
+        private ICollection<IBelt> _belts = new List<IBelt>();
 
-        public override string ToString() => $"{Number}/{Belts.Count()} belts"; //{Machine}/
+        public override string ToString() => $"Tray {Number} consists of {Belts.Count()} belts"; //{Machine}/
     }
 }

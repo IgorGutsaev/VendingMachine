@@ -7,14 +7,20 @@ using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
 {
-    public class VisionEsPlusDispenser : IDispenser
+    public class VisionEsPlusVendingMachine : IDispenser
     {
         public event EventHandler<DeviceTestEventArgs> onTest;
         private VisionEsPlus _machineAdapter;
 
-        public VisionEsPlusDispenser(VisionEsPlus machineAdapter)
+        public string Id { get; private set; }
+
+        public VisionEsPlusVendingMachine(string id, VisionEsPlus machineAdapter)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException();
+
             _machineAdapter = machineAdapter;
+            Id = id;
         }
 
         public void Test()
@@ -23,16 +29,22 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
             onTest?.Invoke(this, new DeviceTestEventArgs { Severity = testResult.severity, Message = testResult.message });
         }
 
-        public void Dispense(TBAddress address)   
+        public void Dispense(IssueAddress address)   
         {
             var t = _machineAdapter.Status(false);
-            _machineAdapter.DispenseProduct(address.Tray, address.Belt);
+
+            _machineAdapter.DispenseProduct(address);
             var t1 = _machineAdapter.Status(false);
         }
 
-        public void IsAddressAvailable(TBAddress address)
+        public bool IsAddressAvailable(IssueAddress address)
+            => _machineAdapter.IsBeltAvailable(address);
+
+        public IEnumerable<IssueAddress> AreAddressesAvailable(IEnumerable<IssueAddress> addresses)
         {
-            _machineAdapter.IsBeltAvailable(address.Tray, address.Belt);
+            foreach (var a in addresses)
+                if (IsAddressAvailable(a))
+                    yield return a;
         }
     }
 }

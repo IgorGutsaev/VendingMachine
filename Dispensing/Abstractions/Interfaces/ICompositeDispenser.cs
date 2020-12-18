@@ -1,9 +1,7 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.Hardware;
-using Filuet.Utils.Abstractions.Events;
+﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.Hardware;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
 {
@@ -15,12 +13,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
     {
         event EventHandler<DispenseEventArgs> OnDispensing;
 
-        event EventHandler<DeviceTestEventArgs> onTest;
+        event EventHandler<DeviceTestEventArgs> OnTest;
 
         void Test();
 
-        void Dispense(string address);
+        //IEnumerable<CompositIssueAddress> A
 
-        void CheckChannel(string address);
+        void Dispense(CompositIssueAddress address);
+
+        void CheckChannel(CompositIssueAddress address);
     }
 }

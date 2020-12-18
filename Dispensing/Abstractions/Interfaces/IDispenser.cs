@@ -13,10 +13,18 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
     {
         event EventHandler<DeviceTestEventArgs> onTest;
 
+        string Id { get; }
+
         void Test();
 
-        void Dispense(TBAddress address);
+        void Dispense(IssueAddress address);
 
-        void IsAddressAvailable(TBAddress address);
+        bool IsAddressAvailable(IssueAddress address);
+
+        /// <summary>
+        /// Check addresses availability
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IssueAddress> AreAddressesAvailable(IEnumerable<IssueAddress> addresses);
     }
 }
