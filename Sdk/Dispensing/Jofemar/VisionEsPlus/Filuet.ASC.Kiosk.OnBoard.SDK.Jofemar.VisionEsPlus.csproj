@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils" Version="1.0.219" />
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.219" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.219" />
+    <PackageReference Include="Filuet.Utils" Version="1.0.225" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.225" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.225" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
     <PackageReference Include="System.IO.Ports" Version="5.0.0" />
   </ItemGroup>

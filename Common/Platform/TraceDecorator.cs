@@ -85,7 +85,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 
                 if (!isSubscription && !isUnsubscription)
                 {
-                    string message = $"Finished {targetMethod.Name}({serializeArgs(args)}) in {s.Elapsed}";
+                    // string message = $"Finished {targetMethod.Name}({serializeArgs(args)}) in {s.Elapsed}";
+                    string message = $"Finished {targetMethod.Name}(...) in {s.Elapsed}";
                     OnEvent?.Invoke(_decorated, success ? EventItem.Info(message) : EventItem.Error(message));
                 }
             }
@@ -122,7 +123,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
         }
 
         private void EventTrace(object sender, EventArgs e)
-            => OnEvent?.Invoke(_decorated, EventItem.Info($"An event has raised: {e}"));
+            => OnEvent?.Invoke(_decorated, EventItem.Info($"A new event has been raised: {Environment.NewLine}=== {e.GetType().Name} ==={Environment.NewLine}{e}{Environment.NewLine}======="));
 
         public event EventHandler<EventItem> OnEvent;
     }

@@ -27,7 +27,7 @@ namespace Filuet.ASC.OnBoard.Kernel.Test
             Money money = Money.Create(amount, Currency);
 
             // Perform
-            vendor.StartOrder(b => b.WithItems(OrderPosition.Create(productId, qty, money))
+            vendor.StartOrder(b => b.WithItems(OrderLine.Create(productId, qty, money, Money.Create(qty * amount, Currency)))
                 .WithTotalAmount(money));
 
             // Post-validate

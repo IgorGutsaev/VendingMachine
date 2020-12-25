@@ -35,7 +35,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Tests
             Assert.NotNull(service);
 
             // Perform
-            service.Add(source);
+            service.AddPlanogram(source);
             Planogram target = service.Get(x => x.Id == id).SingleOrDefault();
 
             // Post-validate

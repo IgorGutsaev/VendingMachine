@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
+using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.ASC.OnBoard.Kernel.Core;
+using Filuet.ASC.OnBoard.Payment.Abstractions;
+using Filuet.ASC.OnBoard.Payment.Core;
 using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Abstractions.Platform;
+using Filuet.Utils.Common.Business;
 using Filuet.Utils.Common.PosSettings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,17 +33,37 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             IHost host = CreateHostBuilder(args).Build();
 
             IEventBroker broker = host.Services.GetRequiredService<IEventBroker>(); // initialize evenk broker
+            // instantiate mediators
+            OrderingMediator mediator = host.Services.GetRequiredService<OrderingMediator>(); 
+            PaymentMediator paymentMediator = host.Services.GetRequiredService<PaymentMediator>();
 
             // POC
             Task.Run(() =>
             {
+                IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
+                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
+
+                paymentProvider.Collect(Money.Create(7650m, CurrencyCode.RussianRouble), (p) => { });
+                cashPaymentService.CashDevices.First().Start();
+
+                return;
+
                 IAttendant att = host.Services.GetRequiredService<IAttendant>();
 
-                att.StartOrder(b => { });
+                att.StartOrder(b => b.WithHeader("TST123456", "9262147116")
+                    .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
+                    .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
+
+                
+               
+
+                att.CompleteOrder();
+
+                return;
 
                 IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
-                ICompositeDispenser s1 = host.Services.GetRequiredService<ICompositeDispenser>();
+                ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
 
                 ILayout layout = host.Services.GetRequiredService<ILayout>();
                 if (layout == null)
@@ -46,10 +71,11 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     var t = s2.Get(x => true);
                 }
 
-                s1.OnDispensing += S1_OnDispensing;
-                s1.OnDispensing -= S1_OnDispensing;
+                dispenser.OnDispensing += S1_OnDispensing;
 
-                s1.Dispense(CompositIssueAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+                dispenser.Dispense(CompositIssueAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+
+                dispenser.OnDispensing -= S1_OnDispensing;
             });
 
             host.Run();
@@ -76,15 +102,17 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                             {
                                 Mode = DeviceUseCase.On,
                                 SlaveMachines = new VendingMachine[] {
-                                    new VendingMachine { Number = 1, Address = "9", Model = "VisionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP, 
-                                        IpAddress = "172.16.7.103", 
+                                    new VendingMachine { Number = 1, Address = "0x01", Model = "VisionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
+                                        IpAddress = "172.16.7.103",
                                         Port = 5000},
-                                    new VendingMachine { Number = 2, Address = "10", Model = "visionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
+                                    new VendingMachine { Number = 2, Address = "0x02", Model = "visionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
                                         IpAddress = "172.16.7.103",
                                         Port = 5000 }
                                 }
-                            }
+                            },
+                            Cashbox = new CashboxSettings { Mode = DeviceUseCase.Emulation }
                         })
+                        .AddPaymentProvider()
                         .AddAttendant()
                         .AddHardware();
 

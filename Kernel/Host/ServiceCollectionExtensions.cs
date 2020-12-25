@@ -19,6 +19,12 @@ using Filuet.Utils.Communication;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities;
+using System.Collections;
+using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
+using System.Collections.Generic;
+using Filuet.ASC.OnBoard.Payment.Abstractions.Interfaces;
+using Filuet.Utils.Common.Business;
+using Filuet.ASC.OnBoard.Payment.Abstractions;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -86,8 +92,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     {
                         if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
                         {
-                    // TODO: Refactor this stub
-                    if (x.Number == 1)
+                            // TODO: Refactor this stub
+                            if (x.Number == 1)
                                 layoutBuilder.AddMachine<VisionEspMachine, VisionEspTray, VisionEspBelt>(x.Number.Value)
                                     .AddTray(11)
                                         .AddBelt(2).CommitTray()
@@ -106,9 +112,38 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     return layoutBuilder.Build();
                 })
-                .AddCashPayment()
+                .AddCashPayment((sp, cs) =>
+                {
+                    KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
+
+                    IEnumerable<ICashDeviceAdapter> cashDevices = null;
+
+                    switch (kioskSettings.Cashbox.Mode)
+                    {
+                        case DeviceUseCase.Emulation:
+                            cashDevices = new ICashDeviceAdapter[] {
+                                new MockBillAcceptor(sp.GetRequiredService<ICurrencyConverter>(), (s) => {
+                                    s.BaseCurrency = CurrencyCode.RussianRouble; // Stub
+                                    s.BillsToReceive = new Money[] { Money.Create(100, CurrencyCode.USDollar), Money.Create(500, CurrencyCode.RussianRouble) }; // Stub
+                                    s.BillsToGiveChange = new Money[] { Money.Create(100, CurrencyCode.RussianRouble) }; // Stub
+                                })
+                            };
+                            break;
+                        case DeviceUseCase.Off:
+                            cashDevices = null;
+                            break;
+                        case DeviceUseCase.On:
+                            // ...
+                            break;
+                    }
+
+                    cs.CashDevices = cashDevices;
+
+                    return cs;
+                })
                 .AddEventMediation((sp, broker) =>
                 {
+                    broker.AppendProducer(sp.GetRequiredService<IPaymentProvider>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<ICashPaymentService>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<ICompositeDispenser>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<IStorageService>() as IEventProducer);
@@ -116,6 +151,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 })
                 .AddSingleton((sp) =>
                     new EventConsumer()
+                        .AppendWriter<IPaymentProvider>(new EventWriter<IPaymentProvider>(sp.GetRequiredService<ILogger<IPaymentProvider>>()))
                         .AppendWriter<ICashPaymentService>(new EventWriter<ICashPaymentService>(sp.GetRequiredService<ILogger<ICashPaymentService>>()))
                         .AppendWriter<ICompositeDispenser>(new EventWriter<ICompositeDispenser>(sp.GetRequiredService<ILogger<ICompositeDispenser>>()))
                         .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>()))

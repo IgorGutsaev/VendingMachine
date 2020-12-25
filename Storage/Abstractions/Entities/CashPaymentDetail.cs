@@ -5,22 +5,22 @@ using System.Text;
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
 {
     [Serializable]
-    public class CashPaymentDetail:IdentifiableEntity<string>
+    public class CashPaymentDetail : IdentifiableEntity<string>
     {
-        public decimal Amount { get;private set; }
+        public decimal Amount { get; private set; }
 
-        public string Result { get;private set; }
+        public string Result { get; private set; }
 
-        public string Type { get;private set; }
+        public string Type { get; private set; }
 
-        public DateTime Timestamp { get;private set; } = DateTime.Now;
+        public DateTime Timestamp { get; private set; } = DateTime.Now;
 
         protected CashPaymentDetail()
         {
             Id = Guid.NewGuid().ToString();
         }
 
-        public static CashPaymentDetail Create(decimal amount = 0.0m,string result = "",string type = "",DateTime? timestamp = null)
+        public static CashPaymentDetail Create(decimal amount = 0.0m, string result = "", string type = "", DateTime? timestamp = null)
         {
             if (amount < 0.0m)
                 throw new ArgumentException("Unable amount cash < 0");

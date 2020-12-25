@@ -12,7 +12,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
         ////private IEventLogger _Logger;
         private readonly LocalStorageSettings _Settings;
         public DbSet<Planogram> Planograms { get; set; }
-
+        public DbSet<OrderLog> OrderLog { get; set; }
         public DbSet<CashPaymentDetail> CashPaymentDetails { get; set; }
 
         /// <summary>

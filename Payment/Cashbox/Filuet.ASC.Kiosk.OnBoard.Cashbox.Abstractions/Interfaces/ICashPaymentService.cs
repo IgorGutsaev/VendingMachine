@@ -2,23 +2,24 @@
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.Utils.Common.Business;
 using System;
+using System.Collections.Generic;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions
 {
     public interface ICashPaymentService
     {
-        void CashReceive(Money money);
+        IEnumerable<ICashDeviceAdapter> CashDevices { get; set; }
 
-        void GiveChange(Money money);
+        void IssueChange(Money money);
 
         void Stop();
 
-        void AddCashDevice(ICashDeviceAdapter cashDevice);
 
-        void RemoveCashDevice();
 
-        event EventHandler<CashEventArgs> OnReceived;
-        event EventHandler<CashEventArgs> OnGivedChange;
-        event EventHandler<StopCashEventArgs> OnStop;
+       // void RemoveCashDevice();
+
+        event EventHandler<CashIncomeEventArgs> OnReceived;
+        event EventHandler<CashIncomeEventArgs> OnGivedChange;
+        event EventHandler<StopCashDeviceEventArgs> OnStop;
     }
 }

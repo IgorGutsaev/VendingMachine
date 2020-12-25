@@ -6,4 +6,13 @@ CREATE TABLE IF NOT EXISTS `Planograms` (
 	`Timestamp`	DateTime NOT NULL,
 	PRIMARY KEY(`Id`)
 );
+
+CREATE TABLE IF NOT EXISTS `OrderLog` (
+	`Id`	 BLOB NOT NULL UNIQUE,
+	`Number` TEXT NOT NULL,
+	`Action` TEXT NOT NULL,
+	`Data`	 TEXT NOT NULL,
+	`Timestamp`	DateTime NOT NULL,
+	PRIMARY KEY(`Id`)
+);
 COMMIT;

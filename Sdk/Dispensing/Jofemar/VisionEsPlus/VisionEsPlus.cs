@@ -5,6 +5,7 @@ using Filuet.Utils.Abstractions.Communication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO.Ports;
 using System.Threading;
 
@@ -21,7 +22,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
         public VisionEsPlus(ICommunicationChannel channel, VisionEsPlusSettings settings)
         {
             _settings = settings;
-            _messagePacket = new byte[] { 0x02, 0x30, 0x30, (byte)(Convert.ToByte(_settings.Address)  + 0x80), 0, 0xff, 0xff, 0, 0, 3 };
+            byte machineAddress = (byte)(Byte.Parse(_settings.Address.Substring(2), NumberStyles.HexNumber) + 0x80);
+            _messagePacket = new byte[] { 0x02, 0x30, 0x30, machineAddress /* 0x81*/, 0, 0xff, 0xff, 0, 0, 3 };
             _channel = channel;
         }
 

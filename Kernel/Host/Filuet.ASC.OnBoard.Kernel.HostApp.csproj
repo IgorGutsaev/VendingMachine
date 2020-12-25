@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.219" />
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.219" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.225" />
+    <PackageReference Include="Filuet.Utils.Common" Version="1.0.225" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview3.20168.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -28,6 +28,7 @@
     <ProjectReference Include="..\..\Maintenance\Dashboard\Shared\Filuet.ASC.OnBoard.Dashboard.Shared.csproj" />
     <ProjectReference Include="..\..\Payment\Cashbox\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.csproj" />
     <ProjectReference Include="..\..\Payment\Cashbox\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core\Filuet.ASC.Kiosk.OnBoard.Cashbox.Core.csproj" />
+    <ProjectReference Include="..\..\Payment\Core\Filuet.ASC.OnBoard.Payment.Core.csproj" />
     <ProjectReference Include="..\..\Sdk\Dispensing\Jofemar\VisionEsPlus\Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus.csproj" />
     <ProjectReference Include="..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />
     <ProjectReference Include="..\..\Storage\Core\Filuet.ASC.Kiosk.OnBoard.Storage.Core.csproj" />

@@ -22,13 +22,13 @@ namespace Filuet.ASC.OnBoard.Kernel.Test
             Assert.True(amount >= 0);
 
             // Perform
-            OrderPosition result = OrderPosition.Create(productId, qty, money);
+            OrderLine result = OrderLine.Create(productId, qty, money, Money.Create(qty * money.Value, Currency));
 
             // Post-validate
             Assert.NotNull(result);
             Assert.NotNull(result.Amount);
             Assert.Equal(amount, result.Amount.Value);
-            Assert.Equal(productId, result.Product);
+            Assert.Equal(productId, result.ProductUID);
             Assert.Equal(qty, result.Quantity);
         }
     }

@@ -1,4 +1,7 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.OnBoard.Kernel.Core.Events;
+using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Extensions;
 using System;
 
@@ -6,41 +9,66 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 {
     public class Attendant : IAttendant
     {
-        /// <summary>
-        /// Vendor state <see cref="AttendantState"/>
-        /// </summary>
-        public AttendantState State { get; private set; } = AttendantState.Idle;
-
-        public Order Order
+        public Attendant(IPaymentProvider paymentService)
         {
-            get => _order;
-            set {
-                _order = value;
-                OnNewOrder?.Invoke(this, new NewOrderEventArgs { Order = _order });
-            }
-        }
+            _paymentService = paymentService;
 
-        public event EventHandler<NewOrderEventArgs> OnNewOrder;
+            //_paymentService.OnReceived += (sender, e) =>
+            //{
 
-        private static Attendant Vendor { get; set; }
-
-        static Attendant()
-        {
-            Vendor = new Attendant();
+            //};
         }
 
         public void StartOrder(Action<OrderBuilder> setupOrder)
         {
-            State = AttendantState.Busy;
+            ChangeState(AttendantState.Busy);
             Order = setupOrder?.CreateTargetAndInvoke().Build();
         }
 
-        public void Flush()
+        public void CompleteOrder()
         {
-            Order = null;
-            State = AttendantState.Idle;
+
+            Flush();
+        }
+
+        private void Flush()
+        {
+            OnOrderCompleted?.Invoke(this, new OrderCloseEventArgs { Order = _order });
+            _order = null;
+            ChangeState(AttendantState.Idle);
         }
 
         private Order _order;
+
+        private AttendantState _state;
+
+        /// <summary>
+        /// Vendor state <see cref="AttendantState"/>
+        /// </summary>
+        public AttendantState State => _state;
+
+        private void ChangeState(AttendantState state)
+        {
+            OnAttendantStateChanged?.Invoke(this, new AttendantStateEventArgs { PreviousState = _state, State = state });
+            _state = state;
+        }
+
+        public Order Order
+        {
+            get => _order;
+            set
+            {
+                _order = value;
+
+                OnOrderOpened?.Invoke(this, new OrderOpenEventArgs { Order = _order });
+            }
+        }
+
+        public event EventHandler<OrderEventArgs> OnOrderOpened;
+        public event EventHandler<IncomePaymentEventArgs> OnIncomePayment;
+        public event EventHandler<OrderEventArgs> OnOrderCompleted;
+        public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
+
+        private readonly IPaymentProvider _paymentService;
     }
 }

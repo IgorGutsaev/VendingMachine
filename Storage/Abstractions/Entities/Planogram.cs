@@ -9,6 +9,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
     public class Planogram : IdentifiableEntity<string>
     {
         public string Data { get; set; }
+
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         protected Planogram()
