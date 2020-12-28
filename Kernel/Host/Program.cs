@@ -43,7 +43,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
                 ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
 
-                paymentProvider.Collect(Money.Create(7650m, CurrencyCode.RussianRouble), (p) => { });
+                paymentProvider.Collect(Money.Create(7600m, CurrencyCode.RussianRouble), (p) => { });
                 cashPaymentService.CashDevices.First().Start();
 
                 return;

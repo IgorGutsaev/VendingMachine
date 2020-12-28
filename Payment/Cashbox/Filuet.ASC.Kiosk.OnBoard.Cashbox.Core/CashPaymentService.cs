@@ -4,6 +4,8 @@ using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 {
@@ -11,55 +13,35 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
     {
         public CashPaymentService() { }
 
-        //public void ReduceDuty(Money money)
-        //{
-        //    CashDevice.ReduceDuty(money);
-        //}
-
-        public void IssueChange(Money money)
+        public void IssueChange(Money change)
         {
-          //  CashDevice.GiveChange(money);
+            if (change <= 0)
+                throw new ArgumentException("The change isn't specified");
+
+            IList<ICashDeviceAdapter> devices = CashDevices.OrderBy(x => x.IssueIndex).ToList(); // Sort devices in priority order
+
+            Money changeDebt = Money.From(change);
+            var @lock = new ReaderWriterLockSlim();
+
+            foreach (var device in devices)
+            {
+                @lock.EnterWriteLock();
+                try
+                {
+                    while (changeDebt > 0)
+                    {
+                        Money nextChange = device.GiveChange(changeDebt);
+                        if (nextChange == null)
+                            break;
+                        else changeDebt = changeDebt - nextChange; // Decrease change debt
+                    }
+                }
+                finally
+                {
+                    @lock.ExitWriteLock();
+                }
+            }
         }
-
-        //public void AppendCashDevice(ICashDeviceAdapter cashDevice)
-        //{
-        //    CashDevice = cashDevice;
-
-        //    CashDevice.OnChangeIssued += CashDevice_OnChange;
-        //    CashDevice.OnReceive += CashDevice_OnReceive;
-        //    CashDevice.OnStop += CashDevice_OnStopDevice;
-        //    CashDevice.OnTest += CashDevice_OnTest;
-        //}
-
-        private void CashDevice_OnTest(object sender, TestResultCash e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void CashDevice_OnStopDevice(object sender, StopCashDeviceEventArgs e)
-        {
-            OnStop?.Invoke(this, e);
-        }
-
-        private void CashDevice_OnReceive(object sender, CashIncomeEventArgs e)
-        {
-            OnReceived?.Invoke(this, e);
-        }
-
-        private void CashDevice_OnChange(object sender, CashIncomeEventArgs e)
-        {
-            OnGivedChange?.Invoke(this, e);
-        }
-
-        //public void RemoveCashDevice()
-        //{
-        //    CashDevice.OnChangeIssued -= CashDevice_OnChange;
-        //    CashDevice.OnReceive -= CashDevice_OnReceive;
-        //    CashDevice.OnStop -= CashDevice_OnStopDevice;
-        //    CashDevice.OnTest -= CashDevice_OnTest;
-
-        //    _cashDevice = null;
-        //}
 
         public void Stop()
         {

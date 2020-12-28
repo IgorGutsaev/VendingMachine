@@ -18,12 +18,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
 
         public Money Change { get; private set; }
 
-        public event EventHandler<MoneyEventArgs> OnAmountSpecified;
-
-        ////public event EventHandler<Money> OnCollected;
-        ////public event EventHandler<Money> OnRefund;
-        ////public event EventHandler<Money> OnRefunded;
-        ////public event EventHandler<string> OnError;
+        public Money ChangeIssued { get; private set; }
 
         public bool Collect(Money money, Action<IPaymentProvider> setupAction)
         {
@@ -32,19 +27,55 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             Credit = Money.Create(0m, money.Currency);
             Change = Money.Create(0m, money.Currency);
 
-            OnAmountSpecified?.Invoke(this, new MoneyEventArgs { Value = money });
+            OnTotalAmountSpecified?.Invoke(this, new TotalAmountSpecifiedEventArgs { Value = money });
             return true;
         }
 
-        public void OnMoneyIncome(Money money)
+        public void WhenSomeMoneyIncome(Money money)
         {
             Credit += money;
             if (Credit >= Amount)
             {
                 Duty = Money.Create(0m, Amount.Currency);
                 Change = Credit > Amount ? Credit - Amount : Money.Create(0m, Amount.Currency);
+
+                OnTotalAmountCollected?.Invoke(this, PaymentCollectedEventArgs.Create(Credit, Change));
             }
             else Duty -= money;
         }
+
+        public void GiveChange(Money change)
+        {
+            if (change > 0m)
+                OnGiveChangeSpecified?.Invoke(this, GiveChangeEventArgs.Create(change));
+        }
+
+        public void WhenSomeChangeExtracted(Money changeIssued)
+        {
+            ChangeIssued += changeIssued;
+
+            if ((ChangeIssued - Change).Abs < 0.01m || ChangeIssued >= Change)
+                OnTotalChangeBeenGiven?.Invoke(this, TotalChangeIssuedEventArgs.Create(Change, ChangeIssued, Money.Create(0m, Change.Currency)));
+        }
+
+        /// <summary>
+        /// When the provider finds out how much money needs to be collected
+        /// </summary>
+        public event EventHandler<TotalAmountSpecifiedEventArgs> OnTotalAmountSpecified;
+
+        /// <summary>
+        /// Called when the Attendant commands to issue the change
+        /// </summary>
+        public event EventHandler<GiveChangeEventArgs> OnGiveChangeSpecified;
+
+        /// <summary>
+        /// When total amount has been collected
+        /// </summary>
+        public event EventHandler<PaymentCollectedEventArgs> OnTotalAmountCollected;
+
+        /// <summary>
+        /// Called when the the change has been completely given
+        /// </summary>
+        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeBeenGiven;
     }
 }

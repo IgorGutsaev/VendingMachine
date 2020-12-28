@@ -6,16 +6,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces
 {
     public interface ICashDeviceAdapter
     {
-        event EventHandler<CashIncomeEventArgs> OnMoneyReceived;
-
-        event EventHandler<TestResultCash> OnTest;
-
-        event EventHandler<CashIncomeEventArgs> OnChangeIssued;
-
-        event EventHandler<StopCashDeviceEventArgs> OnStop;
-
-        event EventHandler<StartCashDeviceEventArgs> OnStart;
-
+        uint IssueIndex { get; }
 
         /// <summary>
         /// Upper threshold of money to collect. Give the change after the amount collected 
@@ -25,7 +16,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces
         /// <remarks>We ought to know amount to be received lest collect more than expected</remarks>
         void ReduceOrSetDutyTo(Money money);
 
-        void GiveChange(Money money);
+        Money GiveChange(Money change);
 
         void Test();
 
@@ -40,5 +31,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces
         /// Stop the device
         /// </summary>
         void Stop();
+
+        event EventHandler<CashIncomeEventArgs> OnMoneyReceived;
+
+        event EventHandler<TestResultCash> OnTest;
+
+        event EventHandler<CashIssueEventArgs> OnSomeChangeIssued;
+
+        event EventHandler<StopCashDeviceEventArgs> OnStop;
+
+        event EventHandler<StartCashDeviceEventArgs> OnStart;
     }
 }

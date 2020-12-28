@@ -2,6 +2,7 @@
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using Filuet.ASC.OnBoard.Kernel.Core.Events;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
+using Filuet.Utils.Common.Business;
 using Filuet.Utils.Extensions;
 using System;
 
@@ -13,10 +14,17 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         {
             _paymentService = paymentService;
 
-            //_paymentService.OnReceived += (sender, e) =>
-            //{
+            _paymentService.OnTotalAmountCollected += (sender, e) =>
+            { 
+                if (e.ChangeToIssue > 0m) // And the cash payment took place probably
+                    GiveChange(e.ChangeToIssue);
+                else PrintReceipt();
+            };
 
-            //};
+            _paymentService.OnTotalChangeBeenGiven += (sender, e) =>
+            {
+                PrintReceipt();
+            };
         }
 
         public void StartOrder(Action<OrderBuilder> setupOrder)
@@ -24,6 +32,19 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             ChangeState(AttendantState.Busy);
             Order = setupOrder?.CreateTargetAndInvoke().Build();
         }
+
+        public void PrintReceipt()
+        {
+            Console.WriteLine("==================");
+            Console.WriteLine("==    RECEIPT   ==");
+            Console.WriteLine("==================");
+        }
+
+        /// <summary>
+        /// Change to be issued in the order context
+        /// </summary>
+        /// <param name="change"></param>
+        private void GiveChange(Money change) => _paymentService.GiveChange(change);
 
         public void CompleteOrder()
         {
@@ -49,8 +70,11 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
         private void ChangeState(AttendantState state)
         {
-            OnAttendantStateChanged?.Invoke(this, new AttendantStateEventArgs { PreviousState = _state, State = state });
-            _state = state;
+            if (state != _state)
+            {
+                OnAttendantStateChanged?.Invoke(this, new AttendantStateEventArgs { PreviousState = _state, State = state });
+                _state = state;
+            }
         }
 
         public Order Order

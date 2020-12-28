@@ -8,8 +8,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
     /// <summary>
     /// Common settings of bill acceptance (not related to the real device)
     /// </summary>
-    public class BillAcceptanceSettings
+    public class CashHandleSettings
     {
+        public uint IssueIndex { get; set; } 
+
         /// <summary>
         /// In some countries there're 2 currency in use
         /// </summary>

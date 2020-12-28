@@ -10,28 +10,31 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             _cashService = cashService;
             _paymentProvider = paymentProvider;
 
-            _paymentProvider.OnAmountSpecified += PaymentProvider_OnAmountSpecified;
+            _paymentProvider.OnTotalAmountSpecified += (sender, e) => {
+                // Notify all cash devices about duty (a remaining part of payment) was changed
+                foreach (var cashDevice in _cashService.CashDevices)
+                    cashDevice.ReduceOrSetDutyTo(e.Value);
+            };
+
+            _paymentProvider.OnGiveChangeSpecified += (sender, e) => {
+                _cashService.IssueChange(e.ChangeAmount);
+            };
 
             foreach (var cashDevice in _cashService.CashDevices)
-                cashDevice.OnMoneyReceived += CashDevice_OnMoneyReceived;
-        }
+                cashDevice.OnMoneyReceived += (sender, e) => {
+                    _paymentProvider.WhenSomeMoneyIncome(e.NativeMoney);
 
-        private void CashDevice_OnMoneyReceived(object sender, Kiosk.OnBoard.Cashbox.Abstractions.Events.CashIncomeEventArgs e)
-        {
-            _paymentProvider.OnMoneyIncome(e.NativeMoney);
+                    // Notify all cash devices about duty (a remaining part of payment) was changed
+                    foreach (var device in _cashService.CashDevices)
+                        device.ReduceOrSetDutyTo(_paymentProvider.Duty);
+                };
 
-            // Notify all cash devices about duty (a remaining part of payment) was changed
             foreach (var cashDevice in _cashService.CashDevices)
-                cashDevice.ReduceOrSetDutyTo(_paymentProvider.Duty);
+                cashDevice.OnSomeChangeIssued += (sender, e) => {
+                    _paymentProvider.WhenSomeChangeExtracted(e.NativeMoney);
+                };
         }
-
-        private void PaymentProvider_OnAmountSpecified(object sender, MoneyEventArgs e)
-        {
-            // Notify all cash devices about duty (a remaining part of payment) was changed
-            foreach (var cashDevice in _cashService.CashDevices)
-                cashDevice.ReduceOrSetDutyTo(e.Value);
-        }
-
+       
         private readonly ICashPaymentService _cashService;
         private readonly IPaymentProvider _paymentProvider;
     }

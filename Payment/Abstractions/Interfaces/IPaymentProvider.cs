@@ -21,28 +21,31 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         Money Duty { get; } // = |Amount - Credit|
 
         /// <summary>
-        /// A change to dispense
+        /// A change to issue
         /// </summary>
         Money Change { get; }
 
-        event EventHandler<MoneyEventArgs> OnAmountSpecified;
+        /// <summary>
+        /// Actually issued change
+        /// </summary>
+        Money ChangeIssued { get; }
 
-        /////// <summary>
-        /////// When requested summ finally collected
-        /////// </summary>
-        ////event EventHandler<Money> OnCollected;
+        event EventHandler<TotalAmountSpecifiedEventArgs> OnTotalAmountSpecified;
 
-        /////// <summary>
-        /////// When collection process consists of several deposits
-        /////// </summary>
-        ////event EventHandler<Money> OnRefund;
+        // <summary>
+        // When requested summ finally collected
+        // </summary>
+        event EventHandler<PaymentCollectedEventArgs> OnTotalAmountCollected;
 
-        /////// <summary>
-        /////// When refund summ is completely refunded
-        /////// </summary>
-        ////event EventHandler<Money> OnRefunded;
+        /// <summary>
+        /// Called when the Attendant commands to issue the change
+        /// </summary>
+        event EventHandler<GiveChangeEventArgs> OnGiveChangeSpecified;
 
-        ////event EventHandler<string> OnError;
+        /// <summary>
+        /// Called when the the change has completely been given
+        /// </summary>
+        event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeBeenGiven;
 
         /// <summary>
         /// Collect summ
@@ -52,6 +55,10 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// <returns></returns>
         bool Collect(Money money, Action<IPaymentProvider> setupAction);
 
-        void OnMoneyIncome(Money money);
+        void WhenSomeMoneyIncome(Money money);
+
+        void GiveChange(Money change);
+
+        void WhenSomeChangeExtracted(Money changeIssued);
     }
 }

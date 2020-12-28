@@ -7,14 +7,15 @@ using Filuet.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 {
     public class MockBillAcceptor : ICashDeviceAdapter
     {
-        public MockBillAcceptor(ICurrencyConverter currencyConverter, Action<BillAcceptanceSettings> setupAction)
+        public uint IssueIndex => _settings.IssueIndex;
+
+        public MockBillAcceptor(ICurrencyConverter currencyConverter, Action<CashHandleSettings> setupAction)
         {
             _currencyConverter = currencyConverter;
             _settings = setupAction?.CreateTargetAndInvoke();
@@ -28,9 +29,18 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             _upperThresholdToCollect = money;
         }
 
-        public void GiveChange(Money money)
+        public Money GiveChange(Money change)
         {
-            throw new NotImplementedException();
+            var changeNominals = SortedBillsFromTheBiggestToTheSmallest(_settings.BaseCurrency, false);
+            Money theBiggestBill = changeNominals.FirstOrDefault(x => x.Value <= change.Value).Key;
+
+            if (theBiggestBill != null)
+            {
+                OnSomeChangeIssued?.Invoke(this, CashIssueEventArgs.BillIncome(theBiggestBill, _currencyConverter.Convert(theBiggestBill, _settings.BaseCurrency)));
+                return theBiggestBill;
+            }
+
+            return null;
         }
 
         public void Start()
@@ -39,12 +49,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 
             while (true)
             {
-                duty = Money.From(_upperThresholdToCollect);
+                duty = Money.From(_upperThresholdToCollect); // _upperThresholdToCollect is renewable so we have to check it every time
                 Thread.Sleep(100);
                 Money bill = MakeFakeSingleBillIncome(duty); // Collected bill at this step
-                Money nativeBill = _currencyConverter.Convert(bill, duty.Currency);
+                Money nativeAmount = _currencyConverter.Convert(bill, duty.Currency);
 
-                if (duty == nativeBill || duty < bill)
+                if (duty == nativeAmount || duty < bill)
                 {
                     duty = Money.Create(0m, duty.Currency);
                     break;
@@ -58,10 +68,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             if (_settings.BillsToReceive == null || !_settings.BillsToReceive.Any())
                 throw new Exception("There is no bills related to the device");
 
-            var bills = _settings.BillsToReceive.Select(x => new KeyValuePair<Money, decimal>(x, _currencyConverter.Convert(x, amount.Currency).Value)).OrderByDescending(x => x.Value);
-            Money theBiggestBill = bills.FirstOrDefault(x => x.Value <= amount.Value).Key;
+            var receiveNominals = SortedBillsFromTheBiggestToTheSmallest(amount.Currency);
+            Money theBiggestBill = receiveNominals.FirstOrDefault(x => x.Value <= amount.Value).Key;
             if (theBiggestBill == null)
-                theBiggestBill = bills.Last().Key;
+                theBiggestBill = receiveNominals.Last().Key;
 
             OnMoneyReceived?.Invoke(this, CashIncomeEventArgs.BillIncome(theBiggestBill, _currencyConverter.Convert(theBiggestBill, amount.Currency)));
 
@@ -83,14 +93,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             throw new NotImplementedException();
         }
 
+        private IEnumerable<KeyValuePair<Money, decimal>> SortedBillsFromTheBiggestToTheSmallest(CurrencyCode currency, bool receiveBills = true)
+            => (receiveBills ? _settings.BillsToReceive : _settings.BillsToGiveChange).Select(x => new KeyValuePair<Money, decimal>(x, _currencyConverter.Convert(x, currency).Value)).OrderByDescending(x => x.Value);
+
         public event EventHandler<CashIncomeEventArgs> OnMoneyReceived;
         public event EventHandler<TestResultCash> OnTest;
-        public event EventHandler<CashIncomeEventArgs> OnChangeIssued;
+        public event EventHandler<CashIssueEventArgs> OnSomeChangeIssued;
         public event EventHandler<StopCashDeviceEventArgs> OnStop;
         public event EventHandler<StartCashDeviceEventArgs> OnStart;
 
         private readonly ICurrencyConverter _currencyConverter;
-        private readonly BillAcceptanceSettings _settings;
+        private readonly CashHandleSettings _settings;
         private Money _upperThresholdToCollect = null;
     }
 }

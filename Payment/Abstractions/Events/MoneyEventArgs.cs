@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Filuet.ASC.OnBoard.Payment.Abstractions
 {
-    public class MoneyEventArgs : EventArgs
+    public abstract class MoneyEventArgs : EventArgs
     {
         public Money Value { get; set; }
     }

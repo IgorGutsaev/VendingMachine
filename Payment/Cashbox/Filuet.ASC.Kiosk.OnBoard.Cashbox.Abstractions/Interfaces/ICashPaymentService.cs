@@ -10,16 +10,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions
     {
         IEnumerable<ICashDeviceAdapter> CashDevices { get; set; }
 
-        void IssueChange(Money money);
+        void IssueChange(Money change);
 
         void Stop();
 
-
-
-       // void RemoveCashDevice();
-
         event EventHandler<CashIncomeEventArgs> OnReceived;
-        event EventHandler<CashIncomeEventArgs> OnGivedChange;
         event EventHandler<StopCashDeviceEventArgs> OnStop;
     }
 }

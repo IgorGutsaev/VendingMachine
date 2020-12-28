@@ -123,6 +123,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                         case DeviceUseCase.Emulation:
                             cashDevices = new ICashDeviceAdapter[] {
                                 new MockBillAcceptor(sp.GetRequiredService<ICurrencyConverter>(), (s) => {
+                                    s.IssueIndex = 1;
                                     s.BaseCurrency = CurrencyCode.RussianRouble; // Stub
                                     s.BillsToReceive = new Money[] { Money.Create(100, CurrencyCode.USDollar), Money.Create(500, CurrencyCode.RussianRouble) }; // Stub
                                     s.BillsToGiveChange = new Money[] { Money.Create(100, CurrencyCode.RussianRouble) }; // Stub
