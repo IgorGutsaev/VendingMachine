@@ -9,11 +9,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
     {
         public Money ChangeAmount { get; set; }
 
-
         private GiveChangeEventArgs() { }
-
-
-
 
         public static GiveChangeEventArgs Create(Money change)
         {
@@ -22,5 +18,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
 
             return new GiveChangeEventArgs { ChangeAmount = change };
         }
+
+        public override string ToString() => $"Change: {ChangeAmount}";
     }
 }

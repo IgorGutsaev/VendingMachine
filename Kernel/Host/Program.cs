@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.ASC.OnBoard.Kernel.Core;
@@ -40,22 +43,20 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             // POC
             Task.Run(() =>
             {
-                IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
-                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
-
-                paymentProvider.Collect(Money.Create(7600m, CurrencyCode.RussianRouble), (p) => { });
-                cashPaymentService.CashDevices.First().Start();
-
-                return;
+                Thread.Sleep(1500);
 
                 IAttendant att = host.Services.GetRequiredService<IAttendant>();
 
                 att.StartOrder(b => b.WithHeader("TST123456", "9262147116")
+                    .WithObtainingMethod(GoodsObtainingMethod.Warehouse)
                     .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
                     .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
 
-                
-               
+                IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
+                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
+
+                paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
+                cashPaymentService.CashDevices.First().Start();
 
                 att.CompleteOrder();
 

@@ -11,15 +11,17 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
     {
         void StartOrder(Action<OrderBuilder> setupOrder);
 
+        void Dispense();
+
         void PrintReceipt();
 
         void CompleteOrder(/* STATUS    void CancelOrder(); //abnormal finalizing */);
 
         event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
 
-        event EventHandler<OrderEventArgs> OnOrderOpened;
+        event EventHandler<OrderOpenEventArgs> OnOrderOpened;
 
-        event EventHandler<OrderEventArgs> OnOrderCompleted;
+        event EventHandler<OrderCloseEventArgs> OnOrderCompleted;
 
         /// <summary>
         /// An event to log any payment income via one of the channels (cash, card...)

@@ -11,12 +11,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Events
         /// </summary>
         public bool IsBill { get; private set; }
 
-        public Money Money { get; private set; }
+        public MoneyNaturalized Money { get; private set; }
 
-        public Money NativeMoney { get; private set; }
+        public static CashIncomeEventArgs CoinIncome(MoneyNaturalized money) => new CashIncomeEventArgs { Money = money, IsBill = false };
 
-        public static CashIncomeEventArgs CoinIncome(Money money, Money nativeMoney) => new CashIncomeEventArgs { Money = money, NativeMoney = nativeMoney, IsBill = false };
-
-        public static CashIncomeEventArgs BillIncome(Money money, Money nativeMoney) => new CashIncomeEventArgs { Money = money, NativeMoney = nativeMoney,  IsBill = true };
+        public static CashIncomeEventArgs BillIncome(MoneyNaturalized money) => new CashIncomeEventArgs { Money = money,  IsBill = true };
     }
 }

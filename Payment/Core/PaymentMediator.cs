@@ -22,7 +22,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
 
             foreach (var cashDevice in _cashService.CashDevices)
                 cashDevice.OnMoneyReceived += (sender, e) => {
-                    _paymentProvider.WhenSomeMoneyIncome(e.NativeMoney);
+                    _paymentProvider.SomeMoneyIncome(e.Money);
 
                     // Notify all cash devices about duty (a remaining part of payment) was changed
                     foreach (var device in _cashService.CashDevices)
@@ -31,7 +31,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
 
             foreach (var cashDevice in _cashService.CashDevices)
                 cashDevice.OnSomeChangeIssued += (sender, e) => {
-                    _paymentProvider.WhenSomeChangeExtracted(e.NativeMoney);
+                    _paymentProvider.SomeChangeExtracted(e.Money);
                 };
         }
        

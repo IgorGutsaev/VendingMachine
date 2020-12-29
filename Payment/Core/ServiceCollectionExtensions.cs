@@ -3,6 +3,7 @@ using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Core;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
 {

@@ -29,18 +29,21 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             _upperThresholdToCollect = money;
         }
 
-        public Money GiveChange(Money change)
+        public (Money change, Money nativeChange) GiveChange(Money change)
         {
+            Thread.Sleep(100);
+
             var changeNominals = SortedBillsFromTheBiggestToTheSmallest(_settings.BaseCurrency, false);
             Money theBiggestBill = changeNominals.FirstOrDefault(x => x.Value <= change.Value).Key;
 
             if (theBiggestBill != null)
             {
-                OnSomeChangeIssued?.Invoke(this, CashIssueEventArgs.BillIncome(theBiggestBill, _currencyConverter.Convert(theBiggestBill, _settings.BaseCurrency)));
-                return theBiggestBill;
+                Money nativeChange = _currencyConverter.Convert(theBiggestBill, _settings.BaseCurrency);
+                OnSomeChangeIssued?.Invoke(this, CashIssueEventArgs.BillIncome(MoneyNaturalized.Create(nativeChange, theBiggestBill)));
+                return (theBiggestBill, nativeChange);
             }
 
-            return null;
+            return (null, null);
         }
 
         public void Start()
@@ -73,7 +76,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             if (theBiggestBill == null)
                 theBiggestBill = receiveNominals.Last().Key;
 
-            OnMoneyReceived?.Invoke(this, CashIncomeEventArgs.BillIncome(theBiggestBill, _currencyConverter.Convert(theBiggestBill, amount.Currency)));
+            OnMoneyReceived?.Invoke(this, CashIncomeEventArgs.BillIncome(MoneyNaturalized.Create(_currencyConverter.Convert(theBiggestBill, amount.Currency), theBiggestBill)));
 
             return theBiggestBill;
         }

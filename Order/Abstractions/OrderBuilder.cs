@@ -1,4 +1,5 @@
-﻿using Filuet.Utils.Common.Business;
+﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         private Money _amount;
         private string _orderNumber;
         private string _customer;
+        private GoodsObtainingMethod _method;
+
+        public OrderBuilder WithObtainingMethod(GoodsObtainingMethod method)
+        {
+            _method = method;
+            return this;
+        }
 
         public OrderBuilder WithHeader(string orderNumber, string customer)
         {
@@ -83,8 +91,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(_customer) || _customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
-
-            return new Order { Items = _items, Amount = _amount, Customer = _customer, Number = _orderNumber };
+            return new Order { Items = _items, Amount = _amount, Customer = _customer, Number = _orderNumber, Obtaining = _method };
         }
     }
 }

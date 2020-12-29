@@ -2,12 +2,20 @@
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Filuet.ASC.OnBoard.Kernel.Core
 {
     public class OrderOpenEventArgs : OrderEventArgs { }
 
-    public class OrderCloseEventArgs : OrderEventArgs { } // TODO: would be better to put inside an Order state, payment income, dispensing log
+    public class OrderCloseEventArgs : OrderEventArgs
+    {
+        [JsonIgnore]
+        new public Order Order { get; set; }
+
+        public override string ToString()
+            => JsonSerializer.Serialize(new { Order = Order?.Number }, typeof(object), JsonSerializationOptions.EventPrettyOptions);
+    } 
 
     public abstract class OrderEventArgs : EventArgs
     {

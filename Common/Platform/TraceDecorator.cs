@@ -26,6 +26,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
             Stopwatch s = null;
             bool isSubscription = false;
             bool isUnsubscription = false;
+            bool isProperty = false;
 
             Func<object[], string> serializeArgs = (a) =>
             {
@@ -34,13 +35,16 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 
                 for (int i = 0; i < convertedArgs.Length; i++)
                 {
-                    string argType = convertedArgs[i].GetType().Name;
+                    if (convertedArgs[i] != null)
+                    {
+                        string argType = convertedArgs[i].GetType().Name;
 
-                    if (argType.Contains("Expression")
-                        || argType.Contains("Action")
-                        || argType.Contains("Func")
-                        || argType.Contains("EventHandler"))
-                        convertedArgs[i] = convertedArgs[i].ToString();                    
+                        if (argType.Contains("Expression")
+                            || argType.Contains("Action")
+                            || argType.Contains("Func")
+                            || argType.Contains("EventHandler"))
+                            convertedArgs[i] = convertedArgs[i].ToString();
+                    }
                 }
 
                 var settings = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
@@ -60,10 +64,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 
                 isSubscription = targetMethod.Name.StartsWith("add_");
                 isUnsubscription = targetMethod.Name.StartsWith("remove_");
+                isProperty = targetMethod.Name.StartsWith("get_");
 
-                OnEvent?.Invoke(_decorated, EventItem.Info($"{(isSubscription || isUnsubscription ? "Event " + (isUnsubscription ? "un" : string.Empty) + "subscriprion has occured:" : "Invoke")} " +
-                    $"{(isSubscription || isUnsubscription ? targetMethod.Name.Replace("add_", "").Replace("remove_", "") : targetMethod.Name)}" +
-                    $"{(isSubscription || isUnsubscription ? string.Empty : "(" + serializeArgs(args) + ")")}"));
+                if (!isProperty) // Do not track properties
+                    OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber)? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" +
+                        $"{(isSubscription || isUnsubscription ? "Event " + (isUnsubscription ? "un" : string.Empty) + "subscriprion has occured:" : "Invoke")} " +
+                        $"{(isSubscription || isUnsubscription ? targetMethod.Name.Replace("add_", "").Replace("remove_", "") : targetMethod.Name)}" +
+                        $"{(isSubscription || isUnsubscription ? string.Empty : "(" + serializeArgs(args) + ")")}"));
 
                 result = targetMethod.Invoke(_decorated, args);
 
@@ -80,14 +87,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
             }
             finally
             {
-                if ((isSubscription || isUnsubscription) && !success)
-                    OnEvent?.Invoke(_decorated, EventItem.Error($"Subscription failed {targetMethod.Name}({serializeArgs(args)})"));
-
-                if (!isSubscription && !isUnsubscription)
+                if (!isProperty)
                 {
-                    // string message = $"Finished {targetMethod.Name}({serializeArgs(args)}) in {s.Elapsed}";
-                    string message = $"Finished {targetMethod.Name}(...) in {s.Elapsed}";
-                    OnEvent?.Invoke(_decorated, success ? EventItem.Info(message) : EventItem.Error(message));
+                    if ((isSubscription || isUnsubscription) && !success)
+                        OnEvent?.Invoke(_decorated, EventItem.Error($"Subscription failed {targetMethod.Name}({serializeArgs(args)})"));
+
+                    if (!isSubscription && !isUnsubscription)
+                    {
+                        // string message = $"Finished {targetMethod.Name}({serializeArgs(args)}) in {s.Elapsed}";
+                        string message = $"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber) ? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" + $"Finished {targetMethod.Name}(...) in {Math.Round(s.Elapsed.TotalSeconds, 3)}s";
+                        OnEvent?.Invoke(_decorated, success ? EventItem.Info(message) : EventItem.Error(message));
+                    }
                 }
             }
         }
@@ -123,7 +133,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
         }
 
         private void EventTrace(object sender, EventArgs e)
-            => OnEvent?.Invoke(_decorated, EventItem.Info($"A new event has been raised: {Environment.NewLine}=== {e.GetType().Name} ==={Environment.NewLine}{e}{Environment.NewLine}======="));
+            => OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber) ? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" + 
+                $"An event occured:{Environment.NewLine}\t>>> {(e.GetType().Name.EndsWith("EventArgs") ? (e.GetType().Name.Substring(0, e.GetType().Name.Length - 9)) : e.GetType().Name)} {e}"));
 
         public event EventHandler<EventItem> OnEvent;
     }

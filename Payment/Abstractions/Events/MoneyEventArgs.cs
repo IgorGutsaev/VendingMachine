@@ -8,5 +8,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
     public abstract class MoneyEventArgs : EventArgs
     {
         public Money Value { get; set; }
+
+        public override string ToString() => Value.ToString();
     }
 }

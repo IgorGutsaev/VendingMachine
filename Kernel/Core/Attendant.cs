@@ -1,5 +1,7 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
 using Filuet.ASC.OnBoard.Kernel.Core.Events;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Common.Business;
@@ -16,14 +18,17 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
             _paymentService.OnTotalAmountCollected += (sender, e) =>
             { 
-                if (e.ChangeToIssue > 0m) // And the cash payment took place probably
+                if (e.ChangeToIssue > 0m) // && cash payment only (probably)
                     GiveChange(e.ChangeToIssue);
                 else PrintReceipt();
             };
 
-            _paymentService.OnTotalChangeBeenGiven += (sender, e) =>
+            _paymentService.OnTotalChangeHasBeenGiven += (sender, e) =>
             {
-                PrintReceipt();
+                if (Order.Obtaining == GoodsObtainingMethod.Warehouse)
+                    PrintReceipt();
+                else if (Order.Obtaining == GoodsObtainingMethod.Dispensing)
+                    Dispense();
             };
         }
 
@@ -31,6 +36,8 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         {
             ChangeState(AttendantState.Busy);
             Order = setupOrder?.CreateTargetAndInvoke().Build();
+
+            TraceState.SetOrderNumber(Order.Number);
         }
 
         public void PrintReceipt()
@@ -56,6 +63,7 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         {
             OnOrderCompleted?.Invoke(this, new OrderCloseEventArgs { Order = _order });
             _order = null;
+            TraceState.FlushOrderNumber();
             ChangeState(AttendantState.Idle);
         }
 
@@ -77,6 +85,13 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             }
         }
 
+        public void Dispense()
+        {
+            Console.WriteLine("===================");
+            Console.WriteLine("==  Dispensing  ==");
+            Console.WriteLine("===================");
+        }
+
         public Order Order
         {
             get => _order;
@@ -88,9 +103,12 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             }
         }
 
-        public event EventHandler<OrderEventArgs> OnOrderOpened;
+        public event EventHandler<OrderOpenEventArgs> OnOrderOpened;
+
         public event EventHandler<IncomePaymentEventArgs> OnIncomePayment;
-        public event EventHandler<OrderEventArgs> OnOrderCompleted;
+
+        public event EventHandler<OrderCloseEventArgs> OnOrderCompleted;
+
         public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
 
         private readonly IPaymentProvider _paymentService;

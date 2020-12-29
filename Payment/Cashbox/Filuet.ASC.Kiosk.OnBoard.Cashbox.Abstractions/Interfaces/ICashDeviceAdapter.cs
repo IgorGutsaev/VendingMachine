@@ -16,7 +16,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces
         /// <remarks>We ought to know amount to be received lest collect more than expected</remarks>
         void ReduceOrSetDutyTo(Money money);
 
-        Money GiveChange(Money change);
+        (Money change, Money nativeChange) GiveChange(Money change);
 
         void Test();
 

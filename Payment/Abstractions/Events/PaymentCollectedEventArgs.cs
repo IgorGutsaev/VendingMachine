@@ -21,5 +21,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
 
             return new PaymentCollectedEventArgs { Credit = credit, ChangeToIssue = change };
         }
+
+        public override string ToString() => $"Credit: {Credit}; ChangeToIssue: {ChangeToIssue}";
     }
 }

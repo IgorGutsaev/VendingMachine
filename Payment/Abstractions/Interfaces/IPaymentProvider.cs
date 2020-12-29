@@ -18,7 +18,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// <summary>
         /// A remaining amount of money to collect
         /// </summary>
-        Money Duty { get; } // = |Amount - Credit|
+        Money Duty { get; }
 
         /// <summary>
         /// A change to issue
@@ -29,6 +29,20 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// Actually issued change
         /// </summary>
         Money ChangeIssued { get; }
+
+        /// <summary>
+        /// Collect summ
+        /// </summary>
+        /// <param name="money">Due</param>
+        /// <param name="setupAction">To pass some payment payload- timeout, installments etc</param>
+        /// <returns></returns>
+        bool Collect(Money money, Action<IPaymentProvider> setupAction);
+
+        void SomeMoneyIncome(MoneyNaturalized money);
+
+        void GiveChange(Money change);
+
+        void SomeChangeExtracted(MoneyNaturalized someChangeIssued);
 
         event EventHandler<TotalAmountSpecifiedEventArgs> OnTotalAmountSpecified;
 
@@ -45,20 +59,11 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// <summary>
         /// Called when the the change has completely been given
         /// </summary>
-        event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeBeenGiven;
+        event EventHandler<SomeChangeIssuedEventArgs> OnSomeChangeHasBeenGiven;
 
         /// <summary>
-        /// Collect summ
+        /// Called when the the change has completely been given
         /// </summary>
-        /// <param name="money">Due</param>
-        /// <param name="setupAction">To pass some payment payload- timeout, installments etc</param>
-        /// <returns></returns>
-        bool Collect(Money money, Action<IPaymentProvider> setupAction);
-
-        void WhenSomeMoneyIncome(Money money);
-
-        void GiveChange(Money change);
-
-        void WhenSomeChangeExtracted(Money changeIssued);
+        event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
     }
 }

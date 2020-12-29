@@ -30,10 +30,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
                 {
                     while (changeDebt > 0)
                     {
-                        Money nextChange = device.GiveChange(changeDebt);
-                        if (nextChange == null)
+                        (Money change, Money nativeChange) nextChange = device.GiveChange(changeDebt);
+                        if (nextChange.nativeChange == null)
                             break;
-                        else changeDebt = changeDebt - nextChange; // Decrease change debt
+                        else changeDebt = changeDebt - nextChange.nativeChange; // Decrease change debt
                     }
                 }
                 finally

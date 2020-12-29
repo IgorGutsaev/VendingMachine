@@ -44,5 +44,8 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
 
             return new TotalChangeIssuedEventArgs { ChangeAmount = changeAmount, ChangeIssued = changeIssued, ChangeDebt = changeDebt };
         }
+
+        public override string ToString() => $"Change has been issued: {ChangeIssued} out of {ChangeAmount}" +
+            $"{(ChangeDebt.Value > 0m ? $"Change debit {ChangeDebt} (fetch your change from the staff)" : string.Empty)}";
     }
 }

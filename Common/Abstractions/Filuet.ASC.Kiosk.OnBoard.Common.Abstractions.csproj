@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.229" />
+    <Compile Remove="Communication\**" />
+    <EmbeddedResource Remove="Communication\**" />
+    <None Remove="Communication\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Communication\" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.231" />
   </ItemGroup>
 
 </Project>

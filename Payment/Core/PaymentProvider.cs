@@ -1,8 +1,6 @@
 ﻿using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Common.Business;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.OnBoard.Payment.Core
 {
@@ -10,20 +8,54 @@ namespace Filuet.ASC.OnBoard.Payment.Core
     {
         public PaymentProvider() { }
 
+        /// <summary>
+        /// Total order price
+        /// </summary>
         public Money Amount { get; private set; }
 
-        public Money Credit { get; private set; }
+        /// <summary>
+        /// Credited money (100% in case of electronic payment. But it could change dynamically in case of cash payment)
+        /// </summary>
+        public Money Credit
+        {
+            get => _credit;
+            set {
+                _credit = value;
 
-        public Money Duty { get; private set; }
+                if (_credit >= Amount)
+                {
+                    Change = _credit > Amount ? _credit - Amount : Money.Create(0m, Amount.Currency);
+                    OnTotalAmountCollected?.Invoke(this, PaymentCollectedEventArgs.Create(_credit, Change));
+                }
+            }
+        }
 
+        /// <summary>
+        /// Remaining duty
+        /// </summary>
+        public Money Duty => Amount - Credit + ChangeIssued;
+
+        /// <summary>
+        /// A change to issue
+        /// </summary>
         public Money Change { get; private set; }
 
-        public Money ChangeIssued { get; private set; }
+        /// <summary>
+        /// Actually issued change
+        /// </summary>
+        public Money ChangeIssued {
+            get => _changeIssued;
+            set {
+                _changeIssued = value;
+
+                if ((_changeIssued - Change).Abs < 0.01m || _changeIssued >= Change)
+                    OnTotalChangeHasBeenGiven?.Invoke(this, TotalChangeIssuedEventArgs.Create(Change, _changeIssued, Money.Create(0m, Change.Currency)));
+            }
+        }
 
         public bool Collect(Money money, Action<IPaymentProvider> setupAction)
         {
             Amount = Money.From(money);
-            Duty = Money.From(money);
             Credit = Money.Create(0m, money.Currency);
             Change = Money.Create(0m, money.Currency);
 
@@ -31,18 +63,11 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             return true;
         }
 
-        public void WhenSomeMoneyIncome(Money money)
-        {
-            Credit += money;
-            if (Credit >= Amount)
-            {
-                Duty = Money.Create(0m, Amount.Currency);
-                Change = Credit > Amount ? Credit - Amount : Money.Create(0m, Amount.Currency);
-
-                OnTotalAmountCollected?.Invoke(this, PaymentCollectedEventArgs.Create(Credit, Change));
-            }
-            else Duty -= money;
-        }
+        /// <summary>
+        /// Called on any customer's credit (cash insert or card trassaction etc)  
+        /// </summary>
+        /// <param name="money"></param>
+        public void SomeMoneyIncome(MoneyNaturalized money) => Credit += money.Native;
 
         public void GiveChange(Money change)
         {
@@ -50,13 +75,16 @@ namespace Filuet.ASC.OnBoard.Payment.Core
                 OnGiveChangeSpecified?.Invoke(this, GiveChangeEventArgs.Create(change));
         }
 
-        public void WhenSomeChangeExtracted(Money changeIssued)
+        /// <summary>
+        /// Called when any part of the change has been given (a bill or a coin)
+        /// </summary>
+        /// <param name="someChangeIssued"></param>
+        public void SomeChangeExtracted(MoneyNaturalized someChangeIssued)
         {
-            ChangeIssued += changeIssued;
-
-            if ((ChangeIssued - Change).Abs < 0.01m || ChangeIssued >= Change)
-                OnTotalChangeBeenGiven?.Invoke(this, TotalChangeIssuedEventArgs.Create(Change, ChangeIssued, Money.Create(0m, Change.Currency)));
+            OnSomeChangeHasBeenGiven?.Invoke(this, SomeChangeIssuedEventArgs.Create(someChangeIssued));
+            ChangeIssued += someChangeIssued.Native;
         }
+
 
         /// <summary>
         /// When the provider finds out how much money needs to be collected
@@ -76,6 +104,12 @@ namespace Filuet.ASC.OnBoard.Payment.Core
         /// <summary>
         /// Called when the the change has been completely given
         /// </summary>
-        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeBeenGiven;
+        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
+
+        public event EventHandler<SomeChangeIssuedEventArgs> OnSomeChangeHasBeenGiven;
+
+        private Money _credit;
+
+        private Money _changeIssued;
     }
 }
