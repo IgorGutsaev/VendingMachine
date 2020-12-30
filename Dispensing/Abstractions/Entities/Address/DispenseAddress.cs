@@ -5,9 +5,9 @@ using System.Text;
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
 {
     /// <summary>
-    /// Issuance address
+    /// Dispensing address
     /// </summary>
-    public abstract class IssueAddress
+    public abstract class DispenseAddress
     {
         public string Address { get; protected set; }
 

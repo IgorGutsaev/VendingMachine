@@ -80,7 +80,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Tests
            // mock.Setup(a => a.CashReceive(money)).Callback(() => mock.Object.OnReceive );
             _cashPaymentService.CashDevices = new ICashDeviceAdapter[] { mock.Object };
             _cashPaymentService.OnReceived += (sender, e) => { 
-                income = e.Money;
+                income = e.Money.Native;
             };
 
             // Perform

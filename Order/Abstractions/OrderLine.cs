@@ -5,7 +5,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 {
     public class OrderLine : OrderItem
     {
-        public uint Quantity { get; private set; }
+        /// <summary>
+        /// Unit cost
+        /// </summary>
+        public Money Amount { get; protected set; }
 
         public Money TotalAmount { get; protected set; }
 
@@ -21,15 +24,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         /// <returns></returns>
         public static OrderLine Create(string productUid, uint quantity, Money amount, Money totalAmount)
         {
-            OrderItem item = OrderItem.Create(productUid, amount);
+            OrderItem item = OrderItem.Create(productUid, quantity);
 
-            if (quantity == 0)
-                throw new ArgumentException("Quantity must be positive");
+            if (amount == null || amount.Value < 0m)
+                throw new ArgumentException("Amount is mandatory");
 
             if (totalAmount == null || totalAmount.Value < 0m)
                 throw new ArgumentException("Total amount is mandatory");
 
-            return new OrderLine { ProductUID = item.ProductUID, Quantity = quantity, Amount = item.Amount, TotalAmount = item.Amount };
+            return new OrderLine { ProductUID = item.ProductUID, Quantity = item.Quantity, Amount = amount, TotalAmount = totalAmount };
         }
 
         /// <summary>
@@ -40,9 +43,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         /// <returns></returns>
         new public static OrderLine Create(string productUid, Money amount)
         {
-            OrderItem item = OrderItem.Create(productUid, amount);
+            OrderItem item = OrderItem.Create(productUid, 1);
 
-            return new OrderLine { ProductUID = item.ProductUID, Quantity = 1, Amount = item.Amount, TotalAmount = item.Amount };
+            return new OrderLine { ProductUID = item.ProductUID, Quantity = item.Quantity, Amount = amount, TotalAmount = amount };
         }
 
         public override string ToString() => $"{base.ToString()} x{Quantity}";

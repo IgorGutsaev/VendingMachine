@@ -18,4 +18,8 @@
     <ProjectReference Include="..\..\..\..\Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Control\" />
+  </ItemGroup>
+
 </Project>

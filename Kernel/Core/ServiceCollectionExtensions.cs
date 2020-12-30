@@ -1,5 +1,6 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Abstractions.Interfaces;
@@ -17,7 +18,7 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             => serviceCollection
             .AddSingleton<ICurrencyConverter, MockCurrencyConverter>()
             .AddSingleton(sp =>
-                    TraceDecorator<IAttendant>.Create(new Attendant(sp.GetRequiredService<IPaymentProvider>())))
+                    TraceDecorator<IAttendant>.Create(new Attendant(sp.GetRequiredService<IPaymentProvider>(), sp.GetRequiredService<ICompositeDispenser>())))
             .AddSingleton(sp => new OrderingMediator(sp.GetRequiredService<IAttendant>(), sp.GetRequiredService<IStorageService>()));
     }
 }

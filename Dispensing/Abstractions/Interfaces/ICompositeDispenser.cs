@@ -1,5 +1,6 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.Hardware;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
+using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using System;
 using System.Collections.Generic;
 
@@ -17,10 +18,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
 
         void Test();
 
-        //IEnumerable<CompositIssueAddress> A
+        void Dispense(IEnumerable<OrderItem> items);
 
-        void Dispense(CompositIssueAddress address);
-
-        void CheckChannel(CompositIssueAddress address);
+        void CheckChannel(CompositDispenseAddress address);
     }
 }

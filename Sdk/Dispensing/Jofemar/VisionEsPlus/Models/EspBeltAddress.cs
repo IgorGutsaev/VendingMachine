@@ -12,7 +12,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus.Models
 
         public int Belt { get; private set; }
 
-        public static implicit operator EspBeltAddress(IssueAddress address)
+        public static implicit operator EspBeltAddress(DispenseAddress address)
             => JsonConvert.DeserializeObject<EspBeltAddress>(address.Address);
     }
 }

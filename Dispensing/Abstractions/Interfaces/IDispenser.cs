@@ -17,14 +17,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions
 
         void Test();
 
-        void Dispense(IssueAddress address);
+        bool Dispense(DispenseAddress address, uint quantity);
 
-        bool IsAddressAvailable(IssueAddress address);
+        bool IsAddressAvailable(DispenseAddress address);
 
         /// <summary>
         /// Check addresses availability
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IssueAddress> AreAddressesAvailable(IEnumerable<IssueAddress> addresses);
+        IEnumerable<DispenseAddress> AreAddressesAvailable(IEnumerable<DispenseAddress> addresses);
     }
 }

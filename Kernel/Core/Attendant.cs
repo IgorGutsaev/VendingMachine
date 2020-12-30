@@ -1,5 +1,7 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
 using Filuet.ASC.OnBoard.Kernel.Core.Events;
@@ -12,9 +14,10 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 {
     public class Attendant : IAttendant
     {
-        public Attendant(IPaymentProvider paymentService)
+        public Attendant(IPaymentProvider paymentService, ICompositeDispenser dispenser)
         {
             _paymentService = paymentService;
+            _dispenser = dispenser;
 
             _paymentService.OnTotalAmountCollected += (sender, e) =>
             { 
@@ -38,6 +41,12 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             Order = setupOrder?.CreateTargetAndInvoke().Build();
 
             TraceState.SetOrderNumber(Order.Number);
+
+            if (Order.Obtaining == GoodsObtainingMethod.Dispensing && _dispenser == null)
+            {
+                CompleteOrder();
+                throw new Exception("Unable to find a dispenser");
+            }
         }
 
         public void PrintReceipt()
@@ -85,11 +94,9 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             }
         }
 
-        public void Dispense()
+        private void Dispense()
         {
-            Console.WriteLine("===================");
-            Console.WriteLine("==  Dispensing  ==");
-            Console.WriteLine("===================");
+            _dispenser.Dispense(Order.Items);
         }
 
         public Order Order
@@ -112,5 +119,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
 
         private readonly IPaymentProvider _paymentService;
+        private readonly ICompositeDispenser _dispenser;
     }
 }

@@ -85,10 +85,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
             }
         }
 
-        internal void DispenseProduct(EspBeltAddress address)
+        internal bool DispenseProduct(EspBeltAddress address, uint quantity)
         {
-            byte[] response = _channel.SendCommand(VendCommand(address.Tray, address.Belt));
-            VisionEsPlusResponseCodes code = ParseResponse(response);
+            for (int i = 0; i < quantity; i++)
+            {
+                byte[] response = _channel.SendCommand(VendCommand(address.Tray, address.Belt));
+                VisionEsPlusResponseCodes code = ParseResponse(response);
+            }
+
+            return true;
         }
 
         internal bool IsBeltAvailable(EspBeltAddress address)

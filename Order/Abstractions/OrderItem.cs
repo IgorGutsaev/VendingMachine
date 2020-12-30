@@ -10,10 +10,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         /// </summary>
         public string ProductUID { get; protected set; }
 
-        /// <summary>
-        /// Unit cost
-        /// </summary>
-        public Money Amount { get; protected set; }
+        public uint Quantity { get; protected set; }
 
         protected OrderItem() { }
 
@@ -23,17 +20,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         /// <param name="productUid">Unique identifier of product. E.g. SKU</param>
         /// <param name="amount">Unit cost</param>
         /// <returns></returns>
-        public static OrderItem Create(string productUid, Money amount)
+        public static OrderItem Create(string productUid, uint quantity)
         {
             if (string.IsNullOrWhiteSpace(productUid))
                 throw new ArgumentException("Product must be specified");
 
-            if (amount == null || amount.Value < 0m)
-                throw new ArgumentException("Amount is mandatory");
+            if (quantity == 0)
+                throw new ArgumentException("Quantity must be positive");
 
-            return new OrderItem { ProductUID = productUid, Amount = amount };
+            return new OrderItem { ProductUID = productUid, Quantity = quantity};
         }
 
-        public override string ToString() => $"{ProductUID} [{Amount}]";
+        public override string ToString() => $"{ProductUID} [{Quantity}]";
     }
 }

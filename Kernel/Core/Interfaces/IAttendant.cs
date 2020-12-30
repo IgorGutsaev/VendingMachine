@@ -11,8 +11,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
     {
         void StartOrder(Action<OrderBuilder> setupOrder);
 
-        void Dispense();
-
         void PrintReceipt();
 
         void CompleteOrder(/* STATUS    void CancelOrder(); //abnormal finalizing */);

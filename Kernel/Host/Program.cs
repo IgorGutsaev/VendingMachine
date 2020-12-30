@@ -72,19 +72,19 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     var t = s2.Get(x => true);
                 }
 
-                dispenser.OnDispensing += S1_OnDispensing;
+                //dispenser.OnDispensing += S1_OnDispensing;
 
-                dispenser.Dispense(CompositIssueAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+                //dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
 
-                dispenser.OnDispensing -= S1_OnDispensing;
+                //dispenser.OnDispensing -= S1_OnDispensing;
             });
 
             host.Run();
         }
 
-        private static void S1_OnDispensing(object sender, EventArgs e)
-        {
-        }
+        //private static void S1_OnDispensing(object sender, EventArgs e)
+        //{
+        //}
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)

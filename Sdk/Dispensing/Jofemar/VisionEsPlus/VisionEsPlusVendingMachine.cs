@@ -29,18 +29,19 @@ namespace Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus
             onTest?.Invoke(this, new DeviceTestEventArgs { Severity = testResult.severity, Message = testResult.message });
         }
 
-        public void Dispense(IssueAddress address)   
+        public bool Dispense(DispenseAddress address, uint quantity)   
         {
             var t = _machineAdapter.Status(false);
-
-            _machineAdapter.DispenseProduct(address);
+            bool result = _machineAdapter.DispenseProduct(address, quantity);
             var t1 = _machineAdapter.Status(false);
+
+            return result;
         }
 
-        public bool IsAddressAvailable(IssueAddress address)
+        public bool IsAddressAvailable(DispenseAddress address)
             => _machineAdapter.IsBeltAvailable(address);
 
-        public IEnumerable<IssueAddress> AreAddressesAvailable(IEnumerable<IssueAddress> addresses)
+        public IEnumerable<DispenseAddress> AreAddressesAvailable(IEnumerable<DispenseAddress> addresses)
         {
             foreach (var a in addresses)
                 if (IsAddressAvailable(a))

@@ -8,14 +8,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
     /// <summary>
     /// Issuance address
     /// </summary>
-    public class CompositIssueAddress : IssueAddress
+    public class CompositDispenseAddress : DispenseAddress
     {
         public string VendingMachineID { get; private set; }
 
-        public static implicit operator String(CompositIssueAddress address)
+        public static implicit operator String(CompositDispenseAddress address)
             => JsonConvert.SerializeObject(address);
 
-        public static CompositIssueAddress Create(string vendingMachineId, string address)
+        public static CompositDispenseAddress Create(string vendingMachineId, string address)
         {
             if (string.IsNullOrWhiteSpace(vendingMachineId))
                 throw new ArgumentException("Vending machine identifier is mandatory");
@@ -23,7 +23,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities
             if (string.IsNullOrWhiteSpace(address))
                 throw new ArgumentException("Address is mandatory");
 
-            return new CompositIssueAddress { VendingMachineID = vendingMachineId.Trim(), Address = address.Trim() };
+            return new CompositDispenseAddress { VendingMachineID = vendingMachineId.Trim(), Address = address.Trim() };
         }
 
         public override string ToString() => JsonConvert.SerializeObject(this);
