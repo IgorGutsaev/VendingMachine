@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.231" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.236" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@
         public string Sku;
         public string SkuName;
         public int Qty;
-        public double Price;
+        public decimal Price;
         public bool Nds21Percent;
     }
 }

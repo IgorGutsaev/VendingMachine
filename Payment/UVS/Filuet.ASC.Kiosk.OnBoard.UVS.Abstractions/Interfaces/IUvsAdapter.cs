@@ -1,24 +1,36 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Enums;
+using Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Events;
+using System;
 using System.Collections.Generic;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Interfaces
 {
     public interface IUvsAdapter
     {
-        UvsDepMode UvsDepMode { get; set; }
+        event EventHandler<UvsIncomeEventArgs> OnUvsPayment;
+        event EventHandler<UvsOrderCancelEventArgs> OnUvsOrderCancelled;
 
-        ///// <summary>
-        ///// RData/SellDiscount/Id
-        ///// </summary>
-        ///// <param name="paymentId"></param>
-        //public delegate void UvsPaymentDataDelegate(string paymentId, string paymentMethod, decimal paymentAmount);
+        /// <summary>
+        /// Specify working mode: operator or POS terminal
+        /// </summary>
+        /// <param name="mode"></param>
+        void SetDepMode(UvsDepMode mode);
 
-        //event UvsPaymentDataDelegate UvsPaymentData;
+        /// <summary>
+        /// Send order details to UVS
+        /// </summary>
+        /// <param name="orderNumber"></param>
+        /// <param name="dsId"></param>
+        /// <param name="dsName"></param>
+        /// <param name="totaldue"></param>
+        /// <param name="orderLines"></param>
+        /// <returns></returns>
+        bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IList<OrderLine> orderLines);
 
-        bool AddOrderToPlu(string orderNumber, string dsId, string dsName, double totaldue, IList<OrderLine> orderLines);
-        IGenericResult CancelOrder(string orderNumber);
-        IGenericResult GetOrderPaymentResult(string orderNumber);
+        bool CancelOrder(string orderNumber);
+
+        bool ConfirmPayment(string orderNumber);
+
         bool IsOrderCanceled(string orderNumber);
-        void Unsubscribe();
     }
 }

@@ -53,7 +53,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
 
                 IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
-                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
+                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>(); // пользователь выбрал оплату кешем (не payment provider так решил, а пользователь)
 
                 paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
                 cashPaymentService.CashDevices.First().Start();

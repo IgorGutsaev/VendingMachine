@@ -12,9 +12,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
     public class UvsTest
     {
         [Theory]
-        [InlineData("1234567891", 666.13,new double[]{13,653.13,5})]
-        [InlineData("1234567891", 666.13,new double[]{13,653.13})]
-        public void Test_AddOrder(string orderNumber,double totalDue,double[] priceDue)
+        [InlineData("1234567891", 666.13, new double[] { 13, 653.13, 5 })]
+        [InlineData("1234567891", 666.13, new double[] { 13, 653.13 })]
+        public void Test_AddOrder(string orderNumber, decimal totalDue, double[] priceDue)
         {
             var uvsAdapter = new UvsAdapter();
 
@@ -25,7 +25,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
                 orderLines.Add(new OrderLine()
                 {
                     Nds21Percent = true,
-                    Price = price,
+                    Price = (decimal)price,
                     Qty = 1,
                     Sku = "test03",
                     SkuId = 666,
@@ -33,9 +33,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
                 });
             }
 
-            if (totalDue - priceDue.Sum()>0.1)
+            if (totalDue - (decimal)priceDue.Sum() > 0.1m)
             {
-                var result = uvsAdapter.AddOrderToPlu(orderNumber, "test01", "test02", totalDue, orderLines);
+                var result = uvsAdapter.CreateOrder(orderNumber, "test01", "test02", totalDue, orderLines);
 
                 Assert.True(result);
             }
@@ -43,7 +43,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
             {
                 try
                 {
-                    var result = uvsAdapter.AddOrderToPlu(orderNumber, "test01", "test02", totalDue, orderLines);
+                    var result = uvsAdapter.CreateOrder(orderNumber, "test01", "test02", totalDue, orderLines);
                 }
                 catch (Exception e)
                 {
@@ -55,9 +55,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
         }
 
         [Theory]
-        [InlineData(true,"123456789")]
-        [InlineData(false,"123456789")]
-        public void Test_CancelOrder(bool isCancel,string orderNumber)
+        [InlineData(true, "123456789")]
+        [InlineData(false, "123456789")]
+        public void Test_CancelOrder(bool isCancel, string orderNumber)
         {
             IUvsAdapter uvsAdapter = new UvsAdapter();
 
@@ -68,7 +68,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
 
             if (isCancel)
             {
-                uvsAdapter.CancelOrder(orderNumber);                
+                uvsAdapter.CancelOrder(orderNumber);
             }
 
             var result = uvsAdapter.IsOrderCanceled(orderNumber);
@@ -82,11 +82,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Tests
         {
             IUvsAdapter uvsAdapter = new UvsAdapter();
 
-            var result = uvsAdapter.GetOrderPaymentResult(orderNumber);
+            var result = uvsAdapter.ConfirmPayment(orderNumber);
 
-            Assert.Equal(result.GenericResultCode.ToString(), Abstractions.Enums.GenericResultCodes.FAILURE.ToString());
-
-            Assert.Equal(result.Code, 1);
+            Assert.Equal(result, false);
         }
     }
 }
