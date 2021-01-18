@@ -1,17 +1,18 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.Hardware;
-using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
-using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
-using Filuet.Utils.Abstractions.Events;
+﻿using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
 {
     public class CompositeDispenserBuilder
     {
+        public CompositeDispenserBuilder AddStrategy(IDispensingStrategy strategy)
+        {
+            _strategy = strategy;
+            return this;
+        }
+
         public CompositeDispenserBuilder AddDispensers(Func<IEnumerable<IDispenser>> getDispensers)
         {
             _dispensers = getDispensers();
@@ -20,9 +21,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
 
         public ICompositeDispenser Build()
         {
-            return new CompositeDispenser(_dispensers);
+            return new CompositeDispenser(_dispensers, _strategy);
         }
 
         private IEnumerable<IDispenser> _dispensers;
+        private IDispensingStrategy _strategy;
     }
 }

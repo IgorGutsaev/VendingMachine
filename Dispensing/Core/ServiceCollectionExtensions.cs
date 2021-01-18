@@ -3,6 +3,7 @@ using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders;
+using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Strategy;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -23,7 +24,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Dispensing.Core
         }
 
         public static IServiceCollection AddCompositeDispenser(this IServiceCollection serviceCollection, Func<IServiceProvider, ICompositeDispenser> dispenserSetup)
-            => serviceCollection.AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)));
+            => serviceCollection
+            .AddSingleton<IDispensingStrategy, MockDispensingStrategy>()
+            .AddSingleton<ICompositeDispenser>((sp) => TraceDecorator<ICompositeDispenser>.Create(dispenserSetup(sp)));
 
         public static IServiceCollection AddLayout(this IServiceCollection serviceCollection, Func<IServiceProvider, ILayout> layoutSetup)
             => serviceCollection.AddSingleton<ILayout>((sp) => TraceDecorator<ILayout>.Create(layoutSetup(sp)));

@@ -40,7 +40,9 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     if (kioskSettings.Dispenser.Mode == DeviceUseCase.Off)
                         return null;
 
-                    return new CompositeDispenserBuilder().AddDispensers(() =>
+                    return new CompositeDispenserBuilder()
+                    .AddStrategy(sp.GetRequiredService<IDispensingStrategy>())
+                    .AddDispensers(() =>
                         kioskSettings.Dispenser.SlaveMachines.Select(x =>
                         {
                             if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
