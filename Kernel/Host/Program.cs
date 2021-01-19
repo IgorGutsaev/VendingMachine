@@ -47,7 +47,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 IAttendant att = host.Services.GetRequiredService<IAttendant>();
 
-                att.StartOrder(b => b.WithHeader("TST123456", "9262147116")
+                att.StartOrder(b => b.WithHeader("TST123456", "9262147116", "IVG")
                     .WithObtainingMethod(GoodsObtainingMethod.Warehouse)
                     .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
                     .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
@@ -56,7 +56,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>(); // пользователь выбрал оплату кешем (не payment provider так решил, а пользователь)
 
                 paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
-                cashPaymentService.CashDevices.First().Start();
+                
 
                 att.CompleteOrder();
 
@@ -101,7 +101,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                         {
                             Dispenser = new DispensingSettings
                             {
-                                Mode = DeviceUseCase.On,
+                                Mode = OptionUseCase.On,
                                 SlaveMachines = new VendingMachine[] {
                                     new VendingMachine { Number = 1, Address = "0x01", Model = "VisionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
                                         IpAddress = "172.16.7.103",
@@ -111,7 +111,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                                         Port = 5000 }
                                 }
                             },
-                            Cashbox = new CashboxSettings { Mode = DeviceUseCase.Emulation }
+                            Cashbox = new CashboxSettings { Mode = OptionUseCase.Emulation },
+                            ECommerceSettings = new EcommerceSettings { Mode = OptionUseCase.Emulation, PaymentProviders = new[] { new UvsEcommerceSettings { } } }
                         })
                         .AddPaymentProvider()
                         .AddAttendant()

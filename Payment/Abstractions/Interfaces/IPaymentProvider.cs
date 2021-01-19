@@ -1,4 +1,5 @@
-﻿using Filuet.Utils.Common.Business;
+﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.Utils.Common.Business;
 using System;
 
 namespace Filuet.ASC.OnBoard.Payment.Abstractions
@@ -33,10 +34,13 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// <summary>
         /// Collect summ
         /// </summary>
-        /// <param name="money">Due</param>
+        /// <param name="paymentSource">How should money be taken</param>
+        /// <param name="order">An order to be payed</param>
         /// <param name="setupAction">To pass some payment payload- timeout, installments etc</param>
         /// <returns></returns>
-        bool Collect(Money money, Action<IPaymentProvider> setupAction);
+        /// <remarks>We have to transfer an order model rather than payment
+        /// because some payment sources require the order payload (like UVS requires order items) </remarks>
+        bool Collect(PaymentSource paymentSource, Order order, Action<IPaymentProvider> setupAction);
 
         void SomeMoneyIncome(MoneyNaturalized money);
 
@@ -65,5 +69,10 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// Called when the the change has completely been given
         /// </summary>
         event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
+
+        /// <summary>
+        /// A command with a new order to be payed
+        /// </summary>
+        event EventHandler<FetchMoneyEventArgs> OnFetchMoneyCommand;
     }
 }

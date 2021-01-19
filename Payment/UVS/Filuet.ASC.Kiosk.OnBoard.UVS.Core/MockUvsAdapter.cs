@@ -25,7 +25,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
 
         public bool ConfirmPayment(string orderNumber) => _orderPayed == orderNumber;
 
-        public bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IList<OrderLine> orderLines)
+        public bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IEnumerable<OrderLine> orderLines)
         {
             _cancelTokenSource = new CancellationTokenSource();
 

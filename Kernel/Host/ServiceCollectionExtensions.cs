@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using Filuet.ASC.OnBoard.Payment.Abstractions.Interfaces;
 using Filuet.Utils.Common.Business;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -37,7 +38,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 {
                     KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
 
-                    if (kioskSettings.Dispenser.Mode == DeviceUseCase.Off)
+                    if (kioskSettings.Dispenser.Mode == OptionUseCase.Off)
                         return null;
 
                     return new CompositeDispenserBuilder()
@@ -56,7 +57,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                                 ICommunicationChannel channel = null;
 
-                                if (kioskSettings.Dispenser.Mode != DeviceUseCase.Off)
+                                if (kioskSettings.Dispenser.Mode != OptionUseCase.Off)
                                 {
                                     switch (x.Protocol)
                                     {
@@ -82,7 +83,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 {
                     KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
 
-                    if (kioskSettings.Dispenser.Mode == DeviceUseCase.Off)
+                    if (kioskSettings.Dispenser.Mode == OptionUseCase.Off)
                         return null;
 
                     ILayoutBuilder layoutBuilder = new LayoutBuilder();
@@ -122,7 +123,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     switch (kioskSettings.Cashbox.Mode)
                     {
-                        case DeviceUseCase.Emulation:
+                        case OptionUseCase.Emulation:
                             cashDevices = new ICashDeviceAdapter[] {
                                 new MockBillAcceptor(sp.GetRequiredService<ICurrencyConverter>(), (s) => {
                                     s.IssueIndex = 1;
@@ -132,10 +133,10 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                                 })
                             };
                             break;
-                        case DeviceUseCase.Off:
+                        case OptionUseCase.Off:
                             cashDevices = null;
                             break;
-                        case DeviceUseCase.On:
+                        case OptionUseCase.On:
                             // ...
                             break;
                     }
@@ -144,6 +145,10 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     return cs;
                 })
+               .AddEcommerce((sp, es) =>
+               {
+                   es.Add();
+               })
                 .AddEventMediation((sp, broker) =>
                 {
                     broker.AppendProducer(sp.GetRequiredService<IPaymentProvider>() as IEventProducer);

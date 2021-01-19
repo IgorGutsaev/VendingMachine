@@ -90,7 +90,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.SD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Common.Abstractions", "Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj", "{5F49EFF6-196D-4653-87C1-1D09F2AFBC6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.OnBoard.Payment.Core", "Payment\Core\Filuet.ASC.OnBoard.Payment.Core.csproj", "{32298A01-FE34-4061-807A-30C35FA7CD21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Payment.Core", "Payment\Core\Filuet.ASC.OnBoard.Payment.Core.csproj", "{32298A01-FE34-4061-807A-30C35FA7CD21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecommerce", "ecommerce", "{50146002-50E3-4CC3-A5F6-26997AADD05F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions", "Payment\ECommerce\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions.csproj", "{642B3009-2D76-453B-AF87-1416C746A01E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service", "Payment\ECommerce\Service\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service.csproj", "{A4AFFFB3-C04E-46A1-9078-42B5E686521B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -210,6 +216,14 @@ Global
 		{32298A01-FE34-4061-807A-30C35FA7CD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32298A01-FE34-4061-807A-30C35FA7CD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32298A01-FE34-4061-807A-30C35FA7CD21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{642B3009-2D76-453B-AF87-1416C746A01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642B3009-2D76-453B-AF87-1416C746A01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642B3009-2D76-453B-AF87-1416C746A01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642B3009-2D76-453B-AF87-1416C746A01E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -248,6 +262,9 @@ Global
 		{B8C392C8-7E4F-49B7-867A-8B21D01A3B78} = {73BBCDAF-D9F6-47C1-BFD8-93444CCFB3B2}
 		{5F49EFF6-196D-4653-87C1-1D09F2AFBC6C} = {47D4898C-D171-4731-A2A2-1DF9F7779454}
 		{32298A01-FE34-4061-807A-30C35FA7CD21} = {9AF1BDF8-3B94-45D2-9DE2-3ADA0F630465}
+		{50146002-50E3-4CC3-A5F6-26997AADD05F} = {9AF1BDF8-3B94-45D2-9DE2-3ADA0F630465}
+		{642B3009-2D76-453B-AF87-1416C746A01E} = {50146002-50E3-4CC3-A5F6-26997AADD05F}
+		{A4AFFFB3-C04E-46A1-9078-42B5E686521B} = {50146002-50E3-4CC3-A5F6-26997AADD05F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A02BEFA1-73D8-435F-8D33-C1AB99ACD5C2}

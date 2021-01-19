@@ -13,6 +13,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         private Money _amount;
         private string _orderNumber;
         private string _customer;
+        private string _customerName;
         private GoodsObtainingMethod _method;
 
         public OrderBuilder WithObtainingMethod(GoodsObtainingMethod method)
@@ -21,7 +22,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             return this;
         }
 
-        public OrderBuilder WithHeader(string orderNumber, string customer)
+        public OrderBuilder WithHeader(string orderNumber, string customer, string customerName)
         {
             if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Trim().Length < 4)
                 throw new ArgumentException("Order number is mandatory");
@@ -29,8 +30,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(customer) || customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
+            if (string.IsNullOrWhiteSpace(customerName) || customerName.Trim().Length < 4)
+                throw new ArgumentException("Customer name is mandatory");
+
             _orderNumber = orderNumber.Trim();
             _customer = customer.Trim();
+            _customerName = customerName.Trim();
 
             return this;
         }
@@ -91,7 +96,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(_customer) || _customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
-            return new Order { Items = _items, Amount = _amount, Customer = _customer, Number = _orderNumber, Obtaining = _method };
+            return new Order { Items = _items, Amount = _amount, Customer = _customer, CustomerName = _customerName, Number = _orderNumber, Obtaining = _method };
         }
     }
 }

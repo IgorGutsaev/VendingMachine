@@ -20,6 +20,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
 
         public string Customer { get; internal set; }
 
+        public string CustomerName { get; internal set; }
+
         public DateTime Timestamp { get => _timestamp; }
 
         [JsonConverter(typeof(GoodsObtainingMethodConverter))]
@@ -31,6 +33,9 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             _timestamp = DateTime.Now;
         }
 
+        /// <summary>
+        /// Order total
+        /// </summary>
         public Money Amount { get; internal set; }
 
         public IEnumerable<OrderLine> Items { get; internal set; }

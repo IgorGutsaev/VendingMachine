@@ -1,4 +1,5 @@
-﻿using Filuet.ASC.OnBoard.Payment.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Common.Business;
 using System;
 
@@ -53,13 +54,14 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             }
         }
 
-        public bool Collect(Money money, Action<IPaymentProvider> setupAction)
+        public bool Collect(PaymentSource paymentSource, Order order, Action<IPaymentProvider> setupAction)
         {
-            Amount = Money.From(money);
-            Credit = Money.Create(0m, money.Currency);
-            Change = Money.Create(0m, money.Currency);
+            Amount = Money.From(order.Amount);
+            Credit = Money.Create(0m, order.Amount.Currency);
+            Change = Money.Create(0m, order.Amount.Currency);
 
-            OnTotalAmountSpecified?.Invoke(this, new TotalAmountSpecifiedEventArgs { Value = money });
+            OnTotalAmountSpecified?.Invoke(this, new TotalAmountSpecifiedEventArgs { Value = order.Amount });
+            OnFetchMoneyCommand?.Invoke(this, new FetchMoneyEventArgs { Order = order, Source = paymentSource });
             return true;
         }
 
@@ -107,6 +109,8 @@ namespace Filuet.ASC.OnBoard.Payment.Core
         public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
 
         public event EventHandler<SomeChangeIssuedEventArgs> OnSomeChangeHasBeenGiven;
+
+        public event EventHandler<FetchMoneyEventArgs> OnFetchMoneyCommand;
 
         private Money _credit;
 

@@ -31,7 +31,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
         /// <param name="dsName">Partner name, get from Oracle</param>
         /// <param name="totaldue">Total order amount</param>
         /// <param name="orderLines">Order product positions information</param>
-        public bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IList<OrderLine> orderLines)
+        public bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IEnumerable<OrderLine> orderLines)
         {
             using (var db = new UvsDataEntities())
             {

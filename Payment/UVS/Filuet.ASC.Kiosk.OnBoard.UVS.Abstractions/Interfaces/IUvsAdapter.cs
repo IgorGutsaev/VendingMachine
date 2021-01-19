@@ -25,7 +25,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.Interfaces
         /// <param name="totaldue"></param>
         /// <param name="orderLines"></param>
         /// <returns></returns>
-        bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IList<OrderLine> orderLines);
+        bool CreateOrder(string orderNumber, string dsId, string dsName, decimal totaldue, IEnumerable<OrderLine> orderLines);
 
         bool CancelOrder(string orderNumber);
 
