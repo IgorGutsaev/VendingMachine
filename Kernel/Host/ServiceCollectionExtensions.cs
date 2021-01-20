@@ -19,13 +19,13 @@ using Filuet.Utils.Communication;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.Builders;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Tests.Entities;
-using System.Collections;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using System.Collections.Generic;
 using Filuet.ASC.OnBoard.Payment.Abstractions.Interfaces;
 using Filuet.Utils.Common.Business;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service;
+using Filuet.ASC.Kiosk.OnBoard.UVS.Core;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -42,41 +42,41 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                         return null;
 
                     return new CompositeDispenserBuilder()
-                    .AddStrategy(sp.GetRequiredService<IDispensingStrategy>())
-                    .AddDispensers(() =>
-                        kioskSettings.Dispenser.SlaveMachines.Select(x =>
-                        {
-                            if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
+                        .AddStrategy(sp.GetRequiredService<IDispensingStrategy>())
+                        .AddDispensers(() =>
+                            kioskSettings.Dispenser.SlaveMachines.Select(x =>
                             {
-                                VisionEsPlusSettings settings = new VisionEsPlusSettings
+                                if (x.Model.Equals("VisionEsPlus", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    PortNumber = (ushort)x.Port,
-                                    Address = x.Address,
-                                    IpAddress = x.IpAddress
-                                };
-
-                                ICommunicationChannel channel = null;
-
-                                if (kioskSettings.Dispenser.Mode != OptionUseCase.Off)
-                                {
-                                    switch (x.Protocol)
+                                    VisionEsPlusSettings settings = new VisionEsPlusSettings
                                     {
-                                        case Utils.Common.Enum.CommunicationProtocol.Serial:
-                                            channel = new SerialPortChannel(settings.PortNumber, settings.BaudRate, settings.Timeout, settings.CommandsSendDelay);
-                                            break;
-                                        case Utils.Common.Enum.CommunicationProtocol.TCP:
-                                            channel = new TcpChannel(settings.IpAddress, settings.PortNumber);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
+                                        PortNumber = (ushort)x.Port,
+                                        Address = x.Address,
+                                        IpAddress = x.IpAddress
+                                    };
 
-                                return new VisionEsPlusVendingMachine(x.Number.ToString(), new VisionEsPlus(channel, settings));
-                            }
-                            else
-                                throw new ArgumentException("Unknown dispenser model");
-                        })
+                                    ICommunicationChannel channel = null;
+
+                                    if (kioskSettings.Dispenser.Mode != OptionUseCase.Off)
+                                    {
+                                        switch (x.Protocol)
+                                        {
+                                            case Utils.Common.Enum.CommunicationProtocol.Serial:
+                                                channel = new SerialPortChannel(settings.PortNumber, settings.BaudRate, settings.Timeout, settings.CommandsSendDelay);
+                                                break;
+                                            case Utils.Common.Enum.CommunicationProtocol.TCP:
+                                                channel = new TcpChannel(settings.IpAddress, settings.PortNumber);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    return new VisionEsPlusVendingMachine(x.Number.ToString(), new VisionEsPlus(channel, settings));
+                                }
+                                else
+                                    throw new ArgumentException("Unknown dispenser model");
+                            })
                     ).Build();
                 })
                 .AddLayout((sp) =>
@@ -131,7 +131,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                                     s.BillsToReceive = new Money[] { Money.Create(100, CurrencyCode.USDollar), Money.Create(500, CurrencyCode.RussianRouble) }; // Stub
                                     s.BillsToGiveChange = new Money[] { Money.Create(50, CurrencyCode.RussianRouble), Money.Create(1, CurrencyCode.USDollar) }; // Stub
                                 })
-                            };
+                           };
                             break;
                         case OptionUseCase.Off:
                             cashDevices = null;
@@ -145,10 +145,22 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                     return cs;
                 })
-               .AddEcommerce((sp, es) =>
-               {
-                   es.Add();
-               })
+                .AddEcommerce((sp, es) =>
+                {
+                    KioskSettings kioskSettings = sp.GetRequiredService<KioskSettings>();
+
+                    foreach (var provider in kioskSettings.ECommerceSettings.PaymentProviders)
+                    {
+                        switch (provider.Source)
+                        {
+                            case PaymentSource.UVS:
+                                es.Add(new UvsEcommerceService());
+                                break;
+                        }
+                    }
+
+                    return es;
+                })
                 .AddEventMediation((sp, broker) =>
                 {
                     broker.AppendProducer(sp.GetRequiredService<IPaymentProvider>() as IEventProducer);
@@ -157,13 +169,12 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     broker.AppendProducer(sp.GetRequiredService<IStorageService>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<IAttendant>() as IEventProducer);
                 })
-                .AddSingleton((sp) =>
-                    new EventConsumer()
-                        .AppendWriter<IPaymentProvider>(new EventWriter<IPaymentProvider>(sp.GetRequiredService<ILogger<IPaymentProvider>>()))
-                        .AppendWriter<ICashPaymentService>(new EventWriter<ICashPaymentService>(sp.GetRequiredService<ILogger<ICashPaymentService>>()))
-                        .AppendWriter<ICompositeDispenser>(new EventWriter<ICompositeDispenser>(sp.GetRequiredService<ILogger<ICompositeDispenser>>()))
-                        .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>()))
-                        .AppendWriter<IAttendant>(new EventWriter<IAttendant>(sp.GetRequiredService<ILogger<IAttendant>>())));
+                .AddSingleton((sp) => new EventConsumer()
+                    .AppendWriter<IPaymentProvider>(new EventWriter<IPaymentProvider>(sp.GetRequiredService<ILogger<IPaymentProvider>>()))
+                    .AppendWriter<ICashPaymentService>(new EventWriter<ICashPaymentService>(sp.GetRequiredService<ILogger<ICashPaymentService>>()))
+                    .AppendWriter<ICompositeDispenser>(new EventWriter<ICompositeDispenser>(sp.GetRequiredService<ILogger<ICompositeDispenser>>()))
+                    .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>()))
+                    .AppendWriter<IAttendant>(new EventWriter<IAttendant>(sp.GetRequiredService<ILogger<IAttendant>>())));
         }
     }
 }

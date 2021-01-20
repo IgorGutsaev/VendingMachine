@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.238" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.238" />
+    <PackageReference Include="Filuet.Utils.Common" Version="1.0.239" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.239" />
   </ItemGroup>
 
   <ItemGroup>

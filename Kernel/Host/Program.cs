@@ -55,7 +55,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
                 ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>(); // пользователь выбрал оплату кешем (не payment provider так решил, а пользователь)
 
-                paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
+                paymentProvider.Collect(PaymentSource.UVS, att.Order, (p) => { });
                 
 
                 att.CompleteOrder();

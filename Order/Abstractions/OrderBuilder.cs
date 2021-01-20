@@ -30,7 +30,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(customer) || customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
-            if (string.IsNullOrWhiteSpace(customerName) || customerName.Trim().Length < 4)
+            if (string.IsNullOrWhiteSpace(customerName) || customerName.Trim().Length < 2)
                 throw new ArgumentException("Customer name is mandatory");
 
             _orderNumber = orderNumber.Trim();

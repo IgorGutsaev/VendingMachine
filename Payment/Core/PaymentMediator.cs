@@ -4,8 +4,6 @@ using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Filuet.ASC.OnBoard.Payment.Core
 {
