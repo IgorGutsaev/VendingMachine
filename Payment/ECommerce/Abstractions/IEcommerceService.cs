@@ -10,6 +10,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions
     {
         IEcommerceService this[PaymentSource source] { get; }
 
+        IEnumerable<IEcommerceService> Services { get; }
+
         void Add(IEcommerceService service);
     }
 

@@ -41,6 +41,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
 
     public class PaymentSettings
     {
+        public string BaseCurrency { get; set; }
         public CashPaymentSettings[] Cash { get; private set; }
         public CashlessPaymentSettings[] Cashless { get; private set; }
     }

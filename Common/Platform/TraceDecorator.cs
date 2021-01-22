@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq.Expressions;
 using System.Text.Encodings.Web;
+using Filuet.Utils.Common.Converters.Json;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
 {
@@ -47,11 +48,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
                     }
                 }
 
-                var settings = new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+                var settings = new JsonSerializerOptions
+                {
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    Converters = { new MoneyNaturalizedConverter() }
+                };
 
                 if (convertedArgs.Length <= 0)
                     return string.Empty;
-                else if (convertedArgs.Length == 1) 
+                else if (convertedArgs.Length == 1)
                     return JsonSerializer.Serialize(convertedArgs[0], typeof(object), settings);
                 else return JsonSerializer.Serialize(convertedArgs, typeof(object[]), settings);
             };
@@ -67,7 +72,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
                 isProperty = targetMethod.Name.StartsWith("get_");
 
                 if (!isProperty) // Do not track properties
-                    OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber)? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" +
+                    OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber) ? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" +
                         $"{(isSubscription || isUnsubscription ? "Event " + (isUnsubscription ? "un" : string.Empty) + "subscriprion has occured:" : "Invoke")} " +
                         $"{(isSubscription || isUnsubscription ? targetMethod.Name.Replace("add_", "").Replace("remove_", "") : targetMethod.Name)}" +
                         $"{(isSubscription || isUnsubscription ? string.Empty : "(" + serializeArgs(args) + ")")}"));
@@ -133,7 +138,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Common.Platform
         }
 
         private void EventTrace(object sender, EventArgs e)
-            => OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber) ? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" + 
+            => OnEvent?.Invoke(_decorated, EventItem.Info($"{(!string.IsNullOrWhiteSpace(TraceState.State.OrderNumber) ? ($"[{TraceState.State.OrderNumber}] ") : string.Empty)}" +
                 $"An event occured:{Environment.NewLine}\t>>> {(e.GetType().Name.EndsWith("EventArgs") ? (e.GetType().Name.Substring(0, e.GetType().Name.Length - 9)) : e.GetType().Name)} {e}"));
 
         public event EventHandler<EventItem> OnEvent;

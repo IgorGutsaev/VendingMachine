@@ -14,6 +14,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             _paymentProvider = paymentProvider;
             _cashService = cashService;
             _ecommerceServices = ecommerceServices;
+
             _paymentProvider.OnFetchMoneyCommand += (sender, e) =>
             {
                 IEcommerceService ecomService = ecommerceServices[e.Source];
@@ -57,6 +58,13 @@ namespace Filuet.ASC.OnBoard.Payment.Core
                 cashDevice.OnSomeChangeIssued += (sender, e) => {
                     _paymentProvider.SomeChangeExtracted(e.Money);
                 };
+
+            foreach (var ecomService in _ecommerceServices.Services)
+            {
+                ecomService.OnReceived += (sender, e) => {
+                    _paymentProvider.SomeMoneyIncome(e.Income);
+                };
+            }
         }
 
         private readonly ICashPaymentService _cashService;

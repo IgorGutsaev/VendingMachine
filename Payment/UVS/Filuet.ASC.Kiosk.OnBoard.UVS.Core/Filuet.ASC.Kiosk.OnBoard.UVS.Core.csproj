@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.239" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.239" />
+    <PackageReference Include="Filuet.Utils.Common" Version="1.0.242" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.242" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />
@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Abstractions\Filuet.ASC.OnBoard.Payment.Abstractions.csproj" />
     <ProjectReference Include="..\..\ECommerce\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions.csproj" />
     <ProjectReference Include="..\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions\Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions.csproj" />
   </ItemGroup>

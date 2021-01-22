@@ -48,7 +48,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
             //CashDevice.StopPayment();
         }
 
-
         public IEnumerable<ICashDeviceAdapter> CashDevices { get; set; }
 
         public event EventHandler<CashIncomeEventArgs> OnReceived;

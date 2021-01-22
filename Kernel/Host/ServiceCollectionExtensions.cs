@@ -127,7 +127,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                             cashDevices = new ICashDeviceAdapter[] {
                                 new MockBillAcceptor(sp.GetRequiredService<ICurrencyConverter>(), (s) => {
                                     s.IssueIndex = 1;
-                                    s.BaseCurrency = CurrencyCode.RussianRouble; // Stub
+                                    s.BaseCurrency = kioskSettings.BaseCurrency; // Stub
                                     s.BillsToReceive = new Money[] { Money.Create(100, CurrencyCode.USDollar), Money.Create(500, CurrencyCode.RussianRouble) }; // Stub
                                     s.BillsToGiveChange = new Money[] { Money.Create(50, CurrencyCode.RussianRouble), Money.Create(1, CurrencyCode.USDollar) }; // Stub
                                 })
@@ -154,8 +154,15 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                         switch (provider.Source)
                         {
                             case PaymentSource.UVS:
-                                es.Add(new UvsEcommerceService());
+                                if (kioskSettings.ECommerceSettings.Mode == OptionUseCase.Emulation)
+                                    es.Add(new UvsMockEcommerceService(sp.GetRequiredService<ICurrencyConverter>(), (settings) => { settings.BaseCurrency = kioskSettings.BaseCurrency; }));
+                                else if (kioskSettings.ECommerceSettings.Mode == OptionUseCase.On)
+                                {
+                                    // ...
+                                }
                                 break;
+                            default:
+                                throw new ArgumentException("Invalid ecommerce source");
                         }
                     }
 

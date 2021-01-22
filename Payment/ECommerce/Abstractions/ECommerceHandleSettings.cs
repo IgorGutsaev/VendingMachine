@@ -6,19 +6,13 @@ using System.Text;
 namespace Filuet.ASC.Kiosk.OnBoard.Cashbox.Core
 {
     /// <summary>
-    /// Common settings of bill acceptance (not related to the real device)
+    /// Common settings of money acceptance
     /// </summary>
-    public class CashHandleSettings
+    public class ECommerceHandleSettings
     {
-        public uint IssueIndex { get; set; } 
-
         /// <summary>
         /// In some countries there're 2 currencies in use
         /// </summary>
         public CurrencyCode BaseCurrency { get; set; }
-
-        public IEnumerable<Money> BillsToReceive { get; set; }
-
-        public IEnumerable<Money> BillsToGiveChange { get; set; }
     }
 }

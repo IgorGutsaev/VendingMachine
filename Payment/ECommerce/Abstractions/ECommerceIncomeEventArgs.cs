@@ -7,6 +7,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions
 {
     public class ECommerceIncomeEventArgs : EventArgs
     {
-        public Money Income { get; set; } 
+        public MoneyNaturalized Income { get; set; } 
     }
 }

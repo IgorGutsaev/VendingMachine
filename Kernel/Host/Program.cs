@@ -21,6 +21,7 @@ using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Abstractions.Platform;
 using Filuet.Utils.Common.Business;
 using Filuet.Utils.Common.PosSettings;
+using Filuet.Utils.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,7 +38,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
             IEventBroker broker = host.Services.GetRequiredService<IEventBroker>(); // initialize evenk broker
             // instantiate mediators
-            OrderingMediator mediator = host.Services.GetRequiredService<OrderingMediator>(); 
+            OrderingMediator mediator = host.Services.GetRequiredService<OrderingMediator>();
             PaymentMediator paymentMediator = host.Services.GetRequiredService<PaymentMediator>();
 
             // POC
@@ -56,7 +57,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>(); // пользователь выбрал оплату кешем (не payment provider так решил, а пользователь)
 
                 paymentProvider.Collect(PaymentSource.UVS, att.Order, (p) => { });
-                
+
 
                 att.CompleteOrder();
 
@@ -99,6 +100,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     services
                         .AddSingleton((sp) => new KioskSettings
                         {
+                            BaseCurrency = EnumHelper.GetValueFromCode<CurrencyCode>(appContext.Payment.BaseCurrency),
                             Dispenser = new DispensingSettings
                             {
                                 Mode = OptionUseCase.On,
