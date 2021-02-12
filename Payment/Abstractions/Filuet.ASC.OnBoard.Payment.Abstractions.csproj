@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.242" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.242" />
+    <PackageReference Include="Filuet.Utils.Common" Version="1.0.243" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.243" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

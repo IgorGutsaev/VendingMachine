@@ -1,12 +1,10 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
 using Filuet.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Converters
+namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Converters
 {
     public class GoodsObtainingMethodConverter : JsonConverter<GoodsObtainingMethod>
     {

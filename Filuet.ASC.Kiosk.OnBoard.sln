@@ -64,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Kernel.T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "order", "order", "{F69CFBCC-833E-47BA-B8D8-E35F65F59F47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Order.Abstractions", "Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.csproj", "{10BACA07-B92A-4574-B9CB-442CB4E537DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions", "Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.csproj", "{10BACA07-B92A-4574-B9CB-442CB4E537DB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Payment.Abstractions", "Payment\Abstractions\Filuet.ASC.OnBoard.Payment.Abstractions.csproj", "{BF8045CD-A457-4DEB-B6C3-A5F49A4B1B6D}"
 EndProject
@@ -96,7 +96,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecommerce", "ecommerce", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions", "Payment\ECommerce\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions.csproj", "{642B3009-2D76-453B-AF87-1416C746A01E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service", "Payment\ECommerce\Service\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service.csproj", "{A4AFFFB3-C04E-46A1-9078-42B5E686521B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service", "Payment\ECommerce\Service\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service.csproj", "{A4AFFFB3-C04E-46A1-9078-42B5E686521B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "slip", "slip", "{734692C4-CCED-4B2D-B62F-222BF1360E23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Slip.Abstractions", "Slip\Abstractions\Filuet.ASC.Kiosk.OnBoard.Slip.Abstractions.csproj", "{33E2DF90-1AE2-474C-9745-5D7365EE4EAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Slip.Service", "Slip\Service\Filuet.ASC.Kiosk.OnBoard.Slip.Service.csproj", "{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.Kiosk.OnBoard.Slip.Test", "Slip\Test\Filuet.ASC.Kiosk.OnBoard.Slip.Test.csproj", "{F4D6681B-35FE-47E7-B41D-91CE4609A818}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -224,6 +232,18 @@ Global
 		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4AFFFB3-C04E-46A1-9078-42B5E686521B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E2DF90-1AE2-474C-9745-5D7365EE4EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E2DF90-1AE2-474C-9745-5D7365EE4EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E2DF90-1AE2-474C-9745-5D7365EE4EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E2DF90-1AE2-474C-9745-5D7365EE4EAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4D6681B-35FE-47E7-B41D-91CE4609A818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4D6681B-35FE-47E7-B41D-91CE4609A818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4D6681B-35FE-47E7-B41D-91CE4609A818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4D6681B-35FE-47E7-B41D-91CE4609A818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,6 +285,9 @@ Global
 		{50146002-50E3-4CC3-A5F6-26997AADD05F} = {9AF1BDF8-3B94-45D2-9DE2-3ADA0F630465}
 		{642B3009-2D76-453B-AF87-1416C746A01E} = {50146002-50E3-4CC3-A5F6-26997AADD05F}
 		{A4AFFFB3-C04E-46A1-9078-42B5E686521B} = {50146002-50E3-4CC3-A5F6-26997AADD05F}
+		{33E2DF90-1AE2-474C-9745-5D7365EE4EAE} = {734692C4-CCED-4B2D-B62F-222BF1360E23}
+		{7D49A5BC-5D4B-4878-8ED8-70E650D64EB2} = {734692C4-CCED-4B2D-B62F-222BF1360E23}
+		{F4D6681B-35FE-47E7-B41D-91CE4609A818} = {734692C4-CCED-4B2D-B62F-222BF1360E23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A02BEFA1-73D8-435F-8D33-C1AB99ACD5C2}

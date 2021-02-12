@@ -1,7 +1,7 @@
 ﻿using Filuet.Utils.Common.Business;
 using System;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
+namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
 {
     public class OrderLine : OrderItem
     {

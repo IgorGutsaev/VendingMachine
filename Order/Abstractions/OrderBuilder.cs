@@ -1,11 +1,11 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
 using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
+namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
 {
     public class OrderBuilder
     {
@@ -14,6 +14,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
         private string _orderNumber;
         private string _customer;
         private string _customerName;
+        private Locale _locale;
         private GoodsObtainingMethod _method;
 
         public OrderBuilder WithObtainingMethod(GoodsObtainingMethod method)
@@ -22,7 +23,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             return this;
         }
 
-        public OrderBuilder WithHeader(string orderNumber, string customer, string customerName)
+        public OrderBuilder WithHeader(string orderNumber, string customer, string customerName, Locale locale)
         {
             if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Trim().Length < 4)
                 throw new ArgumentException("Order number is mandatory");
@@ -33,9 +34,13 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(customerName) || customerName.Trim().Length < 2)
                 throw new ArgumentException("Customer name is mandatory");
 
+            if (locale == Locale.Undefined)
+                throw new ArgumentException("Location is mandatory");
+
             _orderNumber = orderNumber.Trim();
             _customer = customer.Trim();
             _customerName = customerName.Trim();
+            _locale = locale;
 
             return this;
         }
@@ -96,7 +101,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions
             if (string.IsNullOrWhiteSpace(_customer) || _customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
-            return new Order { Items = _items, Amount = _amount, Customer = _customer, CustomerName = _customerName, Number = _orderNumber, Obtaining = _method };
+            return new Order { Items = _items, Amount = _amount, Customer = _customer, CustomerName = _customerName, Location = _locale, Number = _orderNumber, Obtaining = _method };
         }
     }
 }

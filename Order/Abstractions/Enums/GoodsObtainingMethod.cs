@@ -1,9 +1,6 @@
 ﻿using Filuet.Utils.Extensions.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums
+namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums
 {
     public enum GoodsObtainingMethod
     {

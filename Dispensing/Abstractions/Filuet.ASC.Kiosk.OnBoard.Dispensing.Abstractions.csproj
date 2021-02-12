@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.242" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.243" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

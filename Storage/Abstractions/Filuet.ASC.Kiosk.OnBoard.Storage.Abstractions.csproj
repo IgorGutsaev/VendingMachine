@@ -1,18 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.242" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.243" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

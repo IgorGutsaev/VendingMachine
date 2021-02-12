@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
-namespace Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums
+namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums
 {
     public enum OrderAction
     {
