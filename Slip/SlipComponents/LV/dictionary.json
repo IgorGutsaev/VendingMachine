@@ -1,14 +1,51 @@
 {
-	"Standard" : {
+	"standard" : {
+		"LV": [
+			"[hHeader][Herbalife Latvija]",
+			"[hOrderNumber][Pasūtījuma numurs]" ,
+			"[hOrderDate][Datums, laiks]",
+			"[hCustomerName][Vārds, uzvārds]",
+			"[hTotalPrice][Kopā, €]",
+			"[hItemName][Nosaukums]",
+			"[hItemQuantity][Daudzums]",
+			"[hVolumePoints][Apjoma punkti]",
+			"[hSelectedMonth][Pasūtījuma mēnesis]",
+			"[hKiosk][Kiosks]"
+		],
 		"EN" : [
-			"[Header][Herbalife Latvia]",
-			"[OrderNumber][Order number]",
-			"[OrderDate][Order date]"
+			"[hHeader][Herbalife Latvia]",
+			"[hOrderNumber][Order number]",
+			"[hOrderDate][Date, time]",
+			"[hCustomerName][Name, Surname]",
+			"[hTotalPrice][Total, €]",
+			"[hItemName][Name]",
+			"[hItemQuantity][Quantity]",
+			"[hVolumePoints][Volume points]",
+			"[hSelectedMonth][Order month]",
+			"[hKiosk][Kiosk]"
 		],
 		"RU": [
-			"[Header][Herbalife Латвия]",
-			"[OrderNumber][Номер заказа]" ,
-			"[OrderDate][Дата]" 
+			"[hHeader][Herbalife Латвия]",
+			"[hOrderNumber][Номер заказа]" ,
+			"[hOrderDate][Дата, время]",
+			"[hCustomerName][Имя, Фамилия]",
+			"[hTotalPrice][Итого, €]",
+			"[hItemName][Название]",
+			"[hItemQuantity][Количество]",
+			"[hVolumePoints][VP]",
+			"[hSelectedMonth][Месяц заказа]",
+			"[hKiosk][Киоск]"
+		]
+	},
+	"barcode" : {
+		"LV": [
+			"[hWarehouseFetchMessage][Lai saņemtu preci, lūdzu vērsieties pie noliktavas darbinieka]"
+		],
+		"EN" : [
+			"[hWarehouseFetchMessage][Contact the staff to fetch the items]"
+		],
+		"RU": [
+			"[hWarehouseFetchMessage][Для получения продукта обратитесь к оператору]"
 		]
 	}
 }

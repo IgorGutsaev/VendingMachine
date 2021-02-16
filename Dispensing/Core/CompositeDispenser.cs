@@ -3,7 +3,7 @@ using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities.Dispensing;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

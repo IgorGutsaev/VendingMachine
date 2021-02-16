@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.246" />
+    <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Abstractions\Filuet.ASC.Kiosk.OnBoard.Slip.Abstractions.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,6 @@
 using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.SlipTest
 {
@@ -10,10 +9,12 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipTest
     {
         static public IEnumerable<object[]> GetOrders()
         {
-            yield return new object[] { new OrderBuilder().WithHeader("LRK0123456", "79261234567", "FooBar", Utils.Common.Business.Locale.Latvia)
-                .WithObtainingMethod(Ordering.Abstractions.Enums.GoodsObtainingMethod.Dispensing)
+            yield return new object[] { new OrderBuilder().WithHeader("LRK0123456", "79261234567", "FooBar", Locale.Latvia, Lang.En)
+                .WithObtainingMethod(Ordering.Abstractions.Enums.GoodsObtainingMethod.Warehouse)
                 .WithItems(new OrderLine[] { OrderLine.Create("0141", 1, Money.Create(100m, CurrencyCode.Euro), Money.Create(100m, CurrencyCode.Euro)) })
-                .WithTotalAmount(Money.Create(100m, CurrencyCode.Euro)).Build() };
+                .WithTotalValues(Money.Create(100m, CurrencyCode.Euro), 65.5m)
+                .WithExtraData("Kiosk", "LVRIGAS3")
+                .WithExtraData("SelectedMonth", new DateTime(2021, 2, 1)).Build() };
         }
     }
 }

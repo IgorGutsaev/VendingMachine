@@ -1,13 +1,8 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions;
 using Filuet.ASC.Kiosk.OnBoard.SlipService;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Text;
-using System.Web;
 using TheArtOfDev.HtmlRenderer.WinForms;
 using Xunit;
 
@@ -35,7 +30,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipTest
 
             
 
-            Image image = HtmlRender.RenderToImage(slip.Data, new Size(270, 800), Color.White);
+            Image image = HtmlRender.RenderToImage(slip.Data, new Size(250, 800), new Size(270, 800), Color.White);
             image.Save(@"D:\Test.png", ImageFormat.Png);
         }
     }

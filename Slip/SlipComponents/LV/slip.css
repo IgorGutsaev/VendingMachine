@@ -5,6 +5,19 @@
 #header {
 	text-align: center;
 	font-weight: 600;
+	padding-bottom: 5px;
+}
+
+#instructions {
+	text-align: center;
+	font-size: 11px;
+	font-weight: 300px;
+	padding-top: 15px;
+	padding-bottom: 5px;
+}
+
+td {
+	font-size: 11px;
 }
 
 .logo {
@@ -13,23 +26,34 @@
 	padding-bottom: 30px;
 }
 
-.center {
-	text-align: center;
-}
-
-.left {
-	text-align: left;
-}
-
-.right {
-	text-align: right;
-}
-
-
-.header {
+.keyval {
 	width: 100%;
 }
 
-.header .value {
+.brd-top-dotted {
+	border-top: 1px dotted #555;
+}
+
+.brd-top-smoke {
+	border-top: 1px solid #aaa;
+}
+
+.brd-btm-dotted {
+	border-bottom: 1px dotted #555;
+}
+
+.brd-btm-smoke {
+	border-bottom: 1px solid #aaa;
+}
+
+.value {
 	text-align: right;
+}
+
+tr.spaceAbove>td {
+  padding-top: 3px;
+}
+
+tr.spaceBeneath>td {
+  padding-bottom: 3px;
 }

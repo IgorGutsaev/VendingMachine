@@ -1,22 +1,63 @@
 <html>
 	<head>
-		<title>&OrderNumber&</title>
+		<title>$vOrderNumber$</title>
 		<link rel="stylesheet" type="text/css" href="D:\Repos\Filuet.ASC.Kiosk.OnBoard\Slip\SlipComponents\LV\slip.css">
 	</head>
 	<body>
 	<div id="frame">
 		<img src="D:\Repos\Filuet.ASC.Kiosk.OnBoard\Slip\SlipComponents\hrbl.bmp" class="logo"/>
-		<div id="header">$Header$</div>
-		<hr>
-		<table class="header">
+		<div class="brd-btm-smoke" id="header">$hHeader$</div>
+
+		<table class="keyval brd-btm-smoke">
 			<tr>
-				<td class="orderNumberHeader">$OrderNumber$</td>
-				<td class="value">&OrderNumber&</td>
+				<td>$hOrderNumber$</td>
+				<td class="value">$vOrderNumber$</td>
 			</tr>
 			<tr>
-				<td class="orderDateHeader">$OrderDate$</td>
-				<td class="value">&OrderDate&</td>
+				<td>$hCustomerName$</td>
+				<td class="value">$vCustomerName$</td>
+			</tr>
+			<tr>
+				<td>$hOrderDate$</td>
+				<td class="value">$vOrderDate$</td>
 			</tr>
 		</table>
+
+		<table class="keyval brd-btm-dotted">
+			<tr>
+				<td>$hItemName$</td>
+				<td class="value">$hItemQuantity$</td>
+			</tr>
+		</table>
+
+		<table class="keyval brd-btm-dotted">
+			$vOrderLines$
+		</table>
+
+		<table class="keyval brd-btm-smoke">
+			<tr>
+				<td>$hTotalPrice$</td>
+				<td class="value">$vTotalPrice$</td>
+			</tr>
+		</table>
+		
+		<table class="keyval brd-btm-smoke">
+			<tr>
+				<td>$hVolumePoints$</td>
+				<td class="value">$vVolumePoints$</td>
+			</tr>
+			<tr>
+				<td>$hSelectedMonth$</td>
+				<td class="value">$vSelectedMonth$</td>
+			</tr>
+		</table>
+		
+		<table class="keyval">
+			<tr>
+				<td>$hKiosk$</td>
+				<td class="value">$vKiosk$</td>
+			</tr>
+		</table>
+		$vBarcodeFooter$
 	</body>
 </html>

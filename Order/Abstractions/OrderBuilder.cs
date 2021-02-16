@@ -3,7 +3,6 @@ using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
 {
@@ -15,7 +14,10 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
         private string _customer;
         private string _customerName;
         private Locale _locale;
+        private Lang _language;
+        private decimal _points;
         private GoodsObtainingMethod _method;
+        private Dictionary<string, object> _extraData = new Dictionary<string, object>();
 
         public OrderBuilder WithObtainingMethod(GoodsObtainingMethod method)
         {
@@ -23,7 +25,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
             return this;
         }
 
-        public OrderBuilder WithHeader(string orderNumber, string customer, string customerName, Locale locale)
+        public OrderBuilder WithHeader(string orderNumber, string customer, string customerName, Locale locale, Lang language)
         {
             if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Trim().Length < 4)
                 throw new ArgumentException("Order number is mandatory");
@@ -41,6 +43,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
             _customer = customer.Trim();
             _customerName = customerName.Trim();
             _locale = locale;
+            _language = language;
 
             return this;
         }
@@ -69,7 +72,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
             return this;
         }
 
-        public OrderBuilder WithTotalAmount(Money amount)
+        public OrderBuilder WithTotalValues(Money amount, decimal points = 0)
         {
             if (amount.Value < 0)
                 throw new ArgumentException("Order amount must be positive");
@@ -83,6 +86,15 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
             }
 
             _amount = amount;
+            _points = points;
+
+            return this;
+        }
+
+        public OrderBuilder WithExtraData(string name, object value)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                _extraData[name.Trim()] = value.ToString();
 
             return this;
         }
@@ -101,7 +113,17 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions
             if (string.IsNullOrWhiteSpace(_customer) || _customer.Trim().Length < 4)
                 throw new ArgumentException("Customer is mandatory");
 
-            return new Order { Items = _items, Amount = _amount, Customer = _customer, CustomerName = _customerName, Location = _locale, Number = _orderNumber, Obtaining = _method };
+            return new Order { Items = _items,
+                Amount = _amount,
+                Customer = _customer,
+                CustomerName = _customerName,
+                Points = _points,
+                Location = _locale,
+                Language = _language,
+                Number = _orderNumber,
+                Obtaining = _method,
+                ExtraData = _extraData
+            };
         }
     }
 }
