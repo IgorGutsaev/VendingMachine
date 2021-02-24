@@ -1,4 +1,5 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
     {
         void AddPlanogram(Planogram planogram);
 
-        void AddOrderEvent(OrderAction action, Order.Abstractions.Order order);
+        void AddOrderEvent(OrderAction action, Order order);
 
         void AddOrderEvent(string orderNumber, OrderAction action, object payload);
 

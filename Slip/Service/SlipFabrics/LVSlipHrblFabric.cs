@@ -1,4 +1,5 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Catalog.Abstractions.Services;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions;
 using Filuet.Utils.Extensions;
 using System.IO;
@@ -7,7 +8,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService.SlipFabrics
 {
     public class LVSlipHrblFabric : SlipComponentsFabric
     {
-        public LVSlipHrblFabric(ISlipRepository slipComponentRepository)
+        public LVSlipHrblFabric(ICatalogService productService, ISlipRepository slipComponentRepository)
+            : base(productService)
         {
             _slipComponentRepository = slipComponentRepository;
         }

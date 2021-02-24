@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +19,7 @@
     <ProjectReference Include="..\..\Order\Abstractions\Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.csproj" />
     <ProjectReference Include="..\..\Payment\Abstractions\Filuet.ASC.OnBoard.Payment.Abstractions.csproj" />
     <ProjectReference Include="..\..\Payment\Cashbox\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions\Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Slip\Abstractions\Filuet.ASC.Kiosk.OnBoard.Slip.Abstractions.csproj" />
     <ProjectReference Include="..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.Utils.Extensions;
 using System;

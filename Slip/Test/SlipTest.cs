@@ -28,8 +28,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipTest
             // Post-validate
             Assert.NotNull(slip);
 
-            
-
             Image image = HtmlRender.RenderToImage(slip.Data, new Size(250, 800), new Size(270, 800), Color.White);
             image.Save(@"D:\Test.png", ImageFormat.Png);
         }

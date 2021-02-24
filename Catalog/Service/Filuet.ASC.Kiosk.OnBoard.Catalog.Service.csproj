@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.246" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.246" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Platform\Filuet.ASC.Kiosk.OnBoard.Common.Platform.csproj" />
+    <ProjectReference Include="..\Abstractions\Filuet.ASC.Kiosk.OnBoard.Catalog.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

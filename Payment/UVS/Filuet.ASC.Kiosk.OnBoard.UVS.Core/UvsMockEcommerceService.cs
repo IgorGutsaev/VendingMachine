@@ -1,13 +1,10 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Core;
 using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.UVS.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Abstractions.Interfaces;
 using Filuet.Utils.Common.Business;
 using Filuet.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
 {
@@ -27,7 +24,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
                 OnPaymentCancelled?.Invoke(this, new ECommercePaymentCancelledEventArgs { Message = e.Message });
         }
 
-        public void FetchMoney(Order.Abstractions.Order order)
+        public void FetchMoney(Order order)
         {
             _order = order;
             bool created = _adapter.CreateOrder(order.Number, order.Customer, order.CustomerName, order.Amount.Value, null /* no matter*/);
@@ -40,7 +37,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
 
         public PaymentSource Source => PaymentSource.UVS;
         private MockUvsAdapter _adapter = null;
-        private Order.Abstractions.Order _order;
+        private Order _order;
         private readonly ICurrencyConverter _currencyConverter;
         private readonly ECommerceHandleSettings _settings;
     }

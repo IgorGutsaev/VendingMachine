@@ -1,4 +1,4 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;
@@ -23,6 +23,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions
 
         event EventHandler<ECommercePaymentCancelledEventArgs> OnPaymentCancelled;
 
-        void FetchMoney(Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Order order);
+        void FetchMoney(Order order);
     }
 }

@@ -5,13 +5,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Catalog.Service;
 using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Entities;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
+using Filuet.ASC.Kiosk.OnBoard.SlipService;
+using Filuet.ASC.Kiosk.OnBoard.SlipService.SlipFabrics;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Core;
 using Filuet.ASC.OnBoard.Kernel.Core;
@@ -48,10 +51,12 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
                 IAttendant att = host.Services.GetRequiredService<IAttendant>();
 
-                att.StartOrder(b => b.WithHeader("TST123456", "9262147116", "IVG")
+                att.StartOrder(b => b.WithHeader("TST123456", "9262147116", "IVG", Locale.Latvia, Lang.Lv)
                     .WithObtainingMethod(GoodsObtainingMethod.Warehouse)
                     .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
-                    .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
+                    .WithTotalValues(Money.Create(10.0m, CurrencyCode.Euro), 15.95m)
+                    .WithExtraData("Kiosk", "LRK0123456")
+                    .WithExtraData("SelectedMonth", "february 2021"));
 
                 IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
                 ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>(); // пользователь выбрал оплату кешем (не payment provider так решил, а пользователь)
@@ -59,11 +64,12 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 paymentProvider.Collect(PaymentSource.UVS, att.Order, (p) => { });
 
 
-                att.CompleteOrder();
+                Task.Factory.StartNew(() => {
+                    Thread.Sleep(10000);
+                    att.CompleteOrder();
+                });
 
-                return;
-
-                IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
+                /*IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
                 ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
 
@@ -73,11 +79,11 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     var t = s2.Get(x => true);
                 }
 
-                //dispenser.OnDispensing += S1_OnDispensing;
+                dispenser.OnDispensing += S1_OnDispensing;
 
-                //dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+                dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
 
-                //dispenser.OnDispensing -= S1_OnDispensing;
+                dispenser.OnDispensing -= S1_OnDispensing;*/
             });
 
             host.Run();
@@ -118,6 +124,12 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                         })
                         .AddPaymentProvider()
                         .AddAttendant()
+                        .AddCatalog()
+                        .AddSlipService((setup) => {
+                            // Stub
+                            setup.SlipComponentsRepositoryPath = @"D:\Repos\Filuet.ASC.Kiosk.OnBoard\Slip\SlipComponents";
+                            setup.SlipImageStorage = @"D:\SlipImages";
+                        })
                         .AddHardware();
 
                     services.AddStorage()

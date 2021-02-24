@@ -1,11 +1,12 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions.Enums;
 
 namespace Filuet.ASC.Kiosk.OnBoard.SlipAbstractions
 {
     public interface ISlipService
     {
-        Slip Receipt(Order order);
+        Slip Build(Order order, SlipType type);
 
-        Slip Emergency(Order order);
+        void Print(Order order, SlipType type);
     }
 }

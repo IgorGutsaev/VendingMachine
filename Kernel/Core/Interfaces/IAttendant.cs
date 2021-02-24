@@ -1,4 +1,4 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.OnBoard.Kernel.Core.Events;
 using System;
 
@@ -10,8 +10,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
     public interface IAttendant
     {
         void StartOrder(Action<OrderBuilder> setupOrder);
-
-        void PrintReceipt();
 
         void CompleteOrder(/* STATUS    void CancelOrder(); //abnormal finalizing */);
 

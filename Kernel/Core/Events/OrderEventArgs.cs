@@ -1,5 +1,5 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;

@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.245" />
+    <PackageReference Include="Filuet.Utils.Abstractions" Version="1.0.246" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-preview3.20168.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -19,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Catalog\Service\Filuet.ASC.Kiosk.OnBoard.Catalog.Service.csproj" />
     <ProjectReference Include="..\..\Common\Platform\Filuet.ASC.Kiosk.OnBoard.Common.Platform.csproj" />
     <ProjectReference Include="..\..\Dispensing\Abstractions\Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.csproj" />
     <ProjectReference Include="..\..\Dispensing\Core\Filuet.ASC.Kiosk.OnBoard.Dispensing.Core.csproj" />
@@ -31,6 +33,7 @@
     <ProjectReference Include="..\..\Payment\ECommerce\Service\Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service.csproj" />
     <ProjectReference Include="..\..\Payment\UVS\Filuet.ASC.Kiosk.OnBoard.UVS.Core\Filuet.ASC.Kiosk.OnBoard.UVS.Core.csproj" />
     <ProjectReference Include="..\..\Sdk\Dispensing\Jofemar\VisionEsPlus\Filuet.ASC.Kiosk.OnBoard.SDK.Jofemar.VisionEsPlus.csproj" />
+    <ProjectReference Include="..\..\Slip\Service\Filuet.ASC.Kiosk.OnBoard.Slip.Service.csproj" />
     <ProjectReference Include="..\..\Storage\Abstractions\Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions.csproj" />
     <ProjectReference Include="..\..\Storage\Core\Filuet.ASC.Kiosk.OnBoard.Storage.Core.csproj" />
     <ProjectReference Include="..\Core\Filuet.ASC.OnBoard.Kernel.Core.csproj" />

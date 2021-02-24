@@ -26,6 +26,7 @@ using Filuet.Utils.Common.Business;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service;
 using Filuet.ASC.Kiosk.OnBoard.UVS.Core;
+using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -175,13 +176,15 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     broker.AppendProducer(sp.GetRequiredService<ICompositeDispenser>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<IStorageService>() as IEventProducer);
                     broker.AppendProducer(sp.GetRequiredService<IAttendant>() as IEventProducer);
+                    broker.AppendProducer(sp.GetRequiredService<ISlipService>() as IEventProducer);
                 })
                 .AddSingleton((sp) => new EventConsumer()
                     .AppendWriter<IPaymentProvider>(new EventWriter<IPaymentProvider>(sp.GetRequiredService<ILogger<IPaymentProvider>>()))
                     .AppendWriter<ICashPaymentService>(new EventWriter<ICashPaymentService>(sp.GetRequiredService<ILogger<ICashPaymentService>>()))
                     .AppendWriter<ICompositeDispenser>(new EventWriter<ICompositeDispenser>(sp.GetRequiredService<ILogger<ICompositeDispenser>>()))
                     .AppendWriter<IStorageService>(new EventWriter<IStorageService>(sp.GetRequiredService<ILogger<IStorageService>>()))
-                    .AppendWriter<IAttendant>(new EventWriter<IAttendant>(sp.GetRequiredService<ILogger<IAttendant>>())));
+                    .AppendWriter<IAttendant>(new EventWriter<IAttendant>(sp.GetRequiredService<ILogger<IAttendant>>()))
+                    .AppendWriter<ISlipService>(new EventWriter<ISlipService>(sp.GetRequiredService<ILogger<ISlipService>>())));
         }
     }
 }

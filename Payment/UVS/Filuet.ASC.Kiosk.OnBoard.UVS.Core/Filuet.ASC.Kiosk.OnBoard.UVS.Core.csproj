@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Filuet.Utils.Common" Version="1.0.245" />
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.245" />
+    <PackageReference Include="Filuet.Utils.Common" Version="1.0.246" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.246" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="2.0.0-preview1-final" />

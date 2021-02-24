@@ -1,4 +1,4 @@
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.OnBoard.Kernel.Core;
 using Filuet.Utils.Common.Business;
 using System;
@@ -28,7 +28,7 @@ namespace Filuet.ASC.OnBoard.Kernel.Test
 
             // Perform
             vendor.StartOrder(b => b.WithItems(OrderLine.Create(productId, qty, money, Money.Create(qty * amount, Currency)))
-                .WithTotalAmount(money));
+                .WithTotalValues(money));
 
             // Post-validate
             Assert.NotNull(vendor.Order);

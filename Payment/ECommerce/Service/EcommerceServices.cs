@@ -4,16 +4,12 @@ using Filuet.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service
 {
     public class EcommerceServices : IEcommerceServices
     {
-        public EcommerceServices()
-        {
-
-        }
+        public EcommerceServices() { }
 
         private IList<IEcommerceService> _services = new List<IEcommerceService>();
 

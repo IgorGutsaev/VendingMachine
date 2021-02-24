@@ -1,4 +1,4 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.Utils.Common.Business;
 using System;
 using System.Collections.Generic;

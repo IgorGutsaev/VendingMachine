@@ -42,10 +42,10 @@
 			"[hWarehouseFetchMessage][Lai saņemtu preci, lūdzu vērsieties pie noliktavas darbinieka]"
 		],
 		"EN" : [
-			"[hWarehouseFetchMessage][Contact the staff to fetch the items]"
+			"[hWarehouseFetchMessage][Contact the staff to fetch your order]"
 		],
 		"RU": [
-			"[hWarehouseFetchMessage][Для получения продукта обратитесь к оператору]"
+			"[hWarehouseFetchMessage][Для получения заказа обратитесь к оператору]"
 		]
 	}
 }

@@ -1,9 +1,9 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
+﻿using Filuet.ASC.Kiosk.OnBoard.Common.Platform;
 using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Dispensing.Abstractions.Interfaces;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions;
-using Filuet.ASC.Kiosk.OnBoard.Order.Abstractions.Enums;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
+using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions;
+using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions.Enums;
 using Filuet.ASC.OnBoard.Kernel.Core.Events;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
 using Filuet.Utils.Common.Business;
@@ -14,22 +14,23 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 {
     public class Attendant : IAttendant
     {
-        public Attendant(IPaymentProvider paymentService, ICompositeDispenser dispenser)
+        public Attendant(IPaymentProvider paymentService, ICompositeDispenser dispenser, ISlipService slipService)
         {
             _paymentService = paymentService;
             _dispenser = dispenser;
+            _slipService = slipService;
 
             _paymentService.OnTotalAmountCollected += (sender, e) =>
-            { 
+            {
                 if (e.ChangeToIssue > 0m) // && cash payment only (probably)
                     GiveChange(e.ChangeToIssue);
-                else PrintReceipt();
+                else _slipService.Print(Order, SlipType.Standard);
             };
 
             _paymentService.OnTotalChangeHasBeenGiven += (sender, e) =>
             {
                 if (Order.Obtaining == GoodsObtainingMethod.Warehouse)
-                    PrintReceipt();
+                    _slipService.Print(Order, SlipType.Standard);
                 else if (Order.Obtaining == GoodsObtainingMethod.Dispensing)
                     Dispense();
             };
@@ -49,24 +50,13 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             }
         }
 
-        public void PrintReceipt()
-        {
-            Console.WriteLine("==================");
-            Console.WriteLine("==    RECEIPT   ==");
-            Console.WriteLine("==================");
-        }
-
         /// <summary>
         /// Change to be issued in the order context
         /// </summary>
         /// <param name="change"></param>
         private void GiveChange(Money change) => _paymentService.GiveChange(change);
 
-        public void CompleteOrder()
-        {
-
-            Flush();
-        }
+        public void CompleteOrder() => Flush();
 
         private void Flush()
         {
@@ -120,5 +110,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
         private readonly IPaymentProvider _paymentService;
         private readonly ICompositeDispenser _dispenser;
+        private readonly ISlipService _slipService;
     }
 }

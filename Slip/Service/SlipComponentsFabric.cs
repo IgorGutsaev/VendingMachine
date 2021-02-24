@@ -1,4 +1,5 @@
-﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
+﻿using Filuet.ASC.Kiosk.OnBoard.Catalog.Abstractions.Services;
+using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions;
 using Filuet.ASC.Kiosk.OnBoard.SlipAbstractions;
 using System.Text;
 
@@ -6,6 +7,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService
 {
     public abstract class SlipComponentsFabric
     {
+        public SlipComponentsFabric(ICatalogService productService)
+        {
+            _productService = productService;
+        }
+
         /// <summary>
         /// Standard slip of the order
         /// </summary>
@@ -27,7 +33,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService
 
             foreach (var i in order.Items)
             {
-                orderLines.AppendLine(orderLine.Replace($"$v{VAR_ORDER_LINE_NAME}$", i.ProductUID)
+                orderLines.AppendLine(orderLine.Replace($"$v{VAR_ORDER_LINE_NAME}$", _productService.GetName(i.ProductUID, order.Language))
                     .Replace($"$v{VAR_ORDER_LINE_SKU}$", i.ProductUID)
                     .Replace($"$v{VAR_ORDER_LINE_PRICE}$", i.Amount.ToString())
                     .Replace($"$v{VAR_ORDER_LINE_QUANTITY}$", i.Quantity.ToString()));
@@ -42,6 +48,8 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService
 
         public virtual string Test(Order order)
             => _slipComponentRepository.GetTest(order.Location, order.Language);
+
+        private readonly ICatalogService _productService;
 
         protected ISlipRepository _slipComponentRepository;
 

@@ -2,8 +2,6 @@
 using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.Kiosk.OnBoard.Ecommerce.Service
 {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -11,10 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlRenderer.PdfSharp" Version="1.5.0.6" />
-    <PackageReference Include="HtmlRenderer.WinForms" Version="1.5.0.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,8 +24,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Catalog\Service\Filuet.ASC.Kiosk.OnBoard.Catalog.Service.csproj" />
     <ProjectReference Include="..\Abstractions\Filuet.ASC.Kiosk.OnBoard.Slip.Abstractions.csproj" />
     <ProjectReference Include="..\Service\Filuet.ASC.Kiosk.OnBoard.Slip.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="HtmlRenderer">
+      <HintPath>..\..\libraries\HtmlRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.PdfSharp">
+      <HintPath>..\..\libraries\HtmlRenderer.PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.WinForms">
+      <HintPath>..\..\libraries\HtmlRenderer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\libraries\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting">
+      <HintPath>..\..\libraries\PdfSharp.Charting.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
