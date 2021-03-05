@@ -26,7 +26,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
 
             try
             {
-                return Ok(await _api(true).LoginAsync(new LoginDto { Login = username, Password = password }).ContinueWith(t => t.Result));
+                return Ok(await _api(true).LoginAsync(new LoginDto { Login = username, Password = password }).ContinueWith(t => t.Result.Token));
             }
             catch (HttpOperationException e)
             {

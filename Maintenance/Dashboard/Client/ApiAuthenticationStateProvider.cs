@@ -23,16 +23,16 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            object savedToken = await _localStorage.GetItemAsync<object>("authToken");
+            string savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
-            if (savedToken == null)
+            if (string.IsNullOrEmpty(savedToken))
             {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.ToString());
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken.ToString()), "jwt")));
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
         }
 
         public async void MarkUserAsAuthenticated(string email, string token)
@@ -56,9 +56,9 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-
+            
             keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
-
+            
             if (roles != null)
             {
                 if (roles.ToString().Trim().StartsWith("["))
@@ -79,7 +79,10 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
             }
 
             claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
-
+            var sub = claims.FirstOrDefault(x => x.Type == "sub");
+            if (sub != null)
+                claims.Add(new Claim(ClaimTypes.Name, sub.Value));
+            
             return claims;
         }
 

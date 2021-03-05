@@ -3,22 +3,37 @@
 @inject NavigationManager NavigationManager
 @inject IMatToaster Toaster
 
-<MatCard class="demo-mat-card">
-    <MatCardContent>
+  <div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+        <div class="mat-layout-grid-cell"></div>
+        <div class="mat-layout-grid-cell">
+            <MatCard Class="container">
+                <div class="content">
+                    <div>
+                        <MatHeadline6 class="demo-mat-card-clean-margin">
+                            Enter your authentication details
+                        </MatHeadline6>
+                    </div>
 
-        <div class="demo-mat-card-content">
-            <MatHeadline6 class="demo-mat-card-clean-margin">
-                Enter your authentication details
-            </MatHeadline6>
+                    <MatBody2>
+                        <div class="form-group">
+                            <MatTextField @bind-Value="username" Required="true" Label="Login" Class="auth_row"></MatTextField>
+                        </div>
+                        <div class="form-group">
+                            <MatTextField @bind-Value="password" Required="true" Label="Password" Class="auth_row"></MatTextField>
+                        </div>
+                    </MatBody2>
+                    <MatCardActions>
+                        <MatCardActionButtons>
+                            <MatButton Raised="true" OnClick="OnSignIn" Disabled="inProgress">Sign in</MatButton>
+                            </MatCardActionButtons>
+                        </MatCardActions>
+                </div>
+            </MatCard>
         </div>
-
-        <MatBody2 class="demo-mat-card-content demo-mat-card-clean-margin">
-            <MatTextField @bind-Value="username" Required="true" Label="Login" Class="auth_row"></MatTextField>
-            <MatTextField @bind-Value="password" Required="true" Label="Password" Class="auth_row"></MatTextField>
-            <MatButton Raised="true" OnClick="OnSignIn" Disabled="inProgress">Sign in</MatButton>
-        </MatBody2>
-    </MatCardContent>
-</MatCard>
+        <div class="mat-layout-grid-cell"></div>
+    </div>
+</div>
 
 @code {
     private string username;
@@ -39,6 +54,6 @@
             Toaster.Add("Unable to login", MatToastType.Danger);
             return;
         }
-        NavigationManager.NavigateTo("/Index");
+        NavigationManager.NavigateTo("/Index", true);
     }
 }
