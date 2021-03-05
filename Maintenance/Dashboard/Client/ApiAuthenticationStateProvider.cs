@@ -30,7 +30,7 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", savedToken);
 
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken), "jwt")));
         }
@@ -43,8 +43,9 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client
             NotifyAuthenticationStateChanged(authState);
         }
 
-        public void MarkUserAsLoggedOut()
+        public async void MarkUserAsLoggedOut()
         {
+            await _localStorage.ClearAsync();
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
             var authState = Task.FromResult(new AuthenticationState(anonymousUser));
             NotifyAuthenticationStateChanged(authState);

@@ -32,10 +32,21 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client.Implementations
                         return "";
 
                     string token = t.Result.Content.AsString();
-                    Console.WriteLine(token);
+                    
                     ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(username, token);
                     return token;
                 });
+        }
+
+        public Task Logout()
+        {
+            return _client.GetAsync("api/auth/logout").ContinueWith(t =>
+            {
+                if (t.Result.IsSuccessStatusCode)
+                    ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
+
+                return t;
+            });
         }
     }
 }

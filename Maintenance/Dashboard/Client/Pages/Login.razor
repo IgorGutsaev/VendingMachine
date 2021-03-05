@@ -17,10 +17,10 @@
 
                     <MatBody2>
                         <div class="form-group">
-                            <MatTextField @bind-Value="username" Required="true" Label="Login" Class="auth_row"></MatTextField>
+                            <MatTextField @bind-Value="username" Required="true" Label="Login"></MatTextField>
                         </div>
                         <div class="form-group">
-                            <MatTextField @bind-Value="password" Required="true" Label="Password" Class="auth_row"></MatTextField>
+                            <MatTextField @bind-Value="password" Type="password" Required="true" Label="Password" OnKeyUp=@((e) => { if(e.Key == "Enter") OnSignIn(); })></MatTextField>
                         </div>
                     </MatBody2>
                     <MatCardActions>

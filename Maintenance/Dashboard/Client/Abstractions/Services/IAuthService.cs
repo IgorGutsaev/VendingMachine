@@ -8,5 +8,7 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client.Abstractions.Services
     public interface IAuthService
     {
         Task<string> Login(string login, string password);
+
+        Task Logout();
     }
 }

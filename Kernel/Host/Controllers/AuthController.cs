@@ -37,5 +37,24 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
         }
+
+        [HttpGet("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            try
+            {
+                //await _api().ExitAsync();
+                return Ok();
+            }
+            catch (HttpOperationException e)
+            {
+                return BadRequest("Unable to authorize. Check your username and password");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+        }
     }
 }
