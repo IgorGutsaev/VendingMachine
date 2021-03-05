@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
@@ -21,9 +22,14 @@ using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Abstractions.Platform;
 using Filuet.Utils.Common.Business;
 using Filuet.Utils.Common.PosSettings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -41,43 +47,43 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             PaymentMediator paymentMediator = host.Services.GetRequiredService<PaymentMediator>();
 
             // POC
-            Task.Run(() =>
-            {
-                Thread.Sleep(1500);
+            //Task.Run(() =>
+            //{
+            //    Thread.Sleep(1500);
 
-                IAttendant att = host.Services.GetRequiredService<IAttendant>();
+            //    IAttendant att = host.Services.GetRequiredService<IAttendant>();
 
-                att.StartOrder(b => b.WithHeader("TST123456", "9262147116")
-                    .WithObtainingMethod(GoodsObtainingMethod.Warehouse)
-                    .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
-                    .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
+            //    att.StartOrder(b => b.WithHeader("TST123456", "9262147116")
+            //        .WithObtainingMethod(GoodsObtainingMethod.Warehouse)
+            //        .WithItems(OrderLine.Create("0141", Money.Create(10.0m, CurrencyCode.Euro)))
+            //        .WithTotalAmount(Money.Create(10.0m, CurrencyCode.Euro)));
 
-                IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
-                ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
+            //    IPaymentProvider paymentProvider = host.Services.GetRequiredService<IPaymentProvider>();
+            //    ICashPaymentService cashPaymentService = host.Services.GetRequiredService<ICashPaymentService>();
 
-                paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
-                cashPaymentService.CashDevices.First().Start();
+            //    paymentProvider.Collect(Money.Create(7775m, CurrencyCode.RussianRouble), (p) => { });
+            //    cashPaymentService.CashDevices.First().Start();
 
-                att.CompleteOrder();
+            //    att.CompleteOrder();
 
-                return;
+            //    return;
 
-                IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
+            //    IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
-                ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
+            //    ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
 
-                ILayout layout = host.Services.GetRequiredService<ILayout>();
-                if (layout == null)
-                {
-                    var t = s2.Get(x => true);
-                }
+            //    ILayout layout = host.Services.GetRequiredService<ILayout>();
+            //    if (layout == null)
+            //    {
+            //        var t = s2.Get(x => true);
+            //    }
 
-                //dispenser.OnDispensing += S1_OnDispensing;
+            //    //dispenser.OnDispensing += S1_OnDispensing;
 
-                //dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+            //    //dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
 
-                //dispenser.OnDispensing -= S1_OnDispensing;
-            });
+            //    //dispenser.OnDispensing -= S1_OnDispensing;
+            //});
 
             host.Run();
         }
@@ -91,17 +97,19 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseConfiguration(new ConfigurationBuilder()
+                    //.AddCommandLine(args)
+                    //.Build());
                 })
                 .ConfigureServices((services) =>
                 {
                     HostContext appContext = new FileInfo(CONFIG_FILE).ToConfiguration();
-
                     services
                         .AddSingleton((sp) => new KioskSettings
                         {
                             Dispenser = new DispensingSettings
                             {
-                                Mode = DeviceUseCase.On,
+                                Mode = OptionUseCase.On,
                                 SlaveMachines = new VendingMachine[] {
                                     new VendingMachine { Number = 1, Address = "0x01", Model = "VisionEsPlus", Protocol = Utils.Common.Enum.CommunicationProtocol.TCP,
                                         IpAddress = "172.16.7.103",
@@ -111,12 +119,12 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                                         Port = 5000 }
                                 }
                             },
-                            Cashbox = new CashboxSettings { Mode = DeviceUseCase.Emulation }
+                            Cashbox = new CashboxSettings { Mode = OptionUseCase.Emulation }
                         })
                         .AddPaymentProvider()
                         .AddAttendant()
                         .AddHardware();
-
+                    
                     services.AddStorage()
                         .AddCacheContext(settings =>
                         {

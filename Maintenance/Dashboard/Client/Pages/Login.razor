@@ -1,0 +1,44 @@
+﻿@page "/login"
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
+
+<MatCard class="demo-mat-card">
+    <MatCardContent>
+
+        <div class="demo-mat-card-content">
+            <MatHeadline6 class="demo-mat-card-clean-margin">
+                Enter your authentication details
+            </MatHeadline6>
+        </div>
+
+        <MatBody2 class="demo-mat-card-content demo-mat-card-clean-margin">
+            <MatTextField @bind-Value="username" Required="true" Label="Login" Class="auth_row"></MatTextField>
+            <MatTextField @bind-Value="password" Required="true" Label="Password" Class="auth_row"></MatTextField>
+            <MatButton Raised="true" OnClick="OnSignIn" Disabled="inProgress">Sign in</MatButton>
+        </MatBody2>
+    </MatCardContent>
+</MatCard>
+
+@code {
+    private string username;
+    private string password;
+    bool isError = false;
+    bool inProgress = false;
+
+    public async Task OnSignIn()
+    {
+        isError = false;
+        inProgress = true;
+
+        string token = await AuthService.Login(username, password);
+        inProgress = false;
+        if (string.IsNullOrEmpty(token))
+        {
+            isError = true;
+            Toaster.Add("Unable to login", MatToastType.Danger);
+            return;
+        }
+        NavigationManager.NavigateTo("/Index");
+    }
+}

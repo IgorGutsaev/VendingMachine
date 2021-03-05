@@ -90,7 +90,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.SD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.Kiosk.OnBoard.Common.Abstractions", "Common\Abstractions\Filuet.ASC.Kiosk.OnBoard.Common.Abstractions.csproj", "{5F49EFF6-196D-4653-87C1-1D09F2AFBC6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Filuet.ASC.OnBoard.Payment.Core", "Payment\Core\Filuet.ASC.OnBoard.Payment.Core.csproj", "{32298A01-FE34-4061-807A-30C35FA7CD21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Filuet.ASC.OnBoard.Payment.Core", "Payment\Core\Filuet.ASC.OnBoard.Payment.Core.csproj", "{32298A01-FE34-4061-807A-30C35FA7CD21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
