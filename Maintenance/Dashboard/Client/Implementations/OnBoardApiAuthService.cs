@@ -31,6 +31,7 @@ namespace Filuet.ASC.OnBoard.Dashboard.Client.Implementations
                     if (!t.Result.IsSuccessStatusCode)
                         return "";
 
+                    _client.GetAsync($"api/device/pushTerminalActivity?action=Login&message={username} logged-in&level=1&author={username}");
                     string token = t.Result.Content.AsString();
                     
                     ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(username, token);

@@ -14,16 +14,18 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
     {
         const string BEARER_TOKEN_TYPE = "Bearer";
         private readonly Uri _apiUri;
+        private FiluetASCApiHandlerForKiosk _kioskApiHandler;
 
-        public BaseController(IConfiguration configuration)
+        public BaseController(IConfiguration configuration, FiluetASCApiHandlerForKiosk kioskApiHandler)
         {
             string url = configuration["ApiUrl"];
             _apiUri = new Uri(url);
+            _kioskApiHandler = kioskApiHandler;
         }
 
         protected string BearerToken => Request.Headers["Authorization"].ToString().Replace(BEARER_TOKEN_TYPE, string.Empty);
 
-        protected IFiluetASCApi _api(bool noToken = false)
+        protected IFiluetASCApi _userApi(bool noToken = false)
         {
             if (noToken)
             {
@@ -39,6 +41,11 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
                     return null;
                 else return new FiluetASCApi(_apiUri, new TokenCredentials(authHeader.ToString().Replace(BEARER_TOKEN_TYPE, string.Empty).Trim(), BEARER_TOKEN_TYPE));
             }
+        }
+
+        protected IFiluetASCApi _kioskApi()
+        {
+            return _kioskApiHandler.Api;
         }
     }
 }

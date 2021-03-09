@@ -16,8 +16,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
-        public AuthController(IConfiguration configuration)
-            : base(configuration)
+        public AuthController(IConfiguration configuration, FiluetASCApiHandlerForKiosk kioskApiHandler)
+            : base(configuration, kioskApiHandler)
         { }
 
         [HttpGet("Login")]
@@ -26,7 +26,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp.Controllers
 
             try
             {
-                return Ok(await _api(true).LoginAsync(new LoginDto { Login = username, Password = password }).ContinueWith(t => t.Result.Token));
+                return Ok(await _userApi(true).LoginAsync(new LoginDto { Login = username, Password = password }).ContinueWith(t => t.Result.Token));
             }
             catch (HttpOperationException e)
             {
