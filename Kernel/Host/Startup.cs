@@ -30,26 +30,8 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
             services.AddMvc();
-            services.AddLogging((builder) =>
-            {
-                LogSettings  logSettings = new FileInfo(Program.CONFIG_FILE).FromConfiguration();
-                builder.AddSerilog(new LoggerConfiguration()
-                   .WriteTo.File(path: logSettings.path, 
-                   hooks: new SerilogHooks(logSettings.allFilesSizeLimitBytes - logSettings.fileSizeLimitBytes, logSettings.retainedFileCountLimit,
-                   logSettings.pathArchive), 
-                   rollingInterval: (RollingInterval)Enum.Parse(typeof(RollingInterval),logSettings.rollingInterval),
-                   retainedFileCountLimit: logSettings.retainedFileCountLimit, 
-                   fileSizeLimitBytes: logSettings.fileSizeLimitBytes, 
-                   outputTemplate: logSettings.outputTemplate,
-                   rollOnFileSizeLimit: logSettings.rollOnFileSizeLimit
-                   )
-                   .CreateLogger());
-#if DEBUG
-                builder.AddDebug();
-                builder.AddConsole((c) => c.TimestampFormat = "[HH:mm:ss.fff] ");
-#endif
-            });
 
             //services.AddControllersWithViews();
             services.AddRazorPages();
