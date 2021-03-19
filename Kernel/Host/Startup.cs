@@ -1,3 +1,4 @@
+using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
 using Filuet.Utils.Encryption;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
+using Serilog.Sinks.File.Archive;
+using System;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
@@ -21,6 +25,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -28,8 +33,17 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             services.AddMvc();
             services.AddLogging((builder) =>
             {
+                LogSettings  logSettings = new FileInfo(Program.CONFIG_FILE).FromConfiguration();
                 builder.AddSerilog(new LoggerConfiguration()
-                   .ReadFrom.Configuration(Configuration, "Serilog")
+                   .WriteTo.File(path: logSettings.path, 
+                   hooks: new SerilogHooks(logSettings.allFilesSizeLimitBytes - logSettings.fileSizeLimitBytes, logSettings.retainedFileCountLimit,
+                   logSettings.pathArchive), 
+                   rollingInterval: (RollingInterval)Enum.Parse(typeof(RollingInterval),logSettings.rollingInterval),
+                   retainedFileCountLimit: logSettings.retainedFileCountLimit, 
+                   fileSizeLimitBytes: logSettings.fileSizeLimitBytes, 
+                   outputTemplate: logSettings.outputTemplate,
+                   rollOnFileSizeLimit: logSettings.rollOnFileSizeLimit
+                   )
                    .CreateLogger());
 #if DEBUG
                 builder.AddDebug();
