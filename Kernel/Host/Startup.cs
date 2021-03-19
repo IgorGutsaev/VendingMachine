@@ -1,10 +1,14 @@
+using Filuet.Utils.Encryption;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
+using System.IO;
+using System.Text;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -21,6 +25,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
             services.AddLogging((builder) =>
             {
                 builder.AddSerilog(new LoggerConfiguration()
@@ -32,7 +37,10 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 #endif
             });
 
-            services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+            services.AddRazorPages();
+            var key = GetKey();
+            services.AddSingleton<FiluetASCApiHandlerForKiosk>(new FiluetASCApiHandlerForKiosk(Configuration["ApiUrl"], key.Login, key.Password));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,14 +58,34 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
-
+            
             app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapFallbackToFile("index.html");
+            });
+        }
 
-            ////app.UseEndpoints(endpoints =>
-            ////{
-            ////    endpoints.MapControllers();
-            ////    endpoints.MapFallbackToFile("index.html");
-            ////});
+        private KeyModel GetKey()
+        {
+            string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.key");
+
+            if (files.Length == 0)
+                throw new FileNotFoundException("Key file not found! Unable to authorize.");
+
+            string keyFile = files[0];
+            string login = Path.GetFileNameWithoutExtension(keyFile);
+
+            DataProtectionClient client = new DataProtectionClient(Encoding.UTF8.GetBytes(login + login + login));
+            return JsonConvert.DeserializeObject<KeyModel>(client.AsString(client.Unprotect(File.ReadAllBytes(keyFile))));
+        }
+
+        public class KeyModel
+        {
+            public string Login { get; set; }
+            public string Password { get; set; }
         }
     }
 }

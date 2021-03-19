@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions;
@@ -24,10 +25,15 @@ using Filuet.Utils.Abstractions.Events;
 using Filuet.Utils.Abstractions.Platform;
 using Filuet.Utils.Common.Business;
 using Filuet.Utils.Common.PosSettings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Filuet.Utils.Extensions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -69,40 +75,42 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     att.CompleteOrder();
                 });
 
-                /*IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
+            /*IStorageService s2 = host.Services.GetRequiredService<IStorageService>();
 
-                ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
+            ICompositeDispenser dispenser = host.Services.GetRequiredService<ICompositeDispenser>();
 
-                ILayout layout = host.Services.GetRequiredService<ILayout>();
-                if (layout == null)
-                {
-                    var t = s2.Get(x => true);
-                }
+            ILayout layout = host.Services.GetRequiredService<ILayout>();
+            if (layout == null)
+            {
+                var t = s2.Get(x => true);
+            }
 
-                dispenser.OnDispensing += S1_OnDispensing;
+            dispenser.OnDispensing += S1_OnDispensing;
 
-                dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
+            dispenser.Dispense(CompositDispenseAddress.Create(vendingMachineId: layout.Machines.First().Number.ToString(), layout.Machines.First().Trays.First().Belts.First().Address));
 
-                dispenser.OnDispensing -= S1_OnDispensing;*/
-            });
+            dispenser.OnDispensing -= S1_OnDispensing;*/
+        });
 
             host.Run();
         }
 
-        //private static void S1_OnDispensing(object sender, EventArgs e)
-        //{
-        //}
+        private static void S1_OnDispensing(object sender, EventArgs e)
+        {
+        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    //webBuilder.UseConfiguration(new ConfigurationBuilder()
+                    //.AddCommandLine(args)
+                    //.Build());
                 })
                 .ConfigureServices((services) =>
                 {
                     HostContext appContext = new FileInfo(CONFIG_FILE).ToConfiguration();
-
                     services
                         .AddSingleton((sp) => new KioskSettings
                         {
@@ -131,7 +139,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                             setup.SlipImageStorage = @"D:\SlipImages";
                         })
                         .AddHardware();
-
+                    
                     services.AddStorage()
                         .AddCacheContext(settings =>
                         {

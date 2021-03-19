@@ -1,15 +1,65 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthService AuthService
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<MatThemeProvider Theme="@theme">
+    <MatAppBarContainer Style="width: 100%">
+        <AuthorizeView>
+            <Authorized>
+                <MatAppBar Fixed="true">
+                    <MatAppBarRow>
+                        <MatAppBarSection>
+                            <MatIconButton Icon="menu" @onclick="@((e) => {drawerOpened = !drawerOpened; })"></MatIconButton>
+                            <MatAppBarTitle>Pos Dashboard</MatAppBarTitle>
+                        </MatAppBarSection>
+                        <MatAppBarSection Align="@MatAppBarSectionAlign.End">
+                            Hello, <MatButton @ref="UserButton" @onclick="@((e) => { UserMenu.OpenAsync(UserButton.Ref); })" Unelevated="true">@context.User.Identity.Name</MatButton>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-    </div>
+                            <MatMenu @ref="UserMenu">
+                                <MatList>
+                                    <MatButton @onclick="OnLogout">Logout</MatButton>
+                                </MatList>
+                            </MatMenu>
+                        </MatAppBarSection>
+                    </MatAppBarRow>
+                </MatAppBar>
+            </Authorized>
+        </AuthorizeView>
+        <MatAppBarContent Class="main">
+            <MatDrawerContainer Style="height: 100vh;">
+                <AuthorizeView>
+                    <Authorized>
+                        <MatDrawer @bind-Opened="@drawerOpened">
+                            <NavMenu />
+                        </MatDrawer>
+                    </Authorized>
+                </AuthorizeView>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+                <MatDrawerContent>
+
+                    @Body
+
+                </MatDrawerContent>
+            </MatDrawerContainer>
+        </MatAppBarContent>
+    </MatAppBarContainer>
+
+</MatThemeProvider>
+
+@code {
+    bool drawerOpened = false;
+
+    MatButton UserButton;
+    BaseMatMenu UserMenu;
+
+    MatTheme theme = new MatTheme()
+    {
+        Primary = "#43a047",
+        Secondary = "#4caf50"
+    };
+
+    async void OnLogout()
+    {
+        await AuthService.Logout();
+    }
+
+} 
