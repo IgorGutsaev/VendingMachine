@@ -83,7 +83,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
                 this.DbSet.Remove(entity);
 
             this.DbContext.SaveChanges();
-            this.DbContext.Database.ExecuteSqlCommand("VACUUM"); // Shrink database file. Another way is to set auto vacuum flag on database
+            this.DbContext.Database.ExecuteSqlRaw("VACUUM"); // Shrink database file. Another way is to set auto vacuum flag on database
 
             return true;
         }

@@ -303,7 +303,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.UVS.Core
         /// <param name="attributeValue"></param>
         private void AddAttribute(DatabaseFacade attributes, int pluSetId, string attributeId, string attributeValue)
         {
-            attributes.ExecuteSqlCommand("INSERT INTO [PLUSetAttributes] ([PLUSetId],[AttributeId],[Value]) VALUES (@pluSetId, @attributeId, @attributeValue)",
+            attributes.ExecuteSqlRaw("INSERT INTO [PLUSetAttributes] ([PLUSetId],[AttributeId],[Value]) VALUES (@pluSetId, @attributeId, @attributeValue)",
                 new SqlParameter("pluSetId", pluSetId),
                 new SqlParameter("attributeId", attributeId),
                 new SqlParameter("attributeValue", attributeValue));

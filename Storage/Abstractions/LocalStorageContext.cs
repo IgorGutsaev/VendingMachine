@@ -87,7 +87,7 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions
                 string sqlQuery = File.ReadAllText(_Settings.CreateDbScriptPath);
                 try
                 {
-                    base.Database.ExecuteSqlCommand(sqlQuery);
+                    base.Database.ExecuteSqlRaw(sqlQuery);
                 }
                 catch (Exception ex)
                 {
