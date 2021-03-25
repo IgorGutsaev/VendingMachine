@@ -36,6 +36,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System.Runtime.InteropServices;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
 {
@@ -43,11 +44,25 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
     {
         public const string CONFIG_FILE = "appsettings.json";
 
+        static bool ConsoleEventCallback(int eventType)
+        {
+            if (eventType == 2)
+            {
+                Log.Logger.Information("OnBoard hostapp closed");
+                Thread.Sleep(1000 * (_logBatchHoldPeriodSec + 1)); // It should me more than Serilog AzureTableStorage period
+            }
+            return false;
+        }
+
         public static void Main(string[] args)
         {
+            handler = new ConsoleEventDelegate(ConsoleEventCallback);
+            SetConsoleCtrlHandler(handler, true);
+
             IHost host = CreateHostBuilder(args).Build();
 
             IEventBroker broker = host.Services.GetRequiredService<IEventBroker>(); // initialize evenk broker
+
             // instantiate mediators
             OrderingMediator mediator = host.Services.GetRequiredService<OrderingMediator>();
             PaymentMediator paymentMediator = host.Services.GetRequiredService<PaymentMediator>();
@@ -181,5 +196,13 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
                     settings.MaxDatabaseSizeMB = appContext.Storage.MaxDatabaseSizeMB;
                 });
         });
+
+        static ConsoleEventDelegate handler;   // Keeps it from getting garbage collected
+                                               // Pinvoke
+        private delegate bool ConsoleEventDelegate(int eventType);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool SetConsoleCtrlHandler(ConsoleEventDelegate callback, bool add);
+
+        public static int _logBatchHoldPeriodSec = 0;
     }
 }

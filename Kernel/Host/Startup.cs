@@ -1,17 +1,15 @@
-using Filuet.ASC.Kiosk.OnBoard.Kernel.Core;
+using Filuet.ASC.OnBoard.Kernel.HostApp.Classes;
 using Filuet.Utils.Encryption;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
 using Serilog;
-using Serilog.Sinks.File.Archive;
 using System;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 
 namespace Filuet.ASC.OnBoard.Kernel.HostApp
@@ -25,17 +23,19 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
         public IConfiguration Configuration { get; }
 
-
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(Configuration).CreateLogger();
+            var key = GetKey();
+
+            SetupLogger(key.Login);
+
             services.AddMvc();
 
             //services.AddControllersWithViews();
             services.AddRazorPages();
-            var key = GetKey();
+
             services.AddSingleton<FiluetASCApiHandlerForKiosk>(new FiluetASCApiHandlerForKiosk(Configuration["ApiUrl"], key.Login, key.Password));
         }
 
@@ -54,7 +54,7 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
 
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
-            
+
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
@@ -82,6 +82,16 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
         {
             public string Login { get; set; }
             public string Password { get; set; }
+        }
+
+        private void SetupLogger(string cloudStorageName)
+        {
+            Program._logBatchHoldPeriodSec = Convert.ToInt32(Configuration.GetSection("Serilog:LogBatchHoldPeriodSec").Value);
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(Configuration)
+                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(Configuration.GetSection("ConnectionStrings:AzureStorageConnectionString").Value),
+                    storageTableName: cloudStorageName, keyGenerator: new AscKeyGenerator(), writeInBatches: true, batchPostingLimit: 100, period: new System.TimeSpan(0, 0, Program._logBatchHoldPeriodSec))
+                .CreateLogger();
         }
     }
 }
