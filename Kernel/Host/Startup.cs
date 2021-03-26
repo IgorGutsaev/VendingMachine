@@ -84,13 +84,13 @@ namespace Filuet.ASC.OnBoard.Kernel.HostApp
             public string Password { get; set; }
         }
 
-        private void SetupLogger(string cloudStorageName)
+        private void SetupLogger(string partitionId)
         {
             Program._logBatchHoldPeriodSec = Convert.ToInt32(Configuration.GetSection("Serilog:LogBatchHoldPeriodSec").Value);
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(Configuration.GetSection("ConnectionStrings:AzureStorageConnectionString").Value),
-                    storageTableName: cloudStorageName, keyGenerator: new AscKeyGenerator(), writeInBatches: true, batchPostingLimit: 100, period: new System.TimeSpan(0, 0, Program._logBatchHoldPeriodSec))
+                    storageTableName: "onboardlogs", keyGenerator: new AscKeyGenerator(partitionId), writeInBatches: true, batchPostingLimit: 100, period: new System.TimeSpan(0, 0, Program._logBatchHoldPeriodSec))
                 .CreateLogger();
         }
     }
