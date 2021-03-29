@@ -7,6 +7,6 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipAbstractions
     {
         Slip Build(Order order, SlipType type);
 
-        void Print(Order order, SlipType type);
+        bool Print(Order order, SlipType type, out string imageFile);
     }
 }

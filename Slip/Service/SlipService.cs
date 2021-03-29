@@ -37,14 +37,14 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService
             }
         }
 
-        public void Print(Order order, SlipType type)
+        public bool Print(Order order, SlipType type, out string imageFile)
         {
-            Slip slip = Build(order, type);
+            try
+            {
+                Slip slip = Build(order, type);
 
-            Image image = HtmlRender.RenderToImage(slip.Data, new Size(250, 800), new Size(270, 800), Color.White);
+                Image image = HtmlRender.RenderToImage(slip.Data, new Size(250, 800), new Size(270, 800), Color.White);
 
-            // Put image to the image folder
-            Task.Factory.StartNew(() => {
                 string filename = order.Number;
                 int index = 0;
                 string postfix = string.Empty;
@@ -53,10 +53,25 @@ namespace Filuet.ASC.Kiosk.OnBoard.SlipService
                     index++;
                     filename = $"{order.Number}_{index}";
                 }
-                File.WriteAllText(_slipSettings.SlipImageStorage + @$"\{filename}.html", slip.Data);
-            });
 
-            SendOnPrinter(image);
+                string file = _slipSettings.SlipImageStorage + @$"\{filename}.html";
+
+                // Put image to the image folder
+                Task.Factory.StartNew(() =>
+                {
+                    File.WriteAllText(file, slip.Data);
+                });
+
+                imageFile = file;
+
+                SendOnPrinter(image);
+                return true;
+            }
+            catch
+            {
+                imageFile = string.Empty;
+                return false;
+            }
         }
 
         private void SendOnPrinter(Image image)

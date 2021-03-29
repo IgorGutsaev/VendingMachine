@@ -24,11 +24,11 @@ namespace Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums
         /// Dispense the product
         /// </summary>
         Dispense = 4,
-        [Description("PrintReceipt")]
+        [Description("PrintSlip")]
         /// <summary>
         /// Print receipt
         /// </summary>
-        PrintReceipt = 5,
+        PrintSlip = 5,
         [Description("Complete")]
         /// <summary>
         /// Complete

@@ -13,6 +13,8 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
         void CompleteOrder(/* STATUS    void CancelOrder(); //abnormal finalizing */);
 
+        event EventHandler<OrderSlipEventArgs> OnSlipPrinted;
+
         event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
 
         event EventHandler<OrderOpenEventArgs> OnOrderOpened;

@@ -20,7 +20,8 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
             _attendant.OnOrderOpened += (sender, e) => _storage.AddOrderEvent(OrderAction.Open, e.Order);
             _attendant.OnOrderCompleted += (sender, e) => _storage.AddOrderEvent(OrderAction.Complete, e.Order);
-            _attendant.OnIncomePayment += (sender, e) => _storage.AddOrderEvent(e.OrderNumber, OrderAction.ChangeIssue, e.Income);
+            _attendant.OnIncomePayment += (sender, e) => _storage.AddOrderEvent(e.OrderNumber, OrderAction.MoneyIncome, e.Income);
+            _attendant.OnSlipPrinted += (sender, e) => _storage.AddOrderEvent(e.Order, OrderAction.PrintSlip, e);
         }
 
         private readonly IAttendant _attendant;

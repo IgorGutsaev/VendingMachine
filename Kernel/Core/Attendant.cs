@@ -20,20 +20,26 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
             _dispenser = dispenser;
             _slipService = slipService;
 
+            Action _issueOrder = () => {
+                // Print slip
+                string slipImageFile = string.Empty;
+                if (_slipService.Print(Order, SlipType.Standard, out slipImageFile))
+                    OnSlipPrinted?.Invoke(this, OrderSlipEventArgs.Create(Order.Number, SlipType.Standard, slipImageFile));
+                // else ... what should we do if slip printing failed?
+
+                // Dispense products
+                if (Order.Obtaining == GoodsObtainingMethod.Dispensing)
+                    Dispense();
+            };
+
             _paymentService.OnTotalAmountCollected += (sender, e) =>
             {
                 if (e.ChangeToIssue > 0m) // && cash payment only (probably)
                     GiveChange(e.ChangeToIssue);
-                else _slipService.Print(Order, SlipType.Standard);
+                else _issueOrder();
             };
 
-            _paymentService.OnTotalChangeHasBeenGiven += (sender, e) =>
-            {
-                if (Order.Obtaining == GoodsObtainingMethod.Warehouse)
-                    _slipService.Print(Order, SlipType.Standard);
-                else if (Order.Obtaining == GoodsObtainingMethod.Dispensing)
-                    Dispense();
-            };
+            _paymentService.OnTotalChangeHasBeenGiven += (sender, e) => _issueOrder();
         }
 
         public void StartOrder(Action<OrderBuilder> setupOrder)
@@ -101,12 +107,10 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
         }
 
         public event EventHandler<OrderOpenEventArgs> OnOrderOpened;
-
         public event EventHandler<IncomePaymentEventArgs> OnIncomePayment;
-
         public event EventHandler<OrderCloseEventArgs> OnOrderCompleted;
-
         public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
+        public event EventHandler<OrderSlipEventArgs> OnSlipPrinted;
 
         private readonly IPaymentProvider _paymentService;
         private readonly ICompositeDispenser _dispenser;
