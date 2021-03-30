@@ -50,7 +50,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
                 _changeIssued = value;
 
                 if ((_changeIssued - Change).Abs < 0.01m || _changeIssued >= Change)
-                    OnTotalChangeHasBeenGiven?.Invoke(this, TotalChangeIssuedEventArgs.Create(Change, _changeIssued, Money.Create(0m, Change.Currency)));
+                    OnTotalChangeWasIssued?.Invoke(this, TotalChangeIssuedEventArgs.Create(Change, _changeIssued, Money.Create(0m, Change.Currency)));
             }
         }
 
@@ -66,10 +66,14 @@ namespace Filuet.ASC.OnBoard.Payment.Core
         }
 
         /// <summary>
-        /// Called on any customer's credit (cash insert or card trassaction etc)  
+        /// Called on any customer's credit (cash insert or card transaction etc)  
         /// </summary>
         /// <param name="money"></param>
-        public void SomeMoneyIncome(MoneyNaturalized money) => Credit += money.Native;
+        public void SomeMoneyIncome(PaymentSource source, MoneyNaturalized money)
+        {
+            try { OnSomeMoneyIncome?.Invoke(this, SomeMoneyIncomeEventArgs.Create(source, money)); } catch { }
+            Credit += money.Native;
+        }
 
         public void GiveChange(Money change)
         {
@@ -86,7 +90,6 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             OnSomeChangeHasBeenGiven?.Invoke(this, SomeChangeIssuedEventArgs.Create(someChangeIssued));
             ChangeIssued += someChangeIssued.Native;
         }
-
 
         /// <summary>
         /// When the provider finds out how much money needs to be collected
@@ -106,11 +109,13 @@ namespace Filuet.ASC.OnBoard.Payment.Core
         /// <summary>
         /// Called when the the change has been completely given
         /// </summary>
-        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
+        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeWasIssued;
 
         public event EventHandler<SomeChangeIssuedEventArgs> OnSomeChangeHasBeenGiven;
 
         public event EventHandler<FetchMoneyEventArgs> OnFetchMoneyCommand;
+
+        public event EventHandler<SomeMoneyIncomeEventArgs> OnSomeMoneyIncome;
 
         private Money _credit;
 

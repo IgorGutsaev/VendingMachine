@@ -16,17 +16,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// </summary>
         public Money ChangeDebt { get; set; }
 
-
-
-
-
-
         private TotalChangeIssuedEventArgs() { }
-
-
-
-
-
 
         public static TotalChangeIssuedEventArgs Create(Money changeAmount, Money changeIssued, Money changeDebt)
         {

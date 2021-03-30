@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.247" />
+    <PackageReference Include="Filuet.Utils.Extensions" Version="1.0.251" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
   </ItemGroup>

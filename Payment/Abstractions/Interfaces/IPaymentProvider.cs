@@ -42,7 +42,7 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// because some payment sources require the order payload (like UVS requires order items) </remarks>
         bool Collect(PaymentSource paymentSource, Order order, Action<IPaymentProvider> setupAction);
 
-        void SomeMoneyIncome(MoneyNaturalized money);
+        void SomeMoneyIncome(PaymentSource source, MoneyNaturalized money);
 
         void GiveChange(Money change);
 
@@ -68,11 +68,16 @@ namespace Filuet.ASC.OnBoard.Payment.Abstractions
         /// <summary>
         /// Called when the the change has completely been given
         /// </summary>
-        event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeHasBeenGiven;
+        event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeWasIssued;
 
         /// <summary>
         /// A command with a new order to be payed
         /// </summary>
         event EventHandler<FetchMoneyEventArgs> OnFetchMoneyCommand;
+
+        /// <summary>
+        /// When some money's been fetched
+        /// </summary>
+        public event EventHandler<SomeMoneyIncomeEventArgs> OnSomeMoneyIncome;
     }
 }

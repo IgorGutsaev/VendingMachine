@@ -14,6 +14,16 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 {
     public class Attendant : IAttendant
     {
+        public event EventHandler<OrderOpenEventArgs> OnOrderOpened;
+        public event EventHandler<OrderCloseEventArgs> OnOrderCompleted;
+        public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
+        public event EventHandler<OrderSlipEventArgs> OnSlipPrinted;
+
+        public event EventHandler<SomeMoneyIncomeEventArgs> OnIncomePayment;
+        public event EventHandler<SomeChangeIssuedEventArgs> OnIssueMoney;
+        public event EventHandler<PaymentCollectedEventArgs> OnMoneyAcceptanceIsOver;
+        public event EventHandler<TotalChangeIssuedEventArgs> OnTotalChangeIssued;
+
         public Attendant(IPaymentProvider paymentService, ICompositeDispenser dispenser, ISlipService slipService)
         {
             _paymentService = paymentService;
@@ -34,12 +44,18 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
             _paymentService.OnTotalAmountCollected += (sender, e) =>
             {
+                OnMoneyAcceptanceIsOver?.Invoke(this, e);
+
                 if (e.ChangeToIssue > 0m) // && cash payment only (probably)
                     GiveChange(e.ChangeToIssue);
                 else _issueOrder();
             };
 
-            _paymentService.OnTotalChangeHasBeenGiven += (sender, e) => _issueOrder();
+            _paymentService.OnSomeMoneyIncome += (sender, e) => OnIncomePayment?.Invoke(this, e);
+
+            _paymentService.OnSomeChangeHasBeenGiven += (sender, e) => OnIssueMoney?.Invoke(this, e);
+
+            _paymentService.OnTotalChangeWasIssued += (sender, e) => { OnTotalChangeIssued?.Invoke(this, e); _issueOrder(); };
         }
 
         public void StartOrder(Action<OrderBuilder> setupOrder)
@@ -105,12 +121,6 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
                 OnOrderOpened?.Invoke(this, new OrderOpenEventArgs { Order = _order });
             }
         }
-
-        public event EventHandler<OrderOpenEventArgs> OnOrderOpened;
-        public event EventHandler<IncomePaymentEventArgs> OnIncomePayment;
-        public event EventHandler<OrderCloseEventArgs> OnOrderCompleted;
-        public event EventHandler<AttendantStateEventArgs> OnAttendantStateChanged;
-        public event EventHandler<OrderSlipEventArgs> OnSlipPrinted;
 
         private readonly IPaymentProvider _paymentService;
         private readonly ICompositeDispenser _dispenser;

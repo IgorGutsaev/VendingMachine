@@ -2,6 +2,7 @@
 using Filuet.ASC.Kiosk.OnBoard.Cashbox.Abstractions.Interfaces;
 using Filuet.ASC.Kiosk.OnBoard.Ecommerce.Abstractions;
 using Filuet.ASC.OnBoard.Payment.Abstractions;
+using Filuet.Utils.Common.Business;
 using Filuet.Utils.Extensions;
 using System;
 
@@ -25,7 +26,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
                 {
                     switch (e.Source)
                     {
-                        case Utils.Common.Business.PaymentSource.Cash:
+                        case PaymentSource.Cash:
                             foreach (ICashDeviceAdapter cashDevide in _cashService.CashDevices)
                                 cashDevide.Start();
                             break;
@@ -47,7 +48,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
 
             foreach (var cashDevice in _cashService.CashDevices)
                 cashDevice.OnMoneyReceived += (sender, e) => {
-                    _paymentProvider.SomeMoneyIncome(e.Money);
+                    _paymentProvider.SomeMoneyIncome(PaymentSource.Cash, e.Money);
 
                     // Notify all cash devices about duty (a remaining part of payment) was changed
                     foreach (var device in _cashService.CashDevices)
@@ -62,7 +63,7 @@ namespace Filuet.ASC.OnBoard.Payment.Core
             foreach (var ecomService in _ecommerceServices.Services)
             {
                 ecomService.OnReceived += (sender, e) => {
-                    _paymentProvider.SomeMoneyIncome(e.Income);
+                    _paymentProvider.SomeMoneyIncome(ecomService.Source, e.Income);
                 };
             }
         }

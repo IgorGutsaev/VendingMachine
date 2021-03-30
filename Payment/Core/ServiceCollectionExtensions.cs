@@ -13,6 +13,5 @@ namespace Filuet.ASC.Kiosk.OnBoard.Storage.Core
             => serviceCollection.AddTransient<PaymentMediator>()
                 .AddSingleton(sp =>
                     TraceDecorator<IPaymentProvider>.Create(new PaymentProvider()));
-
     }
 }

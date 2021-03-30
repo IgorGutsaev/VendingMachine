@@ -1,7 +1,5 @@
 ﻿using Filuet.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Filuet.ASC.OnBoard.Kernel.Core.Events
 {

@@ -1,10 +1,5 @@
 ﻿using Filuet.ASC.Kiosk.OnBoard.Ordering.Abstractions.Enums;
 using Filuet.ASC.Kiosk.OnBoard.Storage.Abstractions;
-using Filuet.Utils.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
 
 namespace Filuet.ASC.OnBoard.Kernel.Core
 {
@@ -20,7 +15,8 @@ namespace Filuet.ASC.OnBoard.Kernel.Core
 
             _attendant.OnOrderOpened += (sender, e) => _storage.AddOrderEvent(OrderAction.Open, e.Order);
             _attendant.OnOrderCompleted += (sender, e) => _storage.AddOrderEvent(OrderAction.Complete, e.Order);
-            _attendant.OnIncomePayment += (sender, e) => _storage.AddOrderEvent(e.OrderNumber, OrderAction.MoneyIncome, e.Income);
+            _attendant.OnIncomePayment += (sender, e) => _storage.AddOrderEvent(_attendant.Order.Number, OrderAction.MoneyIncome, e);
+            _attendant.OnMoneyAcceptanceIsOver += (sender, e) => _storage.AddOrderEvent(_attendant.Order.Number, OrderAction.MoneyAccepted, e); ;
             _attendant.OnSlipPrinted += (sender, e) => _storage.AddOrderEvent(e.Order, OrderAction.PrintSlip, e);
         }
 
